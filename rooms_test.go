@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	RoomJSON  = `{"id":"123","title":"foo","created":"0001-01-01T00:00:00Z"}`
+	RoomJSON  = `{"id":"123","title":"foo","members":["foo","bar"],"created":"0001-01-01T00:00:00Z"}`
 	RoomsJSON = `{"items":[` + RoomJSON + `]}`
 )
 
@@ -24,6 +24,8 @@ func TestRoomsSpec(t *testing.T) {
 				rooms, err := client.Rooms()
 				So(err, ShouldBeNil)
 				So(rooms.Items[0].Title, ShouldEqual, "foo")
+				So(rooms.Items[0].Members[0], ShouldEqual, "foo")
+				So(rooms.Items[0].Members[1], ShouldEqual, "bar")
 				BaseURL = previousURL
 			})
 			Convey("It should generate the proper struct from the JSON", func() {
@@ -31,13 +33,16 @@ func TestRoomsSpec(t *testing.T) {
 				err := json.Unmarshal([]byte(RoomsJSON)[:], &rooms)
 				So(err, ShouldBeNil)
 				So(rooms.Items[0].Title, ShouldEqual, "foo")
+				So(rooms.Items[0].Members[0], ShouldEqual, "foo")
+				So(rooms.Items[0].Members[1], ShouldEqual, "bar")
 			})
 		})
 		Convey("For room", func() {
 			Convey("It should generate the proper JSON message", func() {
 				room := &Room{
-					ID:    "123",
-					Title: "foo",
+					ID:      "123",
+					Title:   "foo",
+					Members: []string{"foo", "bar"},
 				}
 				body, err := json.Marshal(room)
 				So(err, ShouldBeNil)
@@ -48,6 +53,8 @@ func TestRoomsSpec(t *testing.T) {
 				err := json.Unmarshal([]byte(RoomJSON)[:], room)
 				So(err, ShouldBeNil)
 				So(room.Title, ShouldEqual, "foo")
+				So(room.Members[0], ShouldEqual, "foo")
+				So(room.Members[1], ShouldEqual, "bar")
 			})
 			Convey("Get room", func() {
 				ts := serveHTTP(t)
@@ -58,6 +65,8 @@ func TestRoomsSpec(t *testing.T) {
 				room, err := client.Room("1")
 				So(err, ShouldBeNil)
 				So(room.Title, ShouldEqual, "foo")
+				So(room.Members[0], ShouldEqual, "foo")
+				So(room.Members[1], ShouldEqual, "bar")
 				BaseURL = previousURL
 			})
 			Convey("Delete room", func() {

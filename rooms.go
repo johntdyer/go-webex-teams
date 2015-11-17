@@ -9,6 +9,7 @@ import (
 type Room struct {
 	ID      string    `json:"id,omitempty"`
 	Title   string    `json:"title,omitempty"`
+	Members []string  `json:"members,omitempty"`
 	Created time.Time `json:"created,omitempty"`
 }
 
