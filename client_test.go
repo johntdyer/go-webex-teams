@@ -12,17 +12,9 @@ import (
 )
 
 var (
-	stubNow           = func() time.Time { return time.Unix(1445178376, 0) }
-	ApplicationJSON   = `{"id":"123","name":"foo","description":"bar","logo":"image.jpg","keywords":["foo","bar"],"contactEmails":["john@doe.com","jane@doe.com"],"redirectUrls":["http://1.com","http://2.com"],"scopes":["scope1","scope2"],"created":"0001-01-01T00:00:00Z"}`
-	ApplicationsJSON  = "[" + ApplicationJSON + "]"
-	MembershipJSON    = `{"id":"000","roomId":"123","personId":"456","isModerator":true,"isMonitor":true,"isLocked":true,"email":"jane@doe.com","created":"0001-01-01T00:00:00Z"}`
-	MembershipsJSON   = "[" + MembershipJSON + "]"
-	MessageJSON       = `{"id":"123","roomId":"456","text":"foo","file":"image.jpg","created":"2015-10-18T07:26:16-07:00"}`
-	MessagesJSON      = "[" + MessageJSON + "]"
-	RoomJSON          = `{"id":"123","title":"foo","created":"0001-01-01T00:00:00Z"}`
-	RoomsJSON         = "[" + RoomJSON + "]"
-	SubscriptionJSON  = `{"id":"000","personId":"123","applicationId":"456","applicationName":"foo","created":"2015-10-18T07:26:16-07:00"}`
-	SubscriptionsJSON = "[" + SubscriptionJSON + "]"
+	stubNow    = func() time.Time { return time.Unix(1445178376, 0) }
+	PersonJSON = `{"id":"OTZhYmMyYWEtM2RjYy0xMWU1LWExNTItZmUzNDgxOWNkYzlh","emails":"johnny.chang@foomail.com","displayName":"John Andersen","avatar":"TODO","created":"2015-10-18T14:26:16+00:00"}`
+	PeopleJSON = `{"items":[` + PersonJSON + `]}`
 )
 
 func TestClientSpec(t *testing.T) {

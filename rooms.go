@@ -12,18 +12,19 @@ type Room struct {
 	Created time.Time `json:"created,omitempty"`
 }
 
-// Rooms represent a slice of Room
-type Rooms []struct {
-	Room
+type Rooms struct {
+	Items []struct {
+		Room
+	} `json:"items"`
 }
 
 // Rooms fetches all rooms
-func (c Client) Rooms() (Rooms, error) {
+func (c Client) Rooms() (*Rooms, error) {
+	rooms := &Rooms{}
 	body, err := c.get(RoomsResource)
 	if err != nil {
 		return nil, err
 	}
-	rooms := make(Rooms, 0)
 	err = json.Unmarshal(body, &rooms)
 	if err != nil {
 		return nil, err

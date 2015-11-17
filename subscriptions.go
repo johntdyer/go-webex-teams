@@ -15,20 +15,22 @@ type Subscription struct {
 }
 
 // Subscriptions represent a slice of Subscription
-type Subscriptions []struct {
-	Subscription
+type Subscriptions struct {
+	Items []struct {
+		Subscription
+	} `json:"items"`
 }
 
 // Subscriptions fetches all subscriptions
-func (c Client) Subscriptions() (Subscriptions, error) {
+func (c Client) Subscriptions() (*Subscriptions, error) {
+	subscriptions := &Subscriptions{}
 	body, err := c.get(SubscriptionsResource)
 	if err != nil {
-		return nil, err
+		return subscriptions, err
 	}
-	subscriptions := make(Subscriptions, 0)
 	err = json.Unmarshal(body, &subscriptions)
 	if err != nil {
-		return nil, err
+		return subscriptions, err
 	}
 	return subscriptions, nil
 

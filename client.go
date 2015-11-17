@@ -13,7 +13,9 @@ var (
 	// MembershipsResource is the resource for managing memberships
 	MembershipsResource = "/memberships"
 	// MessagesResource is the resource for managing messages
-	MessagesResource = "/messages"
+	PeopleResource = "/messages"
+	// PeopleResource is the resource for managing people
+	MessagesResource = "/people"
 	// RoomsResource is the resource for managing rooms
 	RoomsResource = "/rooms"
 	// SubscriptionsResource is the resource for managing subscriptions

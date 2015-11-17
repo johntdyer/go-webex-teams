@@ -2,8 +2,14 @@ package spark
 
 import (
 	"encoding/json"
-	. "github.com/smartystreets/goconvey/convey"
 	"testing"
+
+	. "github.com/smartystreets/goconvey/convey"
+)
+
+var (
+	RoomJSON  = `{"id":"123","title":"foo","created":"0001-01-01T00:00:00Z"}`
+	RoomsJSON = `{"items":[` + RoomJSON + `]}`
 )
 
 func TestRoomsSpec(t *testing.T) {
@@ -17,22 +23,14 @@ func TestRoomsSpec(t *testing.T) {
 				client := NewClient("123")
 				rooms, err := client.Rooms()
 				So(err, ShouldBeNil)
-				So(rooms[0].Title, ShouldEqual, "foo")
+				So(rooms.Items[0].Title, ShouldEqual, "foo")
 				BaseURL = previousURL
 			})
-			Convey("It should generate the proper JSON message", func() {
-				rooms := make(Rooms, 1)
-				rooms[0].ID = "123"
-				rooms[0].Title = "foo"
-				body, err := json.Marshal(rooms)
-				So(err, ShouldBeNil)
-				So(string(body), ShouldEqual, RoomsJSON)
-			})
 			Convey("It should generate the proper struct from the JSON", func() {
-				rooms := make(Rooms, 0)
+				rooms := &Rooms{}
 				err := json.Unmarshal([]byte(RoomsJSON)[:], &rooms)
 				So(err, ShouldBeNil)
-				So(rooms[0].Title, ShouldEqual, "foo")
+				So(rooms.Items[0].Title, ShouldEqual, "foo")
 			})
 		})
 		Convey("For room", func() {

@@ -13,23 +13,24 @@ type Membership struct {
 	Ismoderator bool      `json:"isModerator,omitempty"`
 	Ismonitor   bool      `json:"isMonitor,omitempty"`
 	Islocked    bool      `json:"isLocked,omitempty"`
-	Email       string    `json:"email,omitempty"`
+	PersonEmail string    `json:"personEmail,omitempty"`
 	Created     time.Time `json:"created,omitempty"`
 }
 
-// Memberships represent a slice of Membership
-type Memberships []struct {
-	Membership
+type Memberships struct {
+	Items []struct {
+		Membership
+	} `json:"items"`
 }
 
 // Memberships fetches all memberships
-func (c Client) Memberships() (Memberships, error) {
+func (c Client) Memberships() (*Memberships, error) {
+	memberships := &Memberships{}
 	body, err := c.get(MembershipsResource)
 	if err != nil {
-		return nil, err
+		return memberships, err
 	}
-	memberships := make(Memberships, 0)
-	err = json.Unmarshal(body, &memberships)
+	err = json.Unmarshal(body, memberships)
 	if err != nil {
 		return nil, err
 	}

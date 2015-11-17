@@ -2,8 +2,14 @@ package spark
 
 import (
 	"encoding/json"
-	. "github.com/smartystreets/goconvey/convey"
 	"testing"
+
+	. "github.com/smartystreets/goconvey/convey"
+)
+
+var (
+	MessageJSON  = `{"id":"123","roomId":"456","text":"foo","file":"image.jpg","created":"2015-10-18T07:26:16-07:00"}`
+	MessagesJSON = `{"items":[` + MessageJSON + `]}`
 )
 
 func TestMessagesSpec(t *testing.T) {
@@ -17,31 +23,20 @@ func TestMessagesSpec(t *testing.T) {
 				client := NewClient("123")
 				messages, err := client.Messages()
 				So(err, ShouldBeNil)
-				So(messages[0].Roomid, ShouldEqual, "456")
-				So(messages[0].Text, ShouldEqual, "foo")
-				So(messages[0].File, ShouldEqual, "image.jpg")
-				So(messages[0].Created, ShouldHappenOnOrBefore, stubNow())
+				So(messages.Items[0].Roomid, ShouldEqual, "456")
+				So(messages.Items[0].Text, ShouldEqual, "foo")
+				So(messages.Items[0].File, ShouldEqual, "image.jpg")
+				So(messages.Items[0].Created, ShouldHappenOnOrBefore, stubNow())
 				BaseURL = previousURL
 			})
-			Convey("It should generate the proper JSON message", func() {
-				messages := make(Messages, 1)
-				messages[0].ID = "123"
-				messages[0].Roomid = "456"
-				messages[0].Text = "foo"
-				messages[0].File = "image.jpg"
-				messages[0].Created = stubNow()
-				body, err := json.Marshal(messages)
-				So(err, ShouldBeNil)
-				So(string(body), ShouldEqual, MessagesJSON)
-			})
 			Convey("It should generate the proper struct from the JSON", func() {
-				messages := make(Messages, 0)
+				messages := &Messages{}
 				err := json.Unmarshal([]byte(MessagesJSON)[:], &messages)
 				So(err, ShouldBeNil)
-				So(messages[0].Roomid, ShouldEqual, "456")
-				So(messages[0].Text, ShouldEqual, "foo")
-				So(messages[0].File, ShouldEqual, "image.jpg")
-				So(messages[0].Created, ShouldHappenOnOrBefore, stubNow())
+				So(messages.Items[0].Roomid, ShouldEqual, "456")
+				So(messages.Items[0].Text, ShouldEqual, "foo")
+				So(messages.Items[0].File, ShouldEqual, "image.jpg")
+				So(messages.Items[0].Created, ShouldHappenOnOrBefore, stubNow())
 			})
 		})
 		Convey("For a message", func() {

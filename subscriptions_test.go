@@ -2,8 +2,14 @@ package spark
 
 import (
 	"encoding/json"
-	. "github.com/smartystreets/goconvey/convey"
 	"testing"
+
+	. "github.com/smartystreets/goconvey/convey"
+)
+
+var (
+	SubscriptionJSON  = `{"id":"000","personId":"123","applicationId":"456","applicationName":"foo","created":"2015-10-18T07:26:16-07:00"}`
+	SubscriptionsJSON = `{"items":[` + SubscriptionJSON + `]}`
 )
 
 func TestSubscriptionsSpec(t *testing.T) {
@@ -58,26 +64,15 @@ func TestSubscriptionsSpec(t *testing.T) {
 			})
 		})
 		Convey("For subscriptions", func() {
-			Convey("It should generate the proper JSON message", func() {
-				subscriptions := make(Subscriptions, 1)
-				subscriptions[0].ID = "000"
-				subscriptions[0].Personid = "123"
-				subscriptions[0].Applicationid = "456"
-				subscriptions[0].Applicationname = "foo"
-				subscriptions[0].Created = stubNow()
-				body, err := json.Marshal(subscriptions)
-				So(err, ShouldBeNil)
-				So(string(body), ShouldEqual, SubscriptionsJSON)
-			})
 			Convey("It should generate the proper struct from the JSON", func() {
-				subscriptions := make(Subscriptions, 0)
+				subscriptions := &Subscriptions{}
 				err := json.Unmarshal([]byte(SubscriptionsJSON)[:], &subscriptions)
 				So(err, ShouldBeNil)
-				So(subscriptions[0].ID, ShouldEqual, "000")
-				So(subscriptions[0].Personid, ShouldEqual, "123")
-				So(subscriptions[0].Applicationid, ShouldEqual, "456")
-				So(subscriptions[0].Applicationname, ShouldEqual, "foo")
-				So(subscriptions[0].Created, ShouldHappenOnOrBefore, stubNow())
+				So(subscriptions.Items[0].ID, ShouldEqual, "000")
+				So(subscriptions.Items[0].Personid, ShouldEqual, "123")
+				So(subscriptions.Items[0].Applicationid, ShouldEqual, "456")
+				So(subscriptions.Items[0].Applicationname, ShouldEqual, "foo")
+				So(subscriptions.Items[0].Created, ShouldHappenOnOrBefore, stubNow())
 			})
 			Convey("Get subscriptions", func() {
 				ts := serveHTTP(t)
@@ -87,11 +82,11 @@ func TestSubscriptionsSpec(t *testing.T) {
 				client := NewClient("123")
 				subscriptions, err := client.Subscriptions()
 				So(err, ShouldBeNil)
-				So(subscriptions[0].ID, ShouldEqual, "000")
-				So(subscriptions[0].Personid, ShouldEqual, "123")
-				So(subscriptions[0].Applicationid, ShouldEqual, "456")
-				So(subscriptions[0].Applicationname, ShouldEqual, "foo")
-				So(subscriptions[0].Created, ShouldHappenOnOrBefore, stubNow())
+				So(subscriptions.Items[0].ID, ShouldEqual, "000")
+				So(subscriptions.Items[0].Personid, ShouldEqual, "123")
+				So(subscriptions.Items[0].Applicationid, ShouldEqual, "456")
+				So(subscriptions.Items[0].Applicationname, ShouldEqual, "foo")
+				So(subscriptions.Items[0].Created, ShouldHappenOnOrBefore, stubNow())
 				BaseURL = previousURL
 			})
 		})

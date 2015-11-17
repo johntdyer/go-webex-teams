@@ -2,8 +2,14 @@ package spark
 
 import (
 	"encoding/json"
-	. "github.com/smartystreets/goconvey/convey"
 	"testing"
+
+	. "github.com/smartystreets/goconvey/convey"
+)
+
+var (
+	MembershipJSON  = `{"id":"000","roomId":"123","personId":"456","isModerator":true,"isMonitor":true,"isLocked":true,"personEmail":"jane@doe.com","created":"0001-01-01T00:00:00Z"}`
+	MembershipsJSON = `{"items":[` + MembershipJSON + `]}`
 )
 
 func TestMembershipsSpec(t *testing.T) {
@@ -17,7 +23,7 @@ func TestMembershipsSpec(t *testing.T) {
 					Ismoderator: true,
 					Ismonitor:   true,
 					Islocked:    true,
-					Email:       "jane@doe.com",
+					PersonEmail: "jane@doe.com",
 				}
 				body, err := json.Marshal(membership)
 				So(err, ShouldBeNil)
@@ -32,7 +38,7 @@ func TestMembershipsSpec(t *testing.T) {
 				So(membership.Personid, ShouldEqual, "456")
 				So(membership.Ismoderator, ShouldBeTrue)
 				So(membership.Islocked, ShouldBeTrue)
-				So(membership.Email, ShouldEqual, "jane@doe.com")
+				So(membership.PersonEmail, ShouldEqual, "jane@doe.com")
 			})
 			Convey("Get membership", func() {
 				ts := serveHTTP(t)
@@ -60,30 +66,17 @@ func TestMembershipsSpec(t *testing.T) {
 			})
 		})
 		Convey("For memberships", func() {
-			Convey("It should generate the proper JSON message", func() {
-				memberships := make(Memberships, 1)
-				memberships[0].ID = "000"
-				memberships[0].Roomid = "123"
-				memberships[0].Personid = "456"
-				memberships[0].Ismoderator = true
-				memberships[0].Ismonitor = true
-				memberships[0].Islocked = true
-				memberships[0].Email = "jane@doe.com"
-				body, err := json.Marshal(memberships)
-				So(err, ShouldBeNil)
-				So(string(body), ShouldEqual, MembershipsJSON)
-			})
 			Convey("It should generate the proper struct from the JSON", func() {
-				memberships := make(Memberships, 0)
+				memberships := &Memberships{}
 				err := json.Unmarshal([]byte(MembershipsJSON)[:], &memberships)
 				So(err, ShouldBeNil)
-				So(memberships[0].ID, ShouldEqual, "000")
-				So(memberships[0].Roomid, ShouldEqual, "123")
-				So(memberships[0].Personid, ShouldEqual, "456")
-				So(memberships[0].Ismoderator, ShouldEqual, true)
-				So(memberships[0].Ismonitor, ShouldEqual, true)
-				So(memberships[0].Islocked, ShouldEqual, true)
-				So(memberships[0].Created, ShouldHappenOnOrBefore, stubNow())
+				So(memberships.Items[0].ID, ShouldEqual, "000")
+				So(memberships.Items[0].Roomid, ShouldEqual, "123")
+				So(memberships.Items[0].Personid, ShouldEqual, "456")
+				So(memberships.Items[0].Ismoderator, ShouldEqual, true)
+				So(memberships.Items[0].Ismonitor, ShouldEqual, true)
+				So(memberships.Items[0].Islocked, ShouldEqual, true)
+				So(memberships.Items[0].Created, ShouldHappenOnOrBefore, stubNow())
 			})
 			Convey("Get memberships", func() {
 				ts := serveHTTP(t)
@@ -93,13 +86,13 @@ func TestMembershipsSpec(t *testing.T) {
 				client := NewClient("123")
 				memberships, err := client.Memberships()
 				So(err, ShouldBeNil)
-				So(memberships[0].ID, ShouldEqual, "000")
-				So(memberships[0].Roomid, ShouldEqual, "123")
-				So(memberships[0].Personid, ShouldEqual, "456")
-				So(memberships[0].Ismoderator, ShouldEqual, true)
-				So(memberships[0].Ismonitor, ShouldEqual, true)
-				So(memberships[0].Islocked, ShouldEqual, true)
-				So(memberships[0].Created, ShouldHappenOnOrBefore, stubNow())
+				So(memberships.Items[0].ID, ShouldEqual, "000")
+				So(memberships.Items[0].Roomid, ShouldEqual, "123")
+				So(memberships.Items[0].Personid, ShouldEqual, "456")
+				So(memberships.Items[0].Ismoderator, ShouldEqual, true)
+				So(memberships.Items[0].Ismonitor, ShouldEqual, true)
+				So(memberships.Items[0].Islocked, ShouldEqual, true)
+				So(memberships.Items[0].Created, ShouldHappenOnOrBefore, stubNow())
 				BaseURL = previousURL
 			})
 		})

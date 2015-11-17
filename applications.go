@@ -19,20 +19,22 @@ type Application struct {
 }
 
 // Applications represent a slice of Application
-type Applications []struct {
-	Application
+type Applications struct {
+	Items []struct {
+		Application
+	} `json:"items"`
 }
 
 // Applications fetches all applications
-func (c Client) Applications() (Applications, error) {
+func (c Client) Applications() (*Applications, error) {
+	applications := &Applications{}
 	body, err := c.get(ApplicationsResource)
 	if err != nil {
-		return nil, err
+		return applications, err
 	}
-	applications := make(Applications, 0)
 	err = json.Unmarshal(body, &applications)
 	if err != nil {
-		return nil, err
+		return applications, err
 	}
 	return applications, nil
 }

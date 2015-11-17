@@ -14,18 +14,19 @@ type Message struct {
 	Created time.Time `json:"created,omitempty"`
 }
 
-// Messages represent a slice of Message
-type Messages []struct {
-	Message
+type Messages struct {
+	Items []struct {
+		Message
+	} `json:"items"`
 }
 
 // Messages fetches all messages
-func (c Client) Messages() (Messages, error) {
+func (c Client) Messages() (*Messages, error) {
+	messages := &Messages{}
 	body, err := c.get(MessagesResource)
 	if err != nil {
-		return nil, err
+		return messages, err
 	}
-	messages := make(Messages, 0)
 	err = json.Unmarshal(body, &messages)
 	if err != nil {
 		return nil, err
