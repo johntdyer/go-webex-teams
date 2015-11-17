@@ -52,9 +52,16 @@ func main() {
 	// Interact with subscriptions
 	subscriptions := sparkClient.Subscriptions()
 	fmt.println(subscriptions)
-	room := sparkClient.Subscription("901")
+	subscription := sparkClient.Subscription("901")
 	fmt.println(subscription)
 	sparkClient.DeleteSubscription("901")
+
+	// Interact with webhooks
+	webhooks := sparkClient.Webhooks()
+	fmt.println(webhooks)
+	webhook := sparkClient.Webhook("901")
+	fmt.println(webhook)
+	sparkClient.DeleteWebhook("901")
 }
 ```
 
