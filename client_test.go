@@ -30,6 +30,14 @@ func TestClientSpec(t *testing.T) {
 		So(client.Token, ShouldEqual, "1234")
 		So(reflect.TypeOf(client.HTTP).String(), ShouldEqual, "*http.Client")
 	})
+	Convey("Should set the HTTP headers properly", t, func() {
+		client := NewClient("1234")
+		req, _ := http.NewRequest("GET", "http://foo.com", nil)
+		client.setHeaders(req)
+		So(req.Header.Get("Authorization"), ShouldEqual, "Bearer 1234")
+		So(req.Header.Get("Content-Type"), ShouldEqual, "application/json")
+		So(req.Header.Get("Accept"), ShouldEqual, "application/json")
+	})
 }
 
 // serveHTTP serves up a test server emulating the Tropo Gateway
