@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	ApplicationJSON  = `{"id":"123","name":"foo","description":"bar","logo":"image.jpg","keywords":["foo","bar"],"contactEmails":["john@doe.com","jane@doe.com"],"redirectUrls":["http://1.com","http://2.com"],"scopes":["scope1","scope2"],"created":"0001-01-01T00:00:00Z"}`
+	ApplicationJSON  = `{"id":"123","name":"foo","description":"bar","logo":"image.jpg","keywords":["foo","bar"],"contactEmails":["john@doe.com","jane@doe.com"],"redirectUrls":["http://1.com","http://2.com"],"scopes":["scope1","scope2"],"subscriptionCount":1000,"clientId":"123","clientSecret":"456","created":"0001-01-01T00:00:00Z"}`
 	ApplicationsJSON = `{"items":[` + ApplicationJSON + `]}`
 )
 
@@ -17,14 +17,17 @@ func TestApplicationsSpec(t *testing.T) {
 		Convey("For an application", func() {
 			Convey("It should generate the proper JSON message", func() {
 				application := &Application{
-					ID:            "123",
-					Name:          "foo",
-					Description:   "bar",
-					Logo:          "image.jpg",
-					Keywords:      []string{"foo", "bar"},
-					Redirecturls:  []string{"http://1.com", "http://2.com"},
-					Contactemails: []string{"john@doe.com", "jane@doe.com"},
-					Scopes:        []string{"scope1", "scope2"},
+					ID:                "123",
+					Name:              "foo",
+					Description:       "bar",
+					Logo:              "image.jpg",
+					Keywords:          []string{"foo", "bar"},
+					Redirecturls:      []string{"http://1.com", "http://2.com"},
+					Contactemails:     []string{"john@doe.com", "jane@doe.com"},
+					Scopes:            []string{"scope1", "scope2"},
+					SubscriptionCount: 1000,
+					ClientID:          "123",
+					ClientSecret:      "456",
 				}
 				body, err := json.Marshal(application)
 				So(err, ShouldBeNil)
@@ -93,6 +96,9 @@ func validateApplication(t *testing.T, application *Application) {
 	So(application.Contactemails[1], ShouldEqual, "jane@doe.com")
 	So(application.Scopes[0], ShouldEqual, "scope1")
 	So(application.Scopes[1], ShouldEqual, "scope2")
+	So(application.SubscriptionCount, ShouldEqual, 1000)
+	So(application.ClientID, ShouldEqual, "123")
+	So(application.ClientSecret, ShouldEqual, "456")
 	So(application.Created, ShouldHappenOnOrBefore, stubNow())
 }
 
@@ -109,5 +115,8 @@ func validateApplications(t *testing.T, applications *Applications) {
 	So(applications.Items[0].Contactemails[1], ShouldEqual, "jane@doe.com")
 	So(applications.Items[0].Scopes[0], ShouldEqual, "scope1")
 	So(applications.Items[0].Scopes[1], ShouldEqual, "scope2")
+	So(applications.Items[0].SubscriptionCount, ShouldEqual, 1000)
+	So(applications.Items[0].ClientID, ShouldEqual, "123")
+	So(applications.Items[0].ClientSecret, ShouldEqual, "456")
 	So(applications.Items[0].Created, ShouldHappenOnOrBefore, stubNow())
 }
