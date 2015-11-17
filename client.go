@@ -51,17 +51,7 @@ func (c Client) delete(resource string) error {
 // Calls an HTTP GET
 func (c Client) get(resource string) ([]byte, error) {
 	req, _ := http.NewRequest("GET", BaseURL+resource, nil)
-	c.setHeaders(req)
-	res, err := c.HTTP.Do(req)
-	if err != nil && res.StatusCode != 200 {
-		return nil, err
-	}
-	defer res.Body.Close()
-	body, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		return nil, err
-	}
-	return body, nil
+	return c.processRequest(req)
 }
 
 // Calls an HTTP POST
