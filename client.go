@@ -1,6 +1,8 @@
 package spark
 
 import (
+	"bytes"
+	"errors"
 	"io/ioutil"
 	"net/http"
 )
@@ -53,6 +55,36 @@ func (c Client) get(resource string) ([]byte, error) {
 	res, err := c.HTTP.Do(req)
 	if err != nil && res.StatusCode != 200 {
 		return nil, err
+	}
+	defer res.Body.Close()
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+	return body, nil
+}
+
+// Calls an HTTP POST
+func (c Client) post(resource string, body []byte) ([]byte, error) {
+	req, _ := http.NewRequest("POST", BaseURL+resource, bytes.NewBuffer(body))
+	return c.processRequest(req)
+}
+
+// Calls an HTTP PUT
+func (c Client) put(resource string, body []byte) ([]byte, error) {
+	req, _ := http.NewRequest("PUT", BaseURL+resource, bytes.NewBuffer(body))
+	return c.processRequest(req)
+}
+
+// Processes a HTTP POST/PUT request
+func (c Client) processRequest(req *http.Request) ([]byte, error) {
+	c.setHeaders(req)
+	res, err := c.HTTP.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	if res.StatusCode != 200 {
+		return nil, errors.New(res.Status)
 	}
 	defer res.Body.Close()
 	body, err := ioutil.ReadAll(res.Body)

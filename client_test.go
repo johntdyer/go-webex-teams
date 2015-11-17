@@ -1,6 +1,7 @@
 package spark
 
 import (
+	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
@@ -38,15 +39,43 @@ func TestClientSpec(t *testing.T) {
 		So(req.Header.Get("Content-Type"), ShouldEqual, "application/json")
 		So(req.Header.Get("Accept"), ShouldEqual, "application/json")
 	})
+	Convey("Should POST and PUT request", t, func() {
+		ts := serveHTTP(t)
+		defer ts.Close()
+		previousURL := BaseURL
+		BaseURL = ts.URL
+		client := NewClient("1234")
+		message := "foo-bar"
+		body, err := client.post("/foo", []byte(message))
+		So(err, ShouldBeNil)
+		So(string(body), ShouldEqual, "you POSTED")
+		body, err = client.put("/foo", []byte(message))
+		So(err, ShouldBeNil)
+		So(string(body), ShouldEqual, "you PUT")
+		BaseURL = previousURL
+	})
 }
 
 // serveHTTP serves up a test server emulating the Tropo Gateway
 func serveHTTP(t *testing.T) *httptest.Server {
 	return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
-		// body, _ := ioutil.ReadAll(req.Body)
-		// req.Body.Close()
+		body, _ := ioutil.ReadAll(req.Body)
+		defer req.Body.Close()
 		w.Header().Set("Content-Type", "application/json")
 		switch req.URL.String() {
+		case "/foo":
+			Convey("Should receive the correct body from a POST/PUT request", t, func() {
+				switch req.Method {
+				case "POST":
+					So(string(body), ShouldEqual, "foo-bar")
+					w.WriteHeader(200)
+					w.Write([]byte("you POSTED"))
+				case "PUT":
+					So(string(body), ShouldEqual, "foo-bar")
+					w.WriteHeader(200)
+					w.Write([]byte("you PUT"))
+				}
+			})
 		case ApplicationsResource:
 			if req.Method == "GET" {
 				w.WriteHeader(200)
