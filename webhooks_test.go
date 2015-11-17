@@ -8,11 +8,17 @@ import (
 )
 
 var (
-	WebhookJSON  = `{"id":"123","resource":"messages","event":"created","filter":"roomId=456","targetUrl":"https://example.com/mywebhook","name":"My Awesome Webhook","created":"2015-10-18T07:26:16-07:00"}`
-	WebhooksJSON = `{"items":[` + WebhookJSON + `]}`
+	WebhookJSON          = `{"id":"123","resource":"messages","event":"created","filter":"roomId=456","targetUrl":"https://example.com/mywebhook","name":"My Awesome Webhook","created":"2015-10-18T07:26:16-07:00"}`
+	WebhooksJSON         = `{"items":[` + WebhookJSON + `]}`
+	WebhooksResponseJSON = `{"id":"123","resource":"messages","event":"created","filter":"roomId=456","targetUrl":"https://example.com/mywebhook","name":"My Awesome Webhook","created":"2015-10-18T14:26:16+00:00"}`
 )
 
 func TestWebhooksSpec(t *testing.T) {
+	ts := serveHTTP(t)
+	defer ts.Close()
+	previousURL := BaseURL
+	BaseURL = ts.URL
+	InitClient("123")
 	Convey("Given we want to interact with Spark webhooks", t, func() {
 		Convey("For a webhook", func() {
 			Convey("It should generate the proper JSON message", func() {
@@ -42,11 +48,6 @@ func TestWebhooksSpec(t *testing.T) {
 				So(webhook.Created, ShouldHappenOnOrBefore, stubNow())
 			})
 			Convey("Get webhook", func() {
-				ts := serveHTTP(t)
-				defer ts.Close()
-				previousURL := BaseURL
-				BaseURL = ts.URL
-				InitClient("123")
 				webhook := &Webhook{ID: "1"}
 				err := webhook.Get()
 				So(err, ShouldBeNil)
@@ -57,27 +58,38 @@ func TestWebhooksSpec(t *testing.T) {
 				So(webhook.Targeturl, ShouldEqual, "https://example.com/mywebhook")
 				So(webhook.Name, ShouldEqual, "My Awesome Webhook")
 				So(webhook.Created, ShouldHappenOnOrBefore, stubNow())
-				BaseURL = previousURL
 			})
 			Convey("Delete webhook", func() {
-				ts := serveHTTP(t)
-				defer ts.Close()
-				previousURL := BaseURL
-				BaseURL = ts.URL
-				InitClient("123")
 				webhook := &Webhook{ID: "1"}
 				err := webhook.Delete()
 				So(err, ShouldBeNil)
-				BaseURL = previousURL
+			})
+			Convey("Post webhook", func() {
+				webhook := &Webhook{
+					Resource:  "messages",
+					Event:     "created",
+					Filter:    "room=123",
+					Targeturl: "http://foo.com/bar",
+					Name:      "My Awesome webhook",
+				}
+				err := webhook.Post()
+				So(err, ShouldBeNil)
+			})
+			Convey("Put webhook", func() {
+				webhook := &Webhook{
+					ID:        "1",
+					Resource:  "messages",
+					Event:     "created",
+					Filter:    "room=123",
+					Targeturl: "http://foo.com/bar",
+					Name:      "My Awesome webhook",
+				}
+				err := webhook.Put()
+				So(err, ShouldBeNil)
 			})
 		})
 		Convey("For webhooks", func() {
 			Convey("Get webhooks", func() {
-				ts := serveHTTP(t)
-				defer ts.Close()
-				previousURL := BaseURL
-				BaseURL = ts.URL
-				InitClient("123")
 				webhooks := &Webhooks{}
 				err := webhooks.Get()
 				So(err, ShouldBeNil)
@@ -88,8 +100,8 @@ func TestWebhooksSpec(t *testing.T) {
 				So(webhooks.Items[0].Targeturl, ShouldEqual, "https://example.com/mywebhook")
 				So(webhooks.Items[0].Name, ShouldEqual, "My Awesome Webhook")
 				So(webhooks.Items[0].Created, ShouldHappenOnOrBefore, stubNow())
-				BaseURL = previousURL
 			})
 		})
 	})
+	BaseURL = previousURL
 }

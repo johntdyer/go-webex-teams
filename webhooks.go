@@ -51,3 +51,37 @@ func (webhook *Webhook) Get() error {
 func (webhook *Webhook) Delete() error {
 	return delete(WebhooksResource + "/" + webhook.ID)
 }
+
+// Post creates a new webhook
+func (webhook *Webhook) Post() error {
+	body, err := json.Marshal(webhook)
+	if err != nil {
+		return err
+	}
+	body, err = post(WebhooksResource, body)
+	if err != nil {
+		return err
+	}
+	err = json.Unmarshal(body, webhook)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// Post updates a webhook
+func (webhook *Webhook) Put() error {
+	body, err := json.Marshal(webhook)
+	if err != nil {
+		return err
+	}
+	body, err = put(WebhooksResource+"/"+webhook.ID, body)
+	if err != nil {
+		return err
+	}
+	err = json.Unmarshal(body, webhook)
+	if err != nil {
+		return err
+	}
+	return nil
+}

@@ -40,6 +40,39 @@ func main() {
 		fmt.Println(err)
 	}
 
+	// Create an application
+	application := &Application{
+		Name:          "Out of Office Assistant",
+		Description:   "Does awesome things",
+		Logo:          "logo.jpg",
+		Keywords:      []string{"foo", "bar"},
+		Contactemails: []string{"bob@foo.com", "alice@bar.org"},
+		Redirecturls:  []string{"http://myapp.com/verify", "http://myapp.fr/verify"},
+		Scopes:        []string{"foo", "bar"},
+	}
+	err := application.Post()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(application)
+
+	// Update an application by ID
+	application := &Application{
+		ID: 			"1",
+		Name:          "Out of Office Assistant",
+		Description:   "Does awesome things",
+		Logo:          "logo.jpg",
+		Keywords:      []string{"foo", "bar"},
+		Contactemails: []string{"bob@foo.com", "alice@bar.org"},
+		Redirecturls:  []string{"http://myapp.com/verify", "http://myapp.fr/verify"},
+		Scopes:        []string{"foo", "bar"},
+	}
+	err := application.Put()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(application)
+
 	// Memberships
 	
 	// Get all memberships
@@ -64,6 +97,33 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
+
+	// Create a membership
+	membership := &Membership{
+		Roomid:      "123",
+		Personid:    "456",
+		PersonEmail: "john@doe.com",
+		Ismoderator: true,
+	}
+	err := membership.Post()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(membership)
+
+	// Update a membership
+	membership := &Membership{
+		ID: 		 "1",
+		Roomid:      "123",
+		Personid:    "456",
+		PersonEmail: "john@doe.com",
+		Ismoderator: true,
+	}
+	err := membership.Put()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(membership)
 
 	// People
 	
@@ -107,6 +167,29 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
+
+	// Create a room
+	room := &Room{
+		Title:   "Project Unicorn",
+		Members: []string{"john@doe.com", "456"},
+	}
+	err := room.Post()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(room)
+
+	// Update a room
+	room := &Room{
+		ID: 	"1",
+		Title:   "Project Unicorn",
+		Members: []string{"john@doe.com", "456"},
+	}
+	err := room.Put()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(room)
 
 	// Subscriptions
 	
@@ -157,9 +240,24 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
+
+	// Create a webhook
+	webhook := &Webhook{
+		Resource:  "messages",
+		Event:     "created",
+		Filter:    "room=123",
+		Targeturl: "http://foo.com/bar",
+		Name:      "My Awesome webhook",
+	}
+	err := webhook.Put()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(webhook)
 }
 ```
 
-## TODO
+## Examples
 
-* Add POST/PUT methods where appropriate
+To use the examples in the /examples folder, you must set an environment variable SPARK_TOKEN. You may obtain a token by logging in @ [http://developer.ciscospark.com](http://developer.ciscospark.com).
+

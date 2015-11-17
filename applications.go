@@ -28,7 +28,7 @@ type Applications struct {
 	} `json:"items"`
 }
 
-// Applications fetches all applications
+// Get fetches all applications
 func (applications *Applications) Get() error {
 	body, err := get(ApplicationsResource)
 	if err != nil {
@@ -41,7 +41,7 @@ func (applications *Applications) Get() error {
 	return nil
 }
 
-// Application fetches an application
+// Get fetches an application
 func (app *Application) Get() error {
 	body, err := get(ApplicationsResource + "/" + app.ID)
 	if err != nil {
@@ -54,7 +54,41 @@ func (app *Application) Get() error {
 	return nil
 }
 
-// DeleteApplication deletes an application
+// Delete deletes an application
 func (app *Application) Delete() error {
 	return delete(ApplicationsResource + "/" + app.ID)
+}
+
+// Post creates a new application
+func (app *Application) Post() error {
+	body, err := json.Marshal(app)
+	if err != nil {
+		return err
+	}
+	body, err = post(ApplicationsResource, body)
+	if err != nil {
+		return err
+	}
+	err = json.Unmarshal(body, app)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// Post updates a new application
+func (app *Application) Put() error {
+	body, err := json.Marshal(app)
+	if err != nil {
+		return err
+	}
+	body, err = put(ApplicationsResource+"/"+app.ID, body)
+	if err != nil {
+		return err
+	}
+	err = json.Unmarshal(body, app)
+	if err != nil {
+		return err
+	}
+	return nil
 }

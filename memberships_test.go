@@ -8,11 +8,17 @@ import (
 )
 
 var (
-	MembershipJSON  = `{"id":"000","roomId":"123","personId":"456","isModerator":true,"isMonitor":true,"isLocked":true,"personEmail":"jane@doe.com","created":"0001-01-01T00:00:00Z"}`
-	MembershipsJSON = `{"items":[` + MembershipJSON + `]}`
+	MembershipJSON         = `{"id":"000","roomId":"123","personId":"456","isModerator":true,"isMonitor":true,"isLocked":true,"personEmail":"jane@doe.com","created":"0001-01-01T00:00:00Z"}`
+	MembershipsJSON        = `{"items":[` + MembershipJSON + `]}`
+	MembershipResponseJSON = `{"id":"1","roomId":"123","personId":"456","personEmail":"john@doe.com","isModerator":true,"isMonitor":true,"created":"0001-01-01T00:00:00Z"}`
 )
 
 func TestMembershipsSpec(t *testing.T) {
+	ts := serveHTTP(t)
+	defer ts.Close()
+	previousURL := BaseURL
+	BaseURL = ts.URL
+	InitClient("123")
 	Convey("Given we want to interact with Spark memberships", t, func() {
 		Convey("For a membership", func() {
 			Convey("It should generate the proper JSON message", func() {
@@ -41,11 +47,6 @@ func TestMembershipsSpec(t *testing.T) {
 				So(membership.PersonEmail, ShouldEqual, "jane@doe.com")
 			})
 			Convey("Get membership", func() {
-				ts := serveHTTP(t)
-				defer ts.Close()
-				previousURL := BaseURL
-				BaseURL = ts.URL
-				InitClient("123")
 				membership := &Membership{ID: "1"}
 				err := membership.Get()
 				So(err, ShouldBeNil)
@@ -53,18 +54,32 @@ func TestMembershipsSpec(t *testing.T) {
 				So(membership.Roomid, ShouldEqual, "123")
 				So(membership.Personid, ShouldEqual, "456")
 				So(membership.Ismoderator, ShouldEqual, true)
-				BaseURL = previousURL
 			})
 			Convey("Delete membership", func() {
-				ts := serveHTTP(t)
-				defer ts.Close()
-				previousURL := BaseURL
-				BaseURL = ts.URL
-				InitClient("123")
 				membership := &Membership{ID: "1"}
 				err := membership.Delete()
 				So(err, ShouldBeNil)
-				BaseURL = previousURL
+			})
+			Convey("Post membership", func() {
+				membership := &Membership{
+					Roomid:      "123",
+					Personid:    "456",
+					PersonEmail: "john@doe.com",
+					Ismoderator: true,
+				}
+				err := membership.Post()
+				So(err, ShouldBeNil)
+			})
+			Convey("Put membership", func() {
+				membership := &Membership{
+					ID:          "1",
+					Roomid:      "123",
+					Personid:    "456",
+					PersonEmail: "john@doe.com",
+					Ismoderator: true,
+				}
+				err := membership.Put()
+				So(err, ShouldBeNil)
 			})
 		})
 		Convey("For memberships", func() {
@@ -81,11 +96,6 @@ func TestMembershipsSpec(t *testing.T) {
 				So(memberships.Items[0].Created, ShouldHappenOnOrBefore, stubNow())
 			})
 			Convey("Get memberships", func() {
-				ts := serveHTTP(t)
-				defer ts.Close()
-				previousURL := BaseURL
-				BaseURL = ts.URL
-				InitClient("123")
 				memberships := &Memberships{}
 				err := memberships.Get()
 				So(err, ShouldBeNil)
@@ -96,8 +106,8 @@ func TestMembershipsSpec(t *testing.T) {
 				So(memberships.Items[0].Ismonitor, ShouldEqual, true)
 				So(memberships.Items[0].Islocked, ShouldEqual, true)
 				So(memberships.Items[0].Created, ShouldHappenOnOrBefore, stubNow())
-				BaseURL = previousURL
 			})
 		})
 	})
+	BaseURL = previousURL
 }

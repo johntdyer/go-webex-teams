@@ -50,3 +50,20 @@ func (msg *Message) Get() error {
 func (msg *Message) Delete() error {
 	return delete(MessagesResource + "/" + msg.ID)
 }
+
+// Post creates a new membership
+func (msg *Message) Post() error {
+	body, err := json.Marshal(msg)
+	if err != nil {
+		return err
+	}
+	body, err = post(MessagesResource, body)
+	if err != nil {
+		return err
+	}
+	err = json.Unmarshal(body, msg)
+	if err != nil {
+		return err
+	}
+	return nil
+}

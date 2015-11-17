@@ -2,18 +2,23 @@ package spark
 
 import (
 	"encoding/json"
-	"fmt"
 	"testing"
 
 	. "github.com/smartystreets/goconvey/convey"
 )
 
 var (
-	ApplicationJSON  = `{"id":"123","name":"foo","description":"bar","logo":"image.jpg","keywords":["foo","bar"],"contactEmails":["john@doe.com","jane@doe.com"],"redirectUrls":["http://1.com","http://2.com"],"scopes":["scope1","scope2"],"subscriptionCount":1000,"clientId":"123","clientSecret":"456","created":"0001-01-01T00:00:00Z"}`
-	ApplicationsJSON = `{"items":[` + ApplicationJSON + `]}`
+	ApplicationJSON         = `{"id":"123","name":"foo","description":"bar","logo":"image.jpg","keywords":["foo","bar"],"contactEmails":["john@doe.com","jane@doe.com"],"redirectUrls":["http://1.com","http://2.com"],"scopes":["scope1","scope2"],"subscriptionCount":1000,"clientId":"123","clientSecret":"456","created":"0001-01-01T00:00:00Z"}`
+	ApplicationsJSON        = `{"items":[` + ApplicationJSON + `]}`
+	ApplicationResponseJSON = `{"id":"123","name":"Out of Office Assistant","description":"Does awesome things","logo":"logo.jpg","keywords":["foo","bar"],"contactEmails":["bob@foo.com","alice@bar.org"],"redirectUrls":["http://myapp.com/verify","http://myapp.fr/verify"],"scopes":["foo","bar"],"subscriptionCount":1000,"clientId":"456","clientSecret":"secret","created":"0001-01-01T00:00:00Z"}`
 )
 
 func TestApplicationsSpec(t *testing.T) {
+	ts := serveHTTP(t)
+	defer ts.Close()
+	previousURL := BaseURL
+	BaseURL = ts.URL
+	InitClient("123")
 	Convey("Given we want to interact with Spark applications", t, func() {
 		Convey("For an application", func() {
 			Convey("It should generate the proper JSON message", func() {
@@ -41,27 +46,42 @@ func TestApplicationsSpec(t *testing.T) {
 				validateApplication(t, application)
 			})
 			Convey("Get application", func() {
-				ts := serveHTTP(t)
-				defer ts.Close()
-				previousURL := BaseURL
-				BaseURL = ts.URL
-				InitClient("123")
 				application := &Application{ID: "1"}
 				err := application.Get()
 				So(err, ShouldBeNil)
 				validateApplication(t, application)
-				BaseURL = previousURL
 			})
 			Convey("Delete application", func() {
-				ts := serveHTTP(t)
-				defer ts.Close()
-				previousURL := BaseURL
-				BaseURL = ts.URL
-				InitClient("123")
 				application := &Application{ID: "1"}
 				err := application.Delete()
 				So(err, ShouldBeNil)
-				BaseURL = previousURL
+			})
+			Convey("Post application", func() {
+				application := &Application{
+					Name:          "Out of Office Assistant",
+					Description:   "Does awesome things",
+					Logo:          "logo.jpg",
+					Keywords:      []string{"foo", "bar"},
+					Contactemails: []string{"bob@foo.com", "alice@bar.org"},
+					Redirecturls:  []string{"http://myapp.com/verify", "http://myapp.fr/verify"},
+					Scopes:        []string{"foo", "bar"},
+				}
+				err := application.Post()
+				So(err, ShouldBeNil)
+			})
+			Convey("Put application", func() {
+				application := &Application{
+					ID:            "1",
+					Name:          "Out of Office Assistant",
+					Description:   "Does awesome things",
+					Logo:          "logo.jpg",
+					Keywords:      []string{"foo", "bar"},
+					Contactemails: []string{"bob@foo.com", "alice@bar.org"},
+					Redirecturls:  []string{"http://myapp.com/verify", "http://myapp.fr/verify"},
+					Scopes:        []string{"foo", "bar"},
+				}
+				err := application.Put()
+				So(err, ShouldBeNil)
 			})
 		})
 		Convey("For applications", func() {
@@ -72,21 +92,14 @@ func TestApplicationsSpec(t *testing.T) {
 				validateApplications(t, applications)
 			})
 			Convey("Get applications", func() {
-				ts := serveHTTP(t)
-				defer ts.Close()
-				previousURL := BaseURL
-				BaseURL = ts.URL
-				InitClient("123")
 				applications := &Applications{}
 				err := applications.Get()
 				So(err, ShouldBeNil)
-				fmt.Println("+++++")
-				fmt.Println(applications)
 				validateApplications(t, applications)
-				BaseURL = previousURL
 			})
 		})
 	})
+	BaseURL = previousURL
 }
 
 func validateApplication(t *testing.T, application *Application) {

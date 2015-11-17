@@ -53,3 +53,37 @@ func (mem *Membership) Get() error {
 func (mem *Membership) Delete() error {
 	return delete(MembershipsResource + "/" + mem.ID)
 }
+
+// Post creates a new membership
+func (mem *Membership) Post() error {
+	body, err := json.Marshal(mem)
+	if err != nil {
+		return err
+	}
+	body, err = post(MembershipsResource, body)
+	if err != nil {
+		return err
+	}
+	err = json.Unmarshal(body, mem)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// Post updates a membership
+func (mem *Membership) Put() error {
+	body, err := json.Marshal(mem)
+	if err != nil {
+		return err
+	}
+	body, err = put(MembershipsResource+"/"+mem.ID, body)
+	if err != nil {
+		return err
+	}
+	err = json.Unmarshal(body, mem)
+	if err != nil {
+		return err
+	}
+	return nil
+}

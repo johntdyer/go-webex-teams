@@ -94,9 +94,13 @@ func serveHTTP(t *testing.T) *httptest.Server {
 				}
 			})
 		case ApplicationsResource:
-			if req.Method == "GET" {
+			switch req.Method {
+			case "GET":
 				w.WriteHeader(200)
 				w.Write([]byte(ApplicationsJSON))
+			case "POST":
+				w.WriteHeader(200)
+				w.Write([]byte(ApplicationResponseJSON))
 			}
 		case ApplicationsResource + "/1":
 			switch req.Method {
@@ -105,14 +109,21 @@ func serveHTTP(t *testing.T) *httptest.Server {
 				w.Write([]byte(ApplicationJSON))
 			case "DELETE":
 				w.WriteHeader(200)
+			case "PUT":
+				w.WriteHeader(200)
+				w.Write([]byte(ApplicationResponseJSON))
 			default:
 				w.WriteHeader(404)
 				t.Error("Unknown HTTP method for Applications")
 			}
 		case MembershipsResource:
-			if req.Method == "GET" {
+			switch req.Method {
+			case "GET":
 				w.WriteHeader(200)
 				w.Write([]byte(MembershipsJSON))
+			case "POST":
+				w.WriteHeader(200)
+				w.Write([]byte(MembershipResponseJSON))
 			}
 		case MembershipsResource + "/1":
 			switch req.Method {
@@ -121,14 +132,21 @@ func serveHTTP(t *testing.T) *httptest.Server {
 				w.Write([]byte(MembershipJSON))
 			case "DELETE":
 				w.WriteHeader(200)
+			case "PUT":
+				w.WriteHeader(200)
+				w.Write([]byte(MembershipResponseJSON))
 			default:
 				w.WriteHeader(404)
 				t.Error("Unknown HTTP method for Memberships")
 			}
 		case MessagesResource:
-			if req.Method == "GET" {
+			switch req.Method {
+			case "GET":
 				w.WriteHeader(200)
 				w.Write([]byte(MessagesJSON))
+			case "POST":
+				w.WriteHeader(200)
+				w.Write([]byte(MessageResponseJSON))
 			}
 		case MessagesResource + "/1":
 			switch req.Method {
@@ -142,9 +160,27 @@ func serveHTTP(t *testing.T) *httptest.Server {
 				t.Error("Unknown HTTP method for Messages")
 			}
 		case RoomsResource:
-			if req.Method == "GET" {
+			switch req.Method {
+			case "GET":
 				w.WriteHeader(200)
 				w.Write([]byte(RoomsJSON))
+			case "POST":
+				w.WriteHeader(200)
+				w.Write([]byte(RoomResponseJSON))
+			}
+		case RoomsResource + "/1":
+			switch req.Method {
+			case "GET":
+				w.WriteHeader(200)
+				w.Write([]byte(RoomJSON))
+			case "PUT":
+				w.WriteHeader(200)
+				w.Write([]byte(RoomResponseJSON))
+			case "DELETE":
+				w.WriteHeader(200)
+			default:
+				w.WriteHeader(404)
+				t.Error("Unknown HTTP method for Room")
 			}
 		case PeopleResource:
 			if req.Method == "GET" {
@@ -161,17 +197,6 @@ func serveHTTP(t *testing.T) *httptest.Server {
 			default:
 				w.WriteHeader(404)
 				t.Error("Unknown HTTP method for People")
-			}
-		case RoomsResource + "/1":
-			switch req.Method {
-			case "GET":
-				w.WriteHeader(200)
-				w.Write([]byte(RoomJSON))
-			case "DELETE":
-				w.WriteHeader(200)
-			default:
-				w.WriteHeader(404)
-				t.Error("Unknown HTTP method for Rooms")
 			}
 		case SubscriptionsResource:
 			if req.Method == "GET" {
@@ -190,9 +215,13 @@ func serveHTTP(t *testing.T) *httptest.Server {
 				t.Error("Unknown HTTP method for Subscriptions")
 			}
 		case WebhooksResource:
-			if req.Method == "GET" {
+			switch req.Method {
+			case "GET":
 				w.WriteHeader(200)
 				w.Write([]byte(WebhooksJSON))
+			case "POST":
+				w.WriteHeader(200)
+				w.Write([]byte(WebhooksResponseJSON))
 			}
 		case WebhooksResource + "/1":
 			switch req.Method {
@@ -201,6 +230,9 @@ func serveHTTP(t *testing.T) *httptest.Server {
 				w.Write([]byte(WebhookJSON))
 			case "DELETE":
 				w.WriteHeader(200)
+			case "PUT":
+				w.WriteHeader(200)
+				w.Write([]byte(WebhooksResponseJSON))
 			default:
 				w.WriteHeader(404)
 				t.Error("Unknown HTTP method for Webhooks")

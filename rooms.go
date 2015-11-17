@@ -49,3 +49,37 @@ func (room *Room) Get() error {
 func (room *Room) Delete() error {
 	return delete(RoomsResource + "/" + room.ID)
 }
+
+// Post creates a new room
+func (room *Room) Post() error {
+	body, err := json.Marshal(room)
+	if err != nil {
+		return err
+	}
+	body, err = post(RoomsResource, body)
+	if err != nil {
+		return err
+	}
+	err = json.Unmarshal(body, room)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// Post updates a room
+func (room *Room) Put() error {
+	body, err := json.Marshal(room)
+	if err != nil {
+		return err
+	}
+	body, err = put(RoomsResource+"/"+room.ID, body)
+	if err != nil {
+		return err
+	}
+	err = json.Unmarshal(body, room)
+	if err != nil {
+		return err
+	}
+	return nil
+}
