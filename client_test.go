@@ -135,6 +135,22 @@ func serveHTTP(t *testing.T) *httptest.Server {
 				w.WriteHeader(404)
 				t.Error("Unknown HTTP method for Subscriptions")
 			}
+		case WebhooksResource:
+			if req.Method == "GET" {
+				w.WriteHeader(200)
+				w.Write([]byte(WebhooksJSON))
+			}
+		case WebhooksResource + "/1":
+			switch req.Method {
+			case "GET":
+				w.WriteHeader(200)
+				w.Write([]byte(WebhookJSON))
+			case "DELETE":
+				w.WriteHeader(200)
+			default:
+				w.WriteHeader(404)
+				t.Error("Unknown HTTP method for Webhooks")
+			}
 		default:
 			w.WriteHeader(404)
 			t.Error("Unknown HTTP request")

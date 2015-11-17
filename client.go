@@ -20,6 +20,8 @@ var (
 	RoomsResource = "/rooms"
 	// SubscriptionsResource is the resource for managing subscriptions
 	SubscriptionsResource = "/subscriptions"
+	// WebhooksResource is the resource for managing webhooks
+	WebhooksResource = "/webhooks"
 )
 
 // Client is a new Spark client
