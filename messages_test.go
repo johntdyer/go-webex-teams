@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	MessageJSON  = `{"id":"123","roomId":"456","text":"foo","file":"image.jpg","created":"2015-10-18T07:26:16-07:00"}`
+	MessageJSON  = `{"id":"123","roomId":"456","text":"foo","files":["image1.jpg","image2.jpg"],"created":"2015-10-18T07:26:16-07:00"}`
 	MessagesJSON = `{"items":[` + MessageJSON + `]}`
 )
 
@@ -25,7 +25,8 @@ func TestMessagesSpec(t *testing.T) {
 				So(err, ShouldBeNil)
 				So(messages.Items[0].Roomid, ShouldEqual, "456")
 				So(messages.Items[0].Text, ShouldEqual, "foo")
-				So(messages.Items[0].File, ShouldEqual, "image.jpg")
+				So(messages.Items[0].Files[0], ShouldEqual, "image1.jpg")
+				So(messages.Items[0].Files[1], ShouldEqual, "image2.jpg")
 				So(messages.Items[0].Created, ShouldHappenOnOrBefore, stubNow())
 				BaseURL = previousURL
 			})
@@ -35,7 +36,8 @@ func TestMessagesSpec(t *testing.T) {
 				So(err, ShouldBeNil)
 				So(messages.Items[0].Roomid, ShouldEqual, "456")
 				So(messages.Items[0].Text, ShouldEqual, "foo")
-				So(messages.Items[0].File, ShouldEqual, "image.jpg")
+				So(messages.Items[0].Files[0], ShouldEqual, "image1.jpg")
+				So(messages.Items[0].Files[1], ShouldEqual, "image2.jpg")
 				So(messages.Items[0].Created, ShouldHappenOnOrBefore, stubNow())
 			})
 		})
@@ -45,7 +47,7 @@ func TestMessagesSpec(t *testing.T) {
 					ID:      "123",
 					Roomid:  "456",
 					Text:    "foo",
-					File:    "image.jpg",
+					Files:   []string{"image1.jpg", "image2.jpg"},
 					Created: stubNow(),
 				}
 				body, err := json.Marshal(message)
@@ -58,7 +60,8 @@ func TestMessagesSpec(t *testing.T) {
 				So(err, ShouldBeNil)
 				So(message.Roomid, ShouldEqual, "456")
 				So(message.Text, ShouldEqual, "foo")
-				So(message.File, ShouldEqual, "image.jpg")
+				So(message.Files[0], ShouldEqual, "image1.jpg")
+				So(message.Files[1], ShouldEqual, "image2.jpg")
 			})
 			Convey("Get message", func() {
 				ts := serveHTTP(t)
@@ -70,7 +73,8 @@ func TestMessagesSpec(t *testing.T) {
 				So(err, ShouldBeNil)
 				So(message.Roomid, ShouldEqual, "456")
 				So(message.Text, ShouldEqual, "foo")
-				So(message.File, ShouldEqual, "image.jpg")
+				So(message.Files[0], ShouldEqual, "image1.jpg")
+				So(message.Files[1], ShouldEqual, "image2.jpg")
 				So(message.Created, ShouldHappenOnOrBefore, stubNow())
 				BaseURL = previousURL
 			})

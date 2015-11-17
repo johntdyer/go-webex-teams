@@ -10,7 +10,7 @@ type Message struct {
 	ID      string    `json:"id,omitempty"`
 	Roomid  string    `json:"roomId,omitempty"`
 	Text    string    `json:"text,omitempty"`
-	File    string    `json:"file,omitempty"`
+	Files   []string  `json:"files,omitempty"`
 	Created time.Time `json:"created,omitempty"`
 }
 
