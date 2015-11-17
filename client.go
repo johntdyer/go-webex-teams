@@ -43,8 +43,7 @@ func NewClient(token string) Client {
 // Calls an HTTP DELETE
 func (c Client) delete(resource string) error {
 	req, _ := http.NewRequest("DELETE", BaseURL+resource, nil)
-	c.setHeaders(req)
-	_, err := c.HTTP.Do(req)
+	_, err := c.processRequest(req)
 	return err
 }
 
