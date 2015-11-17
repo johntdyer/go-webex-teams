@@ -42,8 +42,9 @@ func TestSubscriptionsSpec(t *testing.T) {
 				defer ts.Close()
 				previousURL := BaseURL
 				BaseURL = ts.URL
-				client := NewClient("123")
-				subscription, err := client.Subscription("1")
+				InitClient("123")
+				subscription := &Subscription{ID: "1"}
+				err := subscription.Get()
 				So(err, ShouldBeNil)
 				So(subscription.ID, ShouldEqual, "000")
 				So(subscription.Personid, ShouldEqual, "123")
@@ -57,8 +58,9 @@ func TestSubscriptionsSpec(t *testing.T) {
 				defer ts.Close()
 				previousURL := BaseURL
 				BaseURL = ts.URL
-				client := NewClient("123")
-				err := client.DeleteSubscription("1")
+				InitClient("123")
+				subscription := &Subscription{ID: "1"}
+				err := subscription.Delete()
 				So(err, ShouldBeNil)
 				BaseURL = previousURL
 			})
@@ -79,8 +81,9 @@ func TestSubscriptionsSpec(t *testing.T) {
 				defer ts.Close()
 				previousURL := BaseURL
 				BaseURL = ts.URL
-				client := NewClient("123")
-				subscriptions, err := client.Subscriptions()
+				InitClient("123")
+				subscriptions := &Subscriptions{}
+				err := subscriptions.Get()
 				So(err, ShouldBeNil)
 				So(subscriptions.Items[0].ID, ShouldEqual, "000")
 				So(subscriptions.Items[0].Personid, ShouldEqual, "123")

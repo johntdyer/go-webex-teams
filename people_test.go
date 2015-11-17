@@ -20,8 +20,9 @@ func TestPeopleSpec(t *testing.T) {
 				defer ts.Close()
 				previousURL := BaseURL
 				BaseURL = ts.URL
-				client := NewClient("123")
-				people, err := client.People()
+				InitClient("123")
+				people := &People{}
+				err := people.Get()
 				So(err, ShouldBeNil)
 				So(people.Items[0].ID, ShouldEqual, "OTZhYmMy")
 				So(people.Items[0].Emails, ShouldEqual, "johnny.chang@foomail.com")
@@ -69,8 +70,9 @@ func TestPeopleSpec(t *testing.T) {
 				defer ts.Close()
 				previousURL := BaseURL
 				BaseURL = ts.URL
-				client := NewClient("123")
-				person, err := client.Person("1")
+				InitClient("123")
+				person := &Person{ID: "1"}
+				err := person.Get()
 				So(err, ShouldBeNil)
 				So(person.ID, ShouldEqual, "OTZhYmMy")
 				So(person.Emails, ShouldEqual, "johnny.chang@foomail.com")

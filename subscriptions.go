@@ -22,35 +22,33 @@ type Subscriptions struct {
 }
 
 // Subscriptions fetches all subscriptions
-func (c Client) Subscriptions() (*Subscriptions, error) {
-	subscriptions := &Subscriptions{}
-	body, err := c.get(SubscriptionsResource)
+func (subs *Subscriptions) Get() error {
+	body, err := get(SubscriptionsResource)
 	if err != nil {
-		return subscriptions, err
+		return err
 	}
-	err = json.Unmarshal(body, &subscriptions)
+	err = json.Unmarshal(body, subs)
 	if err != nil {
-		return subscriptions, err
+		return err
 	}
-	return subscriptions, nil
+	return nil
 
 }
 
 // Subscription fetches a subscription
-func (c Client) Subscription(id string) (*Subscription, error) {
-	body, err := c.get(SubscriptionsResource + "/" + id)
+func (sub *Subscription) Get() error {
+	body, err := get(SubscriptionsResource + "/" + sub.ID)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	subscription := &Subscription{}
-	err = json.Unmarshal(body, subscription)
+	err = json.Unmarshal(body, sub)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return subscription, nil
+	return nil
 }
 
 // DeleteSubscription deletes a subscription
-func (c Client) DeleteSubscription(id string) error {
-	return c.delete(SubscriptionsResource + "/" + id)
+func (sub *Subscription) Delete() error {
+	return delete(SubscriptionsResource + "/" + sub.ID)
 }

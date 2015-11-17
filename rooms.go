@@ -20,34 +20,32 @@ type Rooms struct {
 }
 
 // Rooms fetches all rooms
-func (c Client) Rooms() (*Rooms, error) {
-	rooms := &Rooms{}
-	body, err := c.get(RoomsResource)
+func (rooms *Rooms) Get() error {
+	body, err := get(RoomsResource)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	err = json.Unmarshal(body, &rooms)
+	err = json.Unmarshal(body, rooms)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return rooms, nil
+	return nil
 }
 
 // Room fetchs a room
-func (c Client) Room(id string) (*Room, error) {
-	body, err := c.get(RoomsResource + "/" + id)
+func (room *Room) Get() error {
+	body, err := get(RoomsResource + "/" + room.ID)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	room := &Room{}
 	err = json.Unmarshal(body, room)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return room, nil
+	return nil
 }
 
 // DeleteRoom deletes a room
-func (c Client) DeleteRoom(id string) error {
-	return c.delete(RoomsResource + "/" + id)
+func (room *Room) Delete() error {
+	return delete(RoomsResource + "/" + room.ID)
 }

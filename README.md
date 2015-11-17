@@ -13,55 +13,150 @@ import (
 )
 
 func main() {
-	sparkClient := spark.NewClient("<YOUR TOKEN>")
+	spark.InitClient("<YOUR TOKEN>")
 
-	// Interact with applications
-	applications := sparkClient.Applications()
+	// Applications
+
+	// Get all applications
+	applications := spark.Applications{}
+	err := applications.Get()
+	if err != nil {
+		fmt.Println(err)
+	}
 	fmt.println(applications)
-	application := sparkClient.Application("123")
+
+	// Get an application by ID
+	application := spark.Application{ID: "123"}
+	err := application.Get()
+	if err != nil {
+		fmt.Println(err)
+	}
 	fmt.println(application)
-	sparkClient.DeleteApplication("123")
 
-	// Interact with memberships
-	memberships := sparkClient.Memberships()
-	fmt.println(memberships)
-	membership := sparkClient.Membership("456")
+	// Delete an application by ID
+	application := spark.Application{ID: "123"}
+	err := application.Delete()
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	// Memberships
+	
+	// Get all memberships
+	memberships := spark.Memberships{}
+	err := memberships.Get()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.println(memberhips)
+
+	// Get an membership by ID
+	membership := spark.Membership{ID: "123"}
+	err := membership.Get()
+	if err != nil {
+		fmt.Println(err)
+	}
 	fmt.println(membership)
-	sparkClient.DeleteApplication("456")
 
-	// Interact with messages
-	messages := sparkClient.Messages()
-	fmt.println(messages)
-	message := sparkClient.Message("789")
-	fmt.println(message)
-	sparkClient.DeleteMessage("789")
+	// Delete an membership by ID
+	membership := spark.Membership{ID: "123"}
+	err := membership.Delete()
+	if err != nil {
+		fmt.Println(err)
+	}
 
-	// Interact with people
-	people := sparkClient.People()
+	// People
+	
+	// Get all people
+	people := spark.People{}
+	err := people.Get()
+	if err != nil {
+		fmt.Println(err)
+	}
 	fmt.println(people)
-	person := sparkClient.Person("789")
+
+	// Get a person by ID
+	person := spark.Person{ID: "123"}
+	err := person.Get()
+	if err != nil {
+		fmt.Println(err)
+	}
 	fmt.println(person)
 
-	// Interact with rooms
-	rooms := sparkClient.Rooms()
+	// Rooms
+	
+	// Get all rooms
+	rooms := spark.Rooms{}
+	err := rooms.Get()
+	if err != nil {
+		fmt.Println(err)
+	}
 	fmt.println(rooms)
-	room := sparkClient.Room("901")
+
+	// Get a room by ID
+	room := spark.Room{ID: "123"}
+	err := room.Get()
+	if err != nil {
+		fmt.Println(err)
+	}
 	fmt.println(room)
-	sparkClient.DeleteRoom("901")
 
-	// Interact with subscriptions
-	subscriptions := sparkClient.Subscriptions()
+	// Delete a room by ID
+	room := spark.Room{ID: "123"}
+	err := room.Delete()
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	// Subscriptions
+	
+	// Get all subscriptions
+	subscriptions := spark.Subscriptions{}
+	err := subscriptions.Get()
+	if err != nil {
+		fmt.Println(err)
+	}
 	fmt.println(subscriptions)
-	subscription := sparkClient.Subscription("901")
-	fmt.println(subscription)
-	sparkClient.DeleteSubscription("901")
 
-	// Interact with webhooks
-	webhooks := sparkClient.Webhooks()
+	// Get a subscription by ID
+	subscription := spark.Subscription{ID: "123"}
+	err := subscription.Get()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.println(subscription)
+
+	// Delete a subscription by ID
+	subscription := spark.Subscription{ID: "123"}
+	err := room.Delete()
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	// Webhooks
+	
+	// Get all webhooks
+	webhooks := spark.Webhooks{}
+	err := webhooks.Get()
+	if err != nil {
+		fmt.Println(err)
+	}
 	fmt.println(webhooks)
-	webhook := sparkClient.Webhook("901")
+
+	// Get a webhook by ID
+	webhook := spark.Webhook{ID: "123"}
+	err := webhook.Get()
+	if err != nil {
+		fmt.Println(err)
+	}
 	fmt.println(webhook)
-	sparkClient.DeleteWebhook("901")
+
+	// Delete a webhook by ID
+	webhook := spark.Webhook{ID: "123"}
+	err := room.Delete()
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 ```
 

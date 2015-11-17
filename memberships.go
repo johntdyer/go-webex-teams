@@ -24,34 +24,32 @@ type Memberships struct {
 }
 
 // Memberships fetches all memberships
-func (c Client) Memberships() (*Memberships, error) {
-	memberships := &Memberships{}
-	body, err := c.get(MembershipsResource)
+func (mems *Memberships) Get() error {
+	body, err := get(MembershipsResource)
 	if err != nil {
-		return memberships, err
+		return err
 	}
-	err = json.Unmarshal(body, memberships)
+	err = json.Unmarshal(body, mems)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return memberships, nil
+	return nil
 }
 
 // Membership fetches a membership
-func (c Client) Membership(id string) (*Membership, error) {
-	body, err := c.get(MembershipsResource + "/" + id)
+func (mem *Membership) Get() error {
+	body, err := get(MembershipsResource + "/" + mem.ID)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	membership := &Membership{}
-	err = json.Unmarshal(body, membership)
+	err = json.Unmarshal(body, mem)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return membership, nil
+	return nil
 }
 
 // DeleteMembership deletes a membership
-func (c Client) DeleteMembership(id string) error {
-	return c.delete(MembershipsResource + "/" + id)
+func (mem *Membership) Delete() error {
+	return delete(MembershipsResource + "/" + mem.ID)
 }

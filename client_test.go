@@ -26,15 +26,14 @@ func TestClientSpec(t *testing.T) {
 		So(SubscriptionsResource, ShouldStartWith, "/")
 	})
 	Convey("Should create an *http.Client", t, func() {
-		client := NewClient("1234")
-		So(reflect.TypeOf(client).String(), ShouldEqual, "spark.Client")
-		So(client.Token, ShouldEqual, "1234")
-		So(reflect.TypeOf(client.HTTP).String(), ShouldEqual, "*http.Client")
+		InitClient("1234")
+		So(ActiveClient.Token, ShouldEqual, "1234")
+		So(reflect.TypeOf(ActiveClient.HTTP).String(), ShouldEqual, "*http.Client")
 	})
 	Convey("Should set the HTTP headers properly", t, func() {
-		client := NewClient("1234")
+		InitClient("1234")
 		req, _ := http.NewRequest("GET", "http://foo.com", nil)
-		client.setHeaders(req)
+		setHeaders(req)
 		So(req.Header.Get("Authorization"), ShouldEqual, "Bearer 1234")
 		So(req.Header.Get("Content-Type"), ShouldEqual, "application/json")
 		So(req.Header.Get("Accept"), ShouldEqual, "application/json")
@@ -44,24 +43,24 @@ func TestClientSpec(t *testing.T) {
 		defer ts.Close()
 		previousURL := BaseURL
 		BaseURL = ts.URL
-		client := NewClient("1234")
+		InitClient("1234")
 		Convey("DELETE", func() {
-			err := client.delete("/foo")
+			err := delete("/foo")
 			So(err, ShouldBeNil)
 		})
 		Convey("GET", func() {
-			body, err := client.get("/foo")
+			body, err := get("/foo")
 			So(err, ShouldBeNil)
 			So(string(body), ShouldEqual, "you GOT")
 		})
 		message := "foo-bar"
 		Convey("POST", func() {
-			body, err := client.post("/foo", []byte(message))
+			body, err := post("/foo", []byte(message))
 			So(err, ShouldBeNil)
 			So(string(body), ShouldEqual, "you POSTED")
 		})
 		Convey("PUT", func() {
-			body, err := client.put("/foo", []byte(message))
+			body, err := put("/foo", []byte(message))
 			So(err, ShouldBeNil)
 			So(string(body), ShouldEqual, "you PUT")
 		})

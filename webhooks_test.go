@@ -46,8 +46,9 @@ func TestWebhooksSpec(t *testing.T) {
 				defer ts.Close()
 				previousURL := BaseURL
 				BaseURL = ts.URL
-				client := NewClient("123")
-				webhook, err := client.Webhook("1")
+				InitClient("123")
+				webhook := &Webhook{ID: "1"}
+				err := webhook.Get()
 				So(err, ShouldBeNil)
 				So(webhook.ID, ShouldEqual, "123")
 				So(webhook.Resource, ShouldEqual, "messages")
@@ -63,8 +64,9 @@ func TestWebhooksSpec(t *testing.T) {
 				defer ts.Close()
 				previousURL := BaseURL
 				BaseURL = ts.URL
-				client := NewClient("123")
-				err := client.DeleteWebhook("1")
+				InitClient("123")
+				webhook := &Webhook{ID: "1"}
+				err := webhook.Delete()
 				So(err, ShouldBeNil)
 				BaseURL = previousURL
 			})
@@ -75,8 +77,9 @@ func TestWebhooksSpec(t *testing.T) {
 				defer ts.Close()
 				previousURL := BaseURL
 				BaseURL = ts.URL
-				client := NewClient("123")
-				webhooks, err := client.Webhooks()
+				InitClient("123")
+				webhooks := &Webhooks{}
+				err := webhooks.Get()
 				So(err, ShouldBeNil)
 				So(webhooks.Items[0].ID, ShouldEqual, "123")
 				So(webhooks.Items[0].Resource, ShouldEqual, "messages")

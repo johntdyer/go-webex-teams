@@ -24,6 +24,10 @@ var (
 	SubscriptionsResource = "/subscriptions"
 	// WebhooksResource is the resource for managing webhooks
 	WebhooksResource = "/webhooks"
+	// ActiveClient
+	ActiveClient = &Client{}
+	//
+	InactiveClientErr = errors.New("You must call InitalizeClient() before using this operation")
 )
 
 // Client is a new Spark client
@@ -32,43 +36,46 @@ type Client struct {
 	HTTP  *http.Client
 }
 
-// NewClient generates a new Spark client taking and setting the auth token
-func NewClient(token string) Client {
-	return Client{
+// IntClient generates a new Spark client taking and setting the auth token
+func InitClient(token string) {
+	ActiveClient = &Client{
 		Token: token,
 		HTTP:  &http.Client{},
 	}
 }
 
 // Calls an HTTP DELETE
-func (c Client) delete(resource string) error {
+func delete(resource string) error {
 	req, _ := http.NewRequest("DELETE", BaseURL+resource, nil)
-	_, err := c.processRequest(req)
+	_, err := processRequest(req)
 	return err
 }
 
 // Calls an HTTP GET
-func (c Client) get(resource string) ([]byte, error) {
+func get(resource string) ([]byte, error) {
 	req, _ := http.NewRequest("GET", BaseURL+resource, nil)
-	return c.processRequest(req)
+	return processRequest(req)
 }
 
 // Calls an HTTP POST
-func (c Client) post(resource string, body []byte) ([]byte, error) {
+func post(resource string, body []byte) ([]byte, error) {
 	req, _ := http.NewRequest("POST", BaseURL+resource, bytes.NewBuffer(body))
-	return c.processRequest(req)
+	return processRequest(req)
 }
 
 // Calls an HTTP PUT
-func (c Client) put(resource string, body []byte) ([]byte, error) {
+func put(resource string, body []byte) ([]byte, error) {
 	req, _ := http.NewRequest("PUT", BaseURL+resource, bytes.NewBuffer(body))
-	return c.processRequest(req)
+	return processRequest(req)
 }
 
 // Processes a HTTP POST/PUT request
-func (c Client) processRequest(req *http.Request) ([]byte, error) {
-	c.setHeaders(req)
-	res, err := c.HTTP.Do(req)
+func processRequest(req *http.Request) ([]byte, error) {
+	if ActiveClient.Token == "" {
+		return nil, InactiveClientErr
+	}
+	setHeaders(req)
+	res, err := ActiveClient.HTTP.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -84,8 +91,8 @@ func (c Client) processRequest(req *http.Request) ([]byte, error) {
 }
 
 // Set the headers for the HTTP requests
-func (c Client) setHeaders(req *http.Request) {
-	req.Header.Set("Authorization", "Bearer "+c.Token)
+func setHeaders(req *http.Request) {
+	req.Header.Set("Authorization", "Bearer "+ActiveClient.Token)
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Content-Type", "application/json")
 }

@@ -29,34 +29,32 @@ type Applications struct {
 }
 
 // Applications fetches all applications
-func (c Client) Applications() (*Applications, error) {
-	applications := &Applications{}
-	body, err := c.get(ApplicationsResource)
+func (applications *Applications) Get() error {
+	body, err := get(ApplicationsResource)
 	if err != nil {
-		return applications, err
+		return err
 	}
-	err = json.Unmarshal(body, &applications)
+	err = json.Unmarshal(body, applications)
 	if err != nil {
-		return applications, err
+		return err
 	}
-	return applications, nil
+	return nil
 }
 
 // Application fetches an application
-func (c Client) Application(id string) (*Application, error) {
-	body, err := c.get(ApplicationsResource + "/" + id)
+func (app *Application) Get() error {
+	body, err := get(ApplicationsResource + "/" + app.ID)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	application := &Application{}
-	err = json.Unmarshal(body, application)
+	err = json.Unmarshal(body, app)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return application, nil
+	return nil
 }
 
 // DeleteApplication deletes an application
-func (c Client) DeleteApplication(id string) error {
-	return c.delete(ApplicationsResource + "/" + id)
+func (app *Application) Delete() error {
+	return delete(ApplicationsResource + "/" + app.ID)
 }

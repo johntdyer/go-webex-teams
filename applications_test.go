@@ -2,6 +2,7 @@ package spark
 
 import (
 	"encoding/json"
+	"fmt"
 	"testing"
 
 	. "github.com/smartystreets/goconvey/convey"
@@ -44,8 +45,9 @@ func TestApplicationsSpec(t *testing.T) {
 				defer ts.Close()
 				previousURL := BaseURL
 				BaseURL = ts.URL
-				client := NewClient("123")
-				application, err := client.Application("1")
+				InitClient("123")
+				application := &Application{ID: "1"}
+				err := application.Get()
 				So(err, ShouldBeNil)
 				validateApplication(t, application)
 				BaseURL = previousURL
@@ -55,8 +57,9 @@ func TestApplicationsSpec(t *testing.T) {
 				defer ts.Close()
 				previousURL := BaseURL
 				BaseURL = ts.URL
-				client := NewClient("123")
-				err := client.DeleteApplication("1")
+				InitClient("123")
+				application := &Application{ID: "1"}
+				err := application.Delete()
 				So(err, ShouldBeNil)
 				BaseURL = previousURL
 			})
@@ -73,9 +76,12 @@ func TestApplicationsSpec(t *testing.T) {
 				defer ts.Close()
 				previousURL := BaseURL
 				BaseURL = ts.URL
-				client := NewClient("123")
-				applications, err := client.Applications()
+				InitClient("123")
+				applications := &Applications{}
+				err := applications.Get()
 				So(err, ShouldBeNil)
+				fmt.Println("+++++")
+				fmt.Println(applications)
 				validateApplications(t, applications)
 				BaseURL = previousURL
 			})

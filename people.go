@@ -20,29 +20,27 @@ type People struct {
 }
 
 // Messages fetches all people
-func (c Client) People() (*People, error) {
-	people := &People{}
-	body, err := c.get(PeopleResource)
+func (people *People) Get() error {
+	body, err := get(PeopleResource)
 	if err != nil {
-		return people, err
+		return err
 	}
-	err = json.Unmarshal(body, &people)
+	err = json.Unmarshal(body, people)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return people, nil
+	return nil
 }
 
 // Message fetches a person
-func (c Client) Person(id string) (*Person, error) {
-	body, err := c.get(PeopleResource + "/" + id)
+func (person *Person) Get() error {
+	body, err := get(PeopleResource + "/" + person.ID)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	person := &Person{}
 	err = json.Unmarshal(body, person)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return person, nil
+	return nil
 }

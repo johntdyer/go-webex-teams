@@ -20,8 +20,9 @@ func TestRoomsSpec(t *testing.T) {
 				defer ts.Close()
 				previousURL := BaseURL
 				BaseURL = ts.URL
-				client := NewClient("123")
-				rooms, err := client.Rooms()
+				InitClient("123")
+				rooms := &Rooms{}
+				err := rooms.Get()
 				So(err, ShouldBeNil)
 				So(rooms.Items[0].Title, ShouldEqual, "foo")
 				So(rooms.Items[0].Members[0], ShouldEqual, "foo")
@@ -61,8 +62,9 @@ func TestRoomsSpec(t *testing.T) {
 				defer ts.Close()
 				previousURL := BaseURL
 				BaseURL = ts.URL
-				client := NewClient("123")
-				room, err := client.Room("1")
+				InitClient("123")
+				room := &Room{ID: "1"}
+				err := room.Get()
 				So(err, ShouldBeNil)
 				So(room.Title, ShouldEqual, "foo")
 				So(room.Members[0], ShouldEqual, "foo")
@@ -74,8 +76,9 @@ func TestRoomsSpec(t *testing.T) {
 				defer ts.Close()
 				previousURL := BaseURL
 				BaseURL = ts.URL
-				client := NewClient("123")
-				err := client.DeleteRoom("1")
+				InitClient("123")
+				room := &Room{ID: "1"}
+				err := room.Delete()
 				So(err, ShouldBeNil)
 				BaseURL = previousURL
 			})

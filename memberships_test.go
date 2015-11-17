@@ -45,8 +45,9 @@ func TestMembershipsSpec(t *testing.T) {
 				defer ts.Close()
 				previousURL := BaseURL
 				BaseURL = ts.URL
-				client := NewClient("123")
-				membership, err := client.Membership("1")
+				InitClient("123")
+				membership := &Membership{ID: "1"}
+				err := membership.Get()
 				So(err, ShouldBeNil)
 				So(membership.ID, ShouldEqual, "000")
 				So(membership.Roomid, ShouldEqual, "123")
@@ -59,8 +60,9 @@ func TestMembershipsSpec(t *testing.T) {
 				defer ts.Close()
 				previousURL := BaseURL
 				BaseURL = ts.URL
-				client := NewClient("123")
-				err := client.DeleteMembership("1")
+				InitClient("123")
+				membership := &Membership{ID: "1"}
+				err := membership.Delete()
 				So(err, ShouldBeNil)
 				BaseURL = previousURL
 			})
@@ -83,8 +85,9 @@ func TestMembershipsSpec(t *testing.T) {
 				defer ts.Close()
 				previousURL := BaseURL
 				BaseURL = ts.URL
-				client := NewClient("123")
-				memberships, err := client.Memberships()
+				InitClient("123")
+				memberships := &Memberships{}
+				err := memberships.Get()
 				So(err, ShouldBeNil)
 				So(memberships.Items[0].ID, ShouldEqual, "000")
 				So(memberships.Items[0].Roomid, ShouldEqual, "123")

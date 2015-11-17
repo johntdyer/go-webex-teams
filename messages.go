@@ -21,34 +21,32 @@ type Messages struct {
 }
 
 // Messages fetches all messages
-func (c Client) Messages() (*Messages, error) {
-	messages := &Messages{}
-	body, err := c.get(MessagesResource)
+func (msgs *Messages) Get() error {
+	body, err := get(MessagesResource)
 	if err != nil {
-		return messages, err
+		return err
 	}
-	err = json.Unmarshal(body, &messages)
+	err = json.Unmarshal(body, msgs)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return messages, nil
+	return nil
 }
 
 // Message fetches a message
-func (c Client) Message(id string) (*Message, error) {
-	body, err := c.get(MessagesResource + "/" + id)
+func (msg *Message) Get() error {
+	body, err := get(MessagesResource + "/" + msg.ID)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	message := &Message{}
-	err = json.Unmarshal(body, message)
+	err = json.Unmarshal(body, msg)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return message, nil
+	return nil
 }
 
 // DeleteMessage deletes a message
-func (c Client) DeleteMessage(id string) error {
-	return c.delete(MessagesResource + "/" + id)
+func (msg *Message) Delete() error {
+	return delete(MessagesResource + "/" + msg.ID)
 }

@@ -20,8 +20,9 @@ func TestMessagesSpec(t *testing.T) {
 				defer ts.Close()
 				previousURL := BaseURL
 				BaseURL = ts.URL
-				client := NewClient("123")
-				messages, err := client.Messages()
+				InitClient("123")
+				messages := &Messages{}
+				err := messages.Get()
 				So(err, ShouldBeNil)
 				So(messages.Items[0].Roomid, ShouldEqual, "456")
 				So(messages.Items[0].Text, ShouldEqual, "foo")
@@ -68,8 +69,9 @@ func TestMessagesSpec(t *testing.T) {
 				defer ts.Close()
 				previousURL := BaseURL
 				BaseURL = ts.URL
-				client := NewClient("123")
-				message, err := client.Message("1")
+				InitClient("123")
+				message := &Message{ID: "1"}
+				err := message.Get()
 				So(err, ShouldBeNil)
 				So(message.Roomid, ShouldEqual, "456")
 				So(message.Text, ShouldEqual, "foo")
@@ -83,8 +85,9 @@ func TestMessagesSpec(t *testing.T) {
 				defer ts.Close()
 				previousURL := BaseURL
 				BaseURL = ts.URL
-				client := NewClient("123")
-				err := client.DeleteMessage("1")
+				InitClient("123")
+				message := &Message{ID: "1"}
+				err := message.Delete()
 				So(err, ShouldBeNil)
 				BaseURL = previousURL
 			})

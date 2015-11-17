@@ -22,34 +22,32 @@ type Webhooks struct {
 }
 
 // Rooms fetches all rooms
-func (c Client) Webhooks() (*Webhooks, error) {
-	webhooks := &Webhooks{}
-	body, err := c.get(WebhooksResource)
+func (webhooks *Webhooks) Get() error {
+	body, err := get(WebhooksResource)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	err = json.Unmarshal(body, &webhooks)
+	err = json.Unmarshal(body, webhooks)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return webhooks, nil
+	return nil
 }
 
 // Room fetchs a room
-func (c Client) Webhook(id string) (*Webhook, error) {
-	body, err := c.get(WebhooksResource + "/" + id)
+func (webhook *Webhook) Get() error {
+	body, err := get(WebhooksResource + "/" + webhook.ID)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	webhook := &Webhook{}
 	err = json.Unmarshal(body, webhook)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return webhook, nil
+	return nil
 }
 
 // DeleteRoom deletes a room
-func (c Client) DeleteWebhook(id string) error {
-	return c.delete(WebhooksResource + "/" + id)
+func (webhook *Webhook) Delete() error {
+	return delete(WebhooksResource + "/" + webhook.ID)
 }
