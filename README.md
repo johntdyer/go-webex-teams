@@ -36,6 +36,12 @@ func main() {
 	fmt.println(message)
 	sparkClient.DeleteMessage("789")
 
+	// Interact with people
+	people := sparkClient.People()
+	fmt.println(people)
+	person := sparkClient.Person("789")
+	fmt.println(person)
+
 	// Interact with rooms
 	rooms := sparkClient.Rooms()
 	fmt.println(rooms)
