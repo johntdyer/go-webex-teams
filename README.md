@@ -61,5 +61,3 @@ func main() {
 ## TODO
 
 * Add POST/PUT methods where appropriate
-* Ensure consistent handling of returned pointers
-* Add support for /people resource
