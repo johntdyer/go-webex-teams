@@ -39,19 +39,32 @@ func TestClientSpec(t *testing.T) {
 		So(req.Header.Get("Content-Type"), ShouldEqual, "application/json")
 		So(req.Header.Get("Accept"), ShouldEqual, "application/json")
 	})
-	Convey("Should POST and PUT request", t, func() {
+	Convey("Should DELETE, GET, POST and PUT request", t, func() {
 		ts := serveHTTP(t)
 		defer ts.Close()
 		previousURL := BaseURL
 		BaseURL = ts.URL
 		client := NewClient("1234")
+		Convey("DELETE", func() {
+			err := client.delete("/foo")
+			So(err, ShouldBeNil)
+		})
+		Convey("GET", func() {
+			body, err := client.get("/foo")
+			So(err, ShouldBeNil)
+			So(string(body), ShouldEqual, "you GOT")
+		})
 		message := "foo-bar"
-		body, err := client.post("/foo", []byte(message))
-		So(err, ShouldBeNil)
-		So(string(body), ShouldEqual, "you POSTED")
-		body, err = client.put("/foo", []byte(message))
-		So(err, ShouldBeNil)
-		So(string(body), ShouldEqual, "you PUT")
+		Convey("POST", func() {
+			body, err := client.post("/foo", []byte(message))
+			So(err, ShouldBeNil)
+			So(string(body), ShouldEqual, "you POSTED")
+		})
+		Convey("PUT", func() {
+			body, err := client.put("/foo", []byte(message))
+			So(err, ShouldBeNil)
+			So(string(body), ShouldEqual, "you PUT")
+		})
 		BaseURL = previousURL
 	})
 }
@@ -66,6 +79,11 @@ func serveHTTP(t *testing.T) *httptest.Server {
 		case "/foo":
 			Convey("Should receive the correct body from a POST/PUT request", t, func() {
 				switch req.Method {
+				case "DELETE":
+					w.WriteHeader(200)
+				case "GET":
+					w.WriteHeader(200)
+					w.Write([]byte("you GOT"))
 				case "POST":
 					So(string(body), ShouldEqual, "foo-bar")
 					w.WriteHeader(200)
