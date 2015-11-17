@@ -1,20 +1,17 @@
 package spark
 
 import (
-	// "fmt"
-	. "github.com/smartystreets/goconvey/convey"
-	// "io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
 	"testing"
 	"time"
+
+	. "github.com/smartystreets/goconvey/convey"
 )
 
 var (
-	stubNow    = func() time.Time { return time.Unix(1445178376, 0) }
-	PersonJSON = `{"id":"OTZhYmMyYWEtM2RjYy0xMWU1LWExNTItZmUzNDgxOWNkYzlh","emails":"johnny.chang@foomail.com","displayName":"John Andersen","avatar":"TODO","created":"2015-10-18T14:26:16+00:00"}`
-	PeopleJSON = `{"items":[` + PersonJSON + `]}`
+	stubNow = func() time.Time { return time.Unix(1445178376, 0) }
 )
 
 func TestClientSpec(t *testing.T) {
@@ -94,6 +91,22 @@ func serveHTTP(t *testing.T) *httptest.Server {
 			if req.Method == "GET" {
 				w.WriteHeader(200)
 				w.Write([]byte(RoomsJSON))
+			}
+		case PeopleResource:
+			if req.Method == "GET" {
+				w.WriteHeader(200)
+				w.Write([]byte(PeopleJSON))
+			}
+		case PeopleResource + "/1":
+			switch req.Method {
+			case "GET":
+				w.WriteHeader(200)
+				w.Write([]byte(PersonJSON))
+			case "DELETE":
+				w.WriteHeader(200)
+			default:
+				w.WriteHeader(404)
+				t.Error("Unknown HTTP method for People")
 			}
 		case RoomsResource + "/1":
 			switch req.Method {

@@ -13,9 +13,9 @@ var (
 	// MembershipsResource is the resource for managing memberships
 	MembershipsResource = "/memberships"
 	// MessagesResource is the resource for managing messages
-	PeopleResource = "/messages"
+	PeopleResource = "/people"
 	// PeopleResource is the resource for managing people
-	MessagesResource = "/people"
+	MessagesResource = "/messages"
 	// RoomsResource is the resource for managing rooms
 	RoomsResource = "/rooms"
 	// SubscriptionsResource is the resource for managing subscriptions
@@ -39,8 +39,7 @@ func NewClient(token string) Client {
 // Calls an HTTP DELETE
 func (c Client) delete(resource string) error {
 	req, _ := http.NewRequest("DELETE", BaseURL+resource, nil)
-	req.Header.Set("Authorization:Bearer", c.Token)
-	req.Header.Set("Accept", "application/json")
+	c.setHeaders(req)
 	_, err := c.HTTP.Do(req)
 	return err
 }
@@ -48,8 +47,7 @@ func (c Client) delete(resource string) error {
 // Calls an HTTP GET
 func (c Client) get(resource string) ([]byte, error) {
 	req, _ := http.NewRequest("GET", BaseURL+resource, nil)
-	req.Header.Set("Authorization:Bearer", c.Token)
-	req.Header.Set("Accept", "application/json")
+	c.setHeaders(req)
 	res, err := c.HTTP.Do(req)
 	if err != nil && res.StatusCode != 200 {
 		return nil, err
@@ -60,4 +58,11 @@ func (c Client) get(resource string) ([]byte, error) {
 		return nil, err
 	}
 	return body, nil
+}
+
+// Set the headers for the HTTP requests
+func (c Client) setHeaders(req *http.Request) {
+	req.Header.Set("Authorization", "Bearer "+c.Token)
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("Content-Type", "application/json")
 }
