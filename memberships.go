@@ -7,14 +7,14 @@ import (
 
 // Membership represent a relationship between a person and a room.
 type Membership struct {
-	ID          string    `json:"id,omitempty"`
-	Roomid      string    `json:"roomId,omitempty"`
-	Personid    string    `json:"personId,omitempty"`
-	Ismoderator bool      `json:"isModerator,omitempty"`
-	Ismonitor   bool      `json:"isMonitor,omitempty"`
-	Islocked    bool      `json:"isLocked,omitempty"`
-	PersonEmail string    `json:"personEmail,omitempty"`
-	Created     time.Time `json:"created,omitempty"`
+	ID          string     `json:"id,omitempty"`
+	Roomid      string     `json:"roomId,omitempty"`
+	Personid    string     `json:"personId,omitempty"`
+	Ismoderator bool       `json:"isModerator,omitempty"`
+	Ismonitor   bool       `json:"isMonitor,omitempty"`
+	Islocked    bool       `json:"isLocked,omitempty"`
+	PersonEmail string     `json:"personEmail,omitempty"`
+	Created     *time.Time `json:"created,omitempty"`
 }
 
 type Memberships struct {

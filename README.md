@@ -23,7 +23,7 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.println(applications)
+	fmt.Println(applications)
 
 	// Get an application by ID
 	application := spark.Application{ID: "123"}
@@ -31,7 +31,7 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.println(application)
+	fmt.Println(application)
 
 	// Delete an application by ID
 	application := spark.Application{ID: "123"}
@@ -81,7 +81,7 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.println(memberhips)
+	fmt.Println(memberhips)
 
 	// Get an membership by ID
 	membership := spark.Membership{ID: "123"}
@@ -89,7 +89,7 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.println(membership)
+	fmt.Println(membership)
 
 	// Delete an membership by ID
 	membership := spark.Membership{ID: "123"}
@@ -133,7 +133,7 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.println(people)
+	fmt.Println(people)
 
 	// Get a person by ID
 	person := spark.Person{ID: "123"}
@@ -141,7 +141,7 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.println(person)
+	fmt.Println(person)
 
 	// Rooms
 	
@@ -151,7 +151,7 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.println(rooms)
+	fmt.Println(rooms)
 
 	// Get a room by ID
 	room := spark.Room{ID: "123"}
@@ -159,7 +159,7 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.println(room)
+	fmt.Println(room)
 
 	// Delete a room by ID
 	room := spark.Room{ID: "123"}
@@ -199,7 +199,7 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.println(subscriptions)
+	fmt.Println(subscriptions)
 
 	// Get a subscription by ID
 	subscription := spark.Subscription{ID: "123"}
@@ -207,7 +207,7 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.println(subscription)
+	fmt.Println(subscription)
 
 	// Delete a subscription by ID
 	subscription := spark.Subscription{ID: "123"}
@@ -224,7 +224,7 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.println(webhooks)
+	fmt.Println(webhooks)
 
 	// Get a webhook by ID
 	webhook := spark.Webhook{ID: "123"}
@@ -232,7 +232,7 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.println(webhook)
+	fmt.Println(webhook)
 
 	// Delete a webhook by ID
 	webhook := spark.Webhook{ID: "123"}
@@ -254,10 +254,14 @@ func main() {
 		fmt.Println(err)
 	}
 	fmt.Println(webhook)
+
+	// Output current TrackingID HTTP header value
+	fmt.Println("***Request TrackingID -> " + spark.ActiveClient.TrackingID + "_" + strconv.Itoa(spark.ActiveClient.Sequence))
 }
 ```
 
-## Examples
+## Notes
 
-To use the examples in the /examples folder, you must set an environment variable SPARK_TOKEN. You may obtain a token by logging in @ [http://developer.ciscospark.com](http://developer.ciscospark.com).
+* To use the examples in the /examples folder, you must set an environment variable SPARK_TOKEN. You may obtain a token by logging in @ [http://developer.ciscospark.com](http://developer.ciscospark.com).
+* This library also implements the TrackingID header used to trace requests in the Spark platform. If troubleshooting and working with our support, output the current values, seen in the example above, and send along with your support request.
 

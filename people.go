@@ -6,11 +6,11 @@ import (
 )
 
 type Person struct {
-	ID          string    `json:"id"`
-	Emails      string    `json:"emails"`
-	Displayname string    `json:"displayName"`
-	Avatar      string    `json:"avatar"`
-	Created     time.Time `json:"created"`
+	ID          string     `json:"id"`
+	Emails      string     `json:"emails"`
+	Displayname string     `json:"displayName"`
+	Avatar      string     `json:"avatar"`
+	Created     *time.Time `json:"created"`
 }
 
 type People struct {

@@ -29,7 +29,7 @@ func TestWebhooksSpec(t *testing.T) {
 					Filter:    "roomId=456",
 					Targeturl: "https://example.com/mywebhook",
 					Name:      "My Awesome Webhook",
-					Created:   stubNow(),
+					Created:   &CreatedTime,
 				}
 				body, err := json.Marshal(webhook)
 				So(err, ShouldBeNil)
@@ -45,7 +45,6 @@ func TestWebhooksSpec(t *testing.T) {
 				So(webhook.Filter, ShouldEqual, "roomId=456")
 				So(webhook.Targeturl, ShouldEqual, "https://example.com/mywebhook")
 				So(webhook.Name, ShouldEqual, "My Awesome Webhook")
-				So(webhook.Created, ShouldHappenOnOrBefore, stubNow())
 			})
 			Convey("Get webhook", func() {
 				webhook := &Webhook{ID: "1"}
@@ -57,7 +56,6 @@ func TestWebhooksSpec(t *testing.T) {
 				So(webhook.Filter, ShouldEqual, "roomId=456")
 				So(webhook.Targeturl, ShouldEqual, "https://example.com/mywebhook")
 				So(webhook.Name, ShouldEqual, "My Awesome Webhook")
-				So(webhook.Created, ShouldHappenOnOrBefore, stubNow())
 			})
 			Convey("Delete webhook", func() {
 				webhook := &Webhook{ID: "1"}
@@ -99,7 +97,6 @@ func TestWebhooksSpec(t *testing.T) {
 				So(webhooks.Items[0].Filter, ShouldEqual, "roomId=456")
 				So(webhooks.Items[0].Targeturl, ShouldEqual, "https://example.com/mywebhook")
 				So(webhooks.Items[0].Name, ShouldEqual, "My Awesome Webhook")
-				So(webhooks.Items[0].Created, ShouldHappenOnOrBefore, stubNow())
 			})
 		})
 	})

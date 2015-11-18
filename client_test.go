@@ -12,7 +12,8 @@ import (
 )
 
 var (
-	stubNow = func() time.Time { return time.Unix(1445178376, 0) }
+	stubNow     = func() time.Time { return time.Unix(1445178376, 0) }
+	CreatedTime = time.Unix(1445178376, 0)
 )
 
 func TestClientSpec(t *testing.T) {
@@ -37,6 +38,7 @@ func TestClientSpec(t *testing.T) {
 		So(req.Header.Get("Authorization"), ShouldEqual, "Bearer 1234")
 		So(req.Header.Get("Content-Type"), ShouldEqual, "application/json")
 		So(req.Header.Get("Accept"), ShouldEqual, "application/json")
+		So(req.Header.Get("TrackingID"), ShouldEqual, ActiveClient.TrackingID+"_1")
 	})
 	Convey("Should DELETE, GET, POST and PUT request", t, func() {
 		ts := serveHTTP(t)

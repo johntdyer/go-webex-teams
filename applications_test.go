@@ -8,9 +8,9 @@ import (
 )
 
 var (
-	ApplicationJSON         = `{"id":"123","name":"foo","description":"bar","logo":"image.jpg","keywords":["foo","bar"],"contactEmails":["john@doe.com","jane@doe.com"],"redirectUrls":["http://1.com","http://2.com"],"scopes":["scope1","scope2"],"subscriptionCount":1000,"clientId":"123","clientSecret":"456","created":"0001-01-01T00:00:00Z"}`
+	ApplicationJSON         = `{"id":"123","name":"foo","description":"bar","logo":"image.jpg","keywords":["foo","bar"],"contactEmails":["john@doe.com","jane@doe.com"],"redirectUrls":["http://1.com","http://2.com"],"scopes":["scope1","scope2"],"subscriptionCount":1000,"clientId":"123","clientSecret":"456","created":"2015-10-18T07:26:16-07:00"}`
 	ApplicationsJSON        = `{"items":[` + ApplicationJSON + `]}`
-	ApplicationResponseJSON = `{"id":"123","name":"Out of Office Assistant","description":"Does awesome things","logo":"logo.jpg","keywords":["foo","bar"],"contactEmails":["bob@foo.com","alice@bar.org"],"redirectUrls":["http://myapp.com/verify","http://myapp.fr/verify"],"scopes":["foo","bar"],"subscriptionCount":1000,"clientId":"456","clientSecret":"secret","created":"0001-01-01T00:00:00Z"}`
+	ApplicationResponseJSON = `{"id":"123","name":"Out of Office Assistant","description":"Does awesome things","logo":"logo.jpg","keywords":["foo","bar"],"contactEmails":["bob@foo.com","alice@bar.org"],"redirectUrls":["http://myapp.com/verify","http://myapp.fr/verify"],"scopes":["foo","bar"],"subscriptionCount":1000,"clientId":"456","clientSecret":"secret","created":"2015-10-18T07:26:16-07:00"}`
 )
 
 func TestApplicationsSpec(t *testing.T) {
@@ -34,6 +34,7 @@ func TestApplicationsSpec(t *testing.T) {
 					SubscriptionCount: 1000,
 					ClientID:          "123",
 					ClientSecret:      "456",
+					Created:           &CreatedTime,
 				}
 				body, err := json.Marshal(application)
 				So(err, ShouldBeNil)
@@ -118,7 +119,6 @@ func validateApplication(t *testing.T, application *Application) {
 	So(application.SubscriptionCount, ShouldEqual, 1000)
 	So(application.ClientID, ShouldEqual, "123")
 	So(application.ClientSecret, ShouldEqual, "456")
-	So(application.Created, ShouldHappenOnOrBefore, stubNow())
 }
 
 func validateApplications(t *testing.T, applications *Applications) {
@@ -137,5 +137,4 @@ func validateApplications(t *testing.T, applications *Applications) {
 	So(applications.Items[0].SubscriptionCount, ShouldEqual, 1000)
 	So(applications.Items[0].ClientID, ShouldEqual, "123")
 	So(applications.Items[0].ClientSecret, ShouldEqual, "456")
-	So(applications.Items[0].Created, ShouldHappenOnOrBefore, stubNow())
 }

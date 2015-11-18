@@ -8,9 +8,9 @@ import (
 )
 
 var (
-	MembershipJSON         = `{"id":"000","roomId":"123","personId":"456","isModerator":true,"isMonitor":true,"isLocked":true,"personEmail":"jane@doe.com","created":"0001-01-01T00:00:00Z"}`
+	MembershipJSON         = `{"id":"000","roomId":"123","personId":"456","isModerator":true,"isMonitor":true,"isLocked":true,"personEmail":"jane@doe.com","created":"2015-10-18T07:26:16-07:00"}`
 	MembershipsJSON        = `{"items":[` + MembershipJSON + `]}`
-	MembershipResponseJSON = `{"id":"1","roomId":"123","personId":"456","personEmail":"john@doe.com","isModerator":true,"isMonitor":true,"created":"0001-01-01T00:00:00Z"}`
+	MembershipResponseJSON = `{"id":"1","roomId":"123","personId":"456","personEmail":"john@doe.com","isModerator":true,"isMonitor":true,"created":"2015-10-18T07:26:16-07:00"}`
 )
 
 func TestMembershipsSpec(t *testing.T) {
@@ -30,6 +30,7 @@ func TestMembershipsSpec(t *testing.T) {
 					Ismonitor:   true,
 					Islocked:    true,
 					PersonEmail: "jane@doe.com",
+					Created:     &CreatedTime,
 				}
 				body, err := json.Marshal(membership)
 				So(err, ShouldBeNil)
@@ -93,7 +94,6 @@ func TestMembershipsSpec(t *testing.T) {
 				So(memberships.Items[0].Ismoderator, ShouldEqual, true)
 				So(memberships.Items[0].Ismonitor, ShouldEqual, true)
 				So(memberships.Items[0].Islocked, ShouldEqual, true)
-				So(memberships.Items[0].Created, ShouldHappenOnOrBefore, stubNow())
 			})
 			Convey("Get memberships", func() {
 				memberships := &Memberships{}
@@ -105,7 +105,6 @@ func TestMembershipsSpec(t *testing.T) {
 				So(memberships.Items[0].Ismoderator, ShouldEqual, true)
 				So(memberships.Items[0].Ismonitor, ShouldEqual, true)
 				So(memberships.Items[0].Islocked, ShouldEqual, true)
-				So(memberships.Items[0].Created, ShouldHappenOnOrBefore, stubNow())
 			})
 		})
 	})

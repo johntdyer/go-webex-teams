@@ -2,9 +2,13 @@ package spark
 
 import (
 	"bytes"
+	"crypto/rand"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
+	"strconv"
 )
 
 var (
@@ -26,21 +30,36 @@ var (
 	WebhooksResource = "/webhooks"
 	// ActiveClient
 	ActiveClient = &Client{}
-	//
+	// InactiveClientErr raises if you have not done an InitClient()
 	InactiveClientErr = errors.New("You must call InitalizeClient() before using this operation")
 )
 
 // Client is a new Spark client
 type Client struct {
-	Token string
-	HTTP  *http.Client
+	Token      string
+	TrackingID string
+	Sequence   int
+	Increment  chan int
+	HTTP       *http.Client
 }
 
 // IntClient generates a new Spark client taking and setting the auth token
 func InitClient(token string) {
 	ActiveClient = &Client{
-		Token: token,
-		HTTP:  &http.Client{},
+		Token:      token,
+		HTTP:       &http.Client{},
+		TrackingID: "go-spark_" + uuid(),
+		Sequence:   0,
+		Increment:  make(chan int),
+	}
+	go incrementer()
+}
+
+// incrementer updates the Sequence of the request
+func incrementer() {
+	for {
+		<-ActiveClient.Increment
+		ActiveClient.Sequence++
 	}
 }
 
@@ -92,7 +111,20 @@ func processRequest(req *http.Request) ([]byte, error) {
 
 // Set the headers for the HTTP requests
 func setHeaders(req *http.Request) {
+	ActiveClient.Increment <- 1
 	req.Header.Set("Authorization", "Bearer "+ActiveClient.Token)
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("TrackingID", ActiveClient.TrackingID+"_"+strconv.Itoa(ActiveClient.Sequence))
+}
+
+func uuid() string {
+	b := make([]byte, 16)
+	_, err := rand.Read(b)
+	if err != nil {
+		fmt.Println("Error: ", err)
+		os.Exit(-1)
+		return ""
+	}
+	return fmt.Sprintf("%X-%X-%X-%X-%X", b[0:4], b[4:6], b[6:8], b[8:10], b[10:])
 }

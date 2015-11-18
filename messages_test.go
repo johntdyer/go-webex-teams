@@ -29,7 +29,6 @@ func TestMessagesSpec(t *testing.T) {
 				So(messages.Items[0].Text, ShouldEqual, "foo")
 				So(messages.Items[0].Files[0], ShouldEqual, "image1.jpg")
 				So(messages.Items[0].Files[1], ShouldEqual, "image2.jpg")
-				So(messages.Items[0].Created, ShouldHappenOnOrBefore, stubNow())
 			})
 			Convey("It should generate the proper struct from the JSON", func() {
 				messages := &Messages{}
@@ -39,7 +38,6 @@ func TestMessagesSpec(t *testing.T) {
 				So(messages.Items[0].Text, ShouldEqual, "foo")
 				So(messages.Items[0].Files[0], ShouldEqual, "image1.jpg")
 				So(messages.Items[0].Files[1], ShouldEqual, "image2.jpg")
-				So(messages.Items[0].Created, ShouldHappenOnOrBefore, stubNow())
 			})
 		})
 		Convey("For a message", func() {
@@ -49,7 +47,7 @@ func TestMessagesSpec(t *testing.T) {
 					Roomid:  "456",
 					Text:    "foo",
 					Files:   []string{"image1.jpg", "image2.jpg"},
-					Created: stubNow(),
+					Created: &CreatedTime,
 				}
 				body, err := json.Marshal(message)
 				So(err, ShouldBeNil)
@@ -72,7 +70,6 @@ func TestMessagesSpec(t *testing.T) {
 				So(message.Text, ShouldEqual, "foo")
 				So(message.Files[0], ShouldEqual, "image1.jpg")
 				So(message.Files[1], ShouldEqual, "image2.jpg")
-				So(message.Created, ShouldHappenOnOrBefore, stubNow())
 			})
 			Convey("Delete message", func() {
 				message := &Message{ID: "1"}

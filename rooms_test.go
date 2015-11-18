@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	RoomJSON         = `{"id":"123","title":"foo","members":["foo","bar"],"created":"0001-01-01T00:00:00Z"}`
+	RoomJSON         = `{"id":"123","title":"foo","members":["foo","bar"],"created":"2015-10-18T07:26:16-07:00"}`
 	RoomsJSON        = `{"items":[` + RoomJSON + `]}`
 	RoomResponseJSON = `{"title":"Project Unicorn - Sprint 0","members":["john@example.com","123"]}`
 )
@@ -44,6 +44,7 @@ func TestRoomsSpec(t *testing.T) {
 					ID:      "123",
 					Title:   "foo",
 					Members: []string{"foo", "bar"},
+					Created: &CreatedTime,
 				}
 				body, err := json.Marshal(room)
 				So(err, ShouldBeNil)

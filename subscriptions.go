@@ -7,11 +7,11 @@ import (
 
 // Subscription represents a relationship between a person and an application.
 type Subscription struct {
-	ID              string    `json:"id,omitempty"`
-	Personid        string    `json:"personId,omitempty"`
-	Applicationid   string    `json:"applicationId,omitempty"`
-	Applicationname string    `json:"applicationName,omitempty"`
-	Created         time.Time `json:"created,omitempty"`
+	ID              string     `json:"id,omitempty"`
+	Personid        string     `json:"personId,omitempty"`
+	Applicationid   string     `json:"applicationId,omitempty"`
+	Applicationname string     `json:"applicationName,omitempty"`
+	Created         *time.Time `json:"created,omitempty"`
 }
 
 // Subscriptions represent a slice of Subscription

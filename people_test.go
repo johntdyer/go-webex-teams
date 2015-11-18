@@ -28,7 +28,6 @@ func TestPeopleSpec(t *testing.T) {
 				So(people.Items[0].Emails, ShouldEqual, "johnny.chang@foomail.com")
 				So(people.Items[0].Displayname, ShouldEqual, "John Andersen")
 				So(people.Items[0].Avatar, ShouldEqual, "TODO")
-				So(people.Items[0].Created, ShouldHappenOnOrBefore, stubNow())
 				BaseURL = previousURL
 			})
 			Convey("It should generate the proper struct from the JSON", func() {
@@ -39,7 +38,6 @@ func TestPeopleSpec(t *testing.T) {
 				So(people.Items[0].Emails, ShouldEqual, "johnny.chang@foomail.com")
 				So(people.Items[0].Displayname, ShouldEqual, "John Andersen")
 				So(people.Items[0].Avatar, ShouldEqual, "TODO")
-				So(people.Items[0].Created, ShouldHappenOnOrBefore, stubNow())
 			})
 		})
 		Convey("For a person", func() {
@@ -49,7 +47,7 @@ func TestPeopleSpec(t *testing.T) {
 					Emails:      "johnny.chang@foomail.com",
 					Displayname: "John Andersen",
 					Avatar:      "TODO",
-					Created:     stubNow(),
+					Created:     &CreatedTime,
 				}
 				body, err := json.Marshal(person)
 				So(err, ShouldBeNil)
@@ -63,7 +61,6 @@ func TestPeopleSpec(t *testing.T) {
 				So(person.Emails, ShouldEqual, "johnny.chang@foomail.com")
 				So(person.Displayname, ShouldEqual, "John Andersen")
 				So(person.Avatar, ShouldEqual, "TODO")
-				So(person.Created, ShouldHappenOnOrBefore, stubNow())
 			})
 			Convey("Get person", func() {
 				ts := serveHTTP(t)
@@ -78,7 +75,6 @@ func TestPeopleSpec(t *testing.T) {
 				So(person.Emails, ShouldEqual, "johnny.chang@foomail.com")
 				So(person.Displayname, ShouldEqual, "John Andersen")
 				So(person.Avatar, ShouldEqual, "TODO")
-				So(person.Created, ShouldHappenOnOrBefore, stubNow())
 				BaseURL = previousURL
 			})
 		})

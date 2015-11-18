@@ -6,13 +6,13 @@ import (
 )
 
 type Webhook struct {
-	ID        string    `json:"id"`
-	Resource  string    `json:"resource"`
-	Event     string    `json:"event"`
-	Filter    string    `json:"filter"`
-	Targeturl string    `json:"targetUrl"`
-	Name      string    `json:"name"`
-	Created   time.Time `json:"created,omitempty"`
+	ID        string     `json:"id"`
+	Resource  string     `json:"resource"`
+	Event     string     `json:"event"`
+	Filter    string     `json:"filter"`
+	Targeturl string     `json:"targetUrl"`
+	Name      string     `json:"name"`
+	Created   *time.Time `json:"created,omitempty"`
 }
 
 type Webhooks struct {
