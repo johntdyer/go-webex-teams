@@ -18,10 +18,11 @@ type Messages struct {
 	Items []struct {
 		Message
 	} `json:"items"`
+	// Used as a URL query paramter
 	Roomid string
 }
 
-// Messages fetches all messages
+// Messages fetches all messages based on the provided Roomid
 func (msgs *Messages) Get() error {
 	body, err := get(MessagesResource + "?roomId=" + msgs.Roomid)
 	if err != nil {
@@ -34,7 +35,7 @@ func (msgs *Messages) Get() error {
 	return nil
 }
 
-// Message fetches a message
+// Message fetches a message based on the ID provided
 func (msg *Message) Get() error {
 	body, err := get(MessagesResource + "/" + msg.ID)
 	if err != nil {
@@ -47,12 +48,12 @@ func (msg *Message) Get() error {
 	return nil
 }
 
-// DeleteMessage deletes a message
+// DeleteMessage deletes a message based on the ID provided
 func (msg *Message) Delete() error {
 	return delete(MessagesResource + "/" + msg.ID)
 }
 
-// Post creates a new membership
+// Post creates a new message
 func (msg *Message) Post() error {
 	body, err := json.Marshal(msg)
 	if err != nil {
