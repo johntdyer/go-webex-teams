@@ -187,7 +187,7 @@ func serveHTTP(t *testing.T) *httptest.Server {
 				w.WriteHeader(404)
 				t.Error("Unknown HTTP method for Room")
 			}
-		case PeopleResource:
+		case PeopleResource + "?email=john@doe.com":
 			if req.Method == "GET" {
 				w.WriteHeader(200)
 				w.Write([]byte(PeopleJSON))
