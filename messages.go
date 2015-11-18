@@ -18,11 +18,12 @@ type Messages struct {
 	Items []struct {
 		Message
 	} `json:"items"`
+	Roomid string
 }
 
 // Messages fetches all messages
 func (msgs *Messages) Get() error {
-	body, err := get(MessagesResource)
+	body, err := get(MessagesResource + "?roomId=" + msgs.Roomid)
 	if err != nil {
 		return err
 	}

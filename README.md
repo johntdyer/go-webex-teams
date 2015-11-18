@@ -125,6 +125,95 @@ func main() {
 	}
 	fmt.Println(membership)
 
+	// Memberships
+	
+	// Get all memberships
+	memberships := spark.Memberships{}
+	err := memberships.Get()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(memberhips)
+
+	// Get an membership by ID
+	membership := spark.Membership{ID: "123"}
+	err := membership.Get()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(membership)
+
+	// Delete an membership by ID
+	membership := spark.Membership{ID: "123"}
+	err := membership.Delete()
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	// Create a membership
+	membership := &Membership{
+		Roomid:      "123",
+		Personid:    "456",
+		PersonEmail: "john@doe.com",
+		Ismoderator: true,
+	}
+	err := membership.Post()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(membership)
+
+	// Update a membership
+	membership := &Membership{
+		ID: 		 "1",
+		Roomid:      "123",
+		Personid:    "456",
+		PersonEmail: "john@doe.com",
+		Ismoderator: true,
+	}
+	err := membership.Put()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(membership)
+
+	// Messages
+	
+	// Get all messages for a room
+	messages := spark.Messages{Roomid: "1234"}
+	err := messages.Get()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(messages)
+
+	// Get an message by ID
+	message := spark.Message{ID: "5678"}
+	err := message.Get()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(message)
+
+	// Delete an membership by ID
+	message := spark.Message{ID: "5678"}
+	err := message.Delete()
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	// Create a message
+	message := &Message{
+		Roomid:	"4567",
+		Text:	"This is my awesome message!",
+		Files: 	[]string{"http://foo.com/image1.jpg", "http://foo.comimage2.jpg"},
+	}
+	err := message.Post()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(message)
+
 	// People
 	
 	// Get all people

@@ -22,7 +22,7 @@ func TestMessagesSpec(t *testing.T) {
 	Convey("Given we want to interact with Spark memberships", t, func() {
 		Convey("For messages", func() {
 			Convey("Get messages", func() {
-				messages := &Messages{}
+				messages := &Messages{Roomid: "1"}
 				err := messages.Get()
 				So(err, ShouldBeNil)
 				So(messages.Items[0].Roomid, ShouldEqual, "456")
