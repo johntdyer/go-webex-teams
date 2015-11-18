@@ -1,3 +1,9 @@
+/*
+You must have these environment variables set to use this example:
+
+SPARK_TOKEN must be a valid developer token
+*/
+
 package main
 
 import (
