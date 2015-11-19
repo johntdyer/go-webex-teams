@@ -24,14 +24,14 @@ func main() {
 	spark.InitClient(os.Getenv("SPARK_TOKEN"))
 
 	// Get all rooms
-	memberships := spark.Memberships{PersonEmail: "jgoecke@cisco.com"}
-	err := memberships.Get()
+	subscriptions := spark.Subscriptions{Personid: "456"}
+	err := subscriptions.Get()
 	displayTrackingID()
 	if err != nil {
 		fmt.Println(err)
 	} else {
-		for _, membership := range memberships.Items {
-			fmt.Println(membership)
+		for _, subscription := range subscriptions.Items {
+			fmt.Println(subscription)
 			fmt.Println("*****")
 		}
 	}

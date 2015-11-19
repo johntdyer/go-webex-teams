@@ -24,63 +24,38 @@ func main() {
 	spark.InitClient(os.Getenv("SPARK_TOKEN"))
 
 	// Get all rooms
-	memberships := spark.Memberships{PersonEmail: "jgoecke@cisco.com"}
-	err := memberships.Get()
+	webhooks := spark.Webhooks{}
+	err := webhooks.Get()
 	displayTrackingID()
 	if err != nil {
 		fmt.Println(err)
 	} else {
-		for _, membership := range memberships.Items {
-			fmt.Println(membership)
+		for _, webhook := range webhooks.Items {
+			fmt.Println(webhook)
 			fmt.Println("*****")
 		}
 	}
 
-	// Get all messages from a room
-	// messages := spark.Messages{Roomid: rooms.Items[1].ID}
-	// err = messages.Get()
-	// displayTrackingID()
-	// fmt.Println("Displaying messages for room -> " + rooms.Items[1].Title)
-	// if err != nil {
-	// 	fmt.Println(err)
-	// } else {
-	// 	for _, message := range messages.Items {
-	// 		fmt.Println("*****")
-	// 		fmt.Println(message)
-	// 	}
-	// 	// Display an individual message
-	// 	message := spark.Message{ID: messages.Items[0].ID}
-	// 	err = message.Get()
-	// 	displayTrackingID()
-	// 	if err != nil {
-	// 		fmt.Println(err)
-	// 	} else {
-	// 		fmt.Println("+++++")
-	// 		fmt.Println(message)
-	// 	}
-	// }
+	// {
+	//            "resource" : "messages",
+	//            "event" : "created",
+	//            "filter" : "roomId=Y2lzY29zcGFyazovL3VzL1JPT00vYmJjZWIxYWQtNDNmMS0zYjU4LTkxNDctZjE0YmIwYzRkMTU0",
+	//            "targetUrl" : "https://example.com/mywebhook",
+	//            "name" : "My Awesome Webhook"
+	//          }
 
-	// // Create a message in the test room of SPARK_TEST_ROOM
-	// message := spark.Message{
-	// 	Roomid: os.Getenv("SPARK_TEST_ROOM"),
-	// 	Text:   "Hello for go-spark!",
-	// 	Files:  []string{"http://49.media.tumblr.com/0cb3d95bf6263c0e27e2b141d0bd9409/tumblr_nnjbwx8fNo1rf78nfo1_500.gif"},
-	// }
-	// err = message.Post()
-	// displayTrackingID()
-	// if err != nil {
-	// 	fmt.Println(err)
-	// } else {
-	// 	fmt.Println(message)
-	// }
-
-	// Delete the posted message
-	// Not implemented
-	// err = message.Delete()
-	// displayTrackingID()
-	// if err != nil {
-	// 	fmt.Println(err)
-	// } else {
-	// 	fmt.Println(message)
-	// }
+	webhook := spark.Webhook{
+		Resource:  "messages",
+		Event:     "created",
+		Filter:    "roomId=Y2lzY29zcGFyazovL3VzL1JPT00vYmJjZWIxYWQtNDNmMS0zYjU4LTkxNDctZjE0YmIwYzRkMTU0",
+		Targeturl: "https://example.com/hook",
+		Name:      "Awesomesauce",
+	}
+	err = webhook.Post()
+	displayTrackingID()
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println(webhook)
+	}
 }

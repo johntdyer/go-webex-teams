@@ -76,7 +76,7 @@ func main() {
 	// Memberships
 	
 	// Get all memberships
-	memberships := spark.Memberships{}
+	memberships := spark.Memberships{PersonEmail: "john@doe.com"}
 	err := memberships.Get()
 	if err != nil {
 		fmt.Println(err)
@@ -164,8 +164,8 @@ func main() {
 
 	// People
 	
-	// Get all people
-	people := spark.People{}
+	// Get people
+	people := spark.People{PersonEmail: "john@doe.com"}
 	err := people.Get()
 	if err != nil {
 		fmt.Println(err)
@@ -183,7 +183,7 @@ func main() {
 	// Rooms
 	
 	// Get all rooms
-	rooms := spark.Rooms{}
+	rooms := spark.Rooms{Personid: "abc123"}
 	err := rooms.Get()
 	if err != nil {
 		fmt.Println(err)
@@ -231,7 +231,7 @@ func main() {
 	// Subscriptions
 	
 	// Get all subscriptions
-	subscriptions := spark.Subscriptions{}
+	subscriptions := spark.Subscriptions{Personid: "abc123"}
 	err := subscriptions.Get()
 	if err != nil {
 		fmt.Println(err)
