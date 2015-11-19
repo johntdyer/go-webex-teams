@@ -20,6 +20,48 @@ func TestMembershipsSpec(t *testing.T) {
 	BaseURL = ts.URL
 	InitClient("123")
 	Convey("Given we want to interact with Spark memberships", t, func() {
+		Convey("Should construct proper query strings", func() {
+			Convey("Personid query", func() {
+				memberships := &Memberships{Personid: "123"}
+				query := memberships.buildQueryString()
+				So(query, ShouldEqual, "?personId=123")
+			})
+			Convey("Roomid query", func() {
+				memberships := &Memberships{Roomid: "123"}
+				query := memberships.buildQueryString()
+				So(query, ShouldEqual, "?roomId=123")
+			})
+			Convey("PersonEmail query", func() {
+				memberships := &Memberships{PersonEmail: "123"}
+				query := memberships.buildQueryString()
+				So(query, ShouldEqual, "?personEmail=123")
+			})
+			Convey("Personid & Roomid query", func() {
+				memberships := &Memberships{
+					Personid: "123",
+					Roomid:   "456",
+				}
+				query := memberships.buildQueryString()
+				So(query, ShouldEqual, "?roomId=456&personId=123")
+			})
+			Convey("Personid & PersonEmail query", func() {
+				memberships := &Memberships{
+					Personid:    "123",
+					PersonEmail: "456",
+				}
+				query := memberships.buildQueryString()
+				So(query, ShouldEqual, "?personId=123&personEmail=456")
+			})
+			Convey("Personid & PersonEmail & Roomid query", func() {
+				memberships := &Memberships{
+					Personid:    "123",
+					PersonEmail: "456",
+					Roomid:      "789",
+				}
+				query := memberships.buildQueryString()
+				So(query, ShouldEqual, "?roomId=789&personId=123&personEmail=456")
+			})
+		})
 		Convey("For a membership", func() {
 			Convey("It should generate the proper JSON message", func() {
 				membership := &Membership{
@@ -96,7 +138,7 @@ func TestMembershipsSpec(t *testing.T) {
 				So(memberships.Items[0].Islocked, ShouldEqual, true)
 			})
 			Convey("Get memberships", func() {
-				memberships := &Memberships{}
+				memberships := &Memberships{Roomid: "123"}
 				err := memberships.Get()
 				So(err, ShouldBeNil)
 				So(memberships.Items[0].ID, ShouldEqual, "000")

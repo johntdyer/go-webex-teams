@@ -21,11 +21,14 @@ type Memberships struct {
 	Items []struct {
 		Membership
 	} `json:"items"`
+	Roomid      string
+	Personid    string
+	PersonEmail string
 }
 
 // Memberships fetches all memberships
 func (mems *Memberships) Get() error {
-	body, err := get(MembershipsResource)
+	body, err := get(MembershipsResource + mems.buildQueryString())
 	if err != nil {
 		return err
 	}
@@ -86,4 +89,30 @@ func (mem *Membership) Put() error {
 		return err
 	}
 	return nil
+}
+
+// Builds the query string
+func (memberships *Memberships) buildQueryString() string {
+	query := ""
+	if memberships.Roomid != "" {
+		query = "?roomId=" + memberships.Roomid
+		if memberships.Personid != "" {
+			query += "&personId=" + memberships.Personid
+		}
+		if memberships.PersonEmail != "" {
+			query += "&personEmail=" + memberships.PersonEmail
+		}
+	} else {
+		if memberships.Personid != "" {
+			query = "?personId=" + memberships.Personid
+			if memberships.PersonEmail != "" {
+				query += "&personEmail=" + memberships.PersonEmail
+			}
+		} else {
+			if memberships.PersonEmail != "" {
+				query += "?personEmail=" + memberships.PersonEmail
+			}
+		}
+	}
+	return query
 }

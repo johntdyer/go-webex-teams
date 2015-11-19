@@ -120,12 +120,15 @@ func serveHTTP(t *testing.T) *httptest.Server {
 			}
 		case MembershipsResource:
 			switch req.Method {
-			case "GET":
-				w.WriteHeader(200)
-				w.Write([]byte(MembershipsJSON))
 			case "POST":
 				w.WriteHeader(200)
 				w.Write([]byte(MembershipResponseJSON))
+			}
+		case MembershipsResource + "?roomId=123":
+			switch req.Method {
+			case "GET":
+				w.WriteHeader(200)
+				w.Write([]byte(MembershipsJSON))
 			}
 		case MembershipsResource + "/1":
 			switch req.Method {
