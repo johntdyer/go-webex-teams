@@ -23,8 +23,8 @@ func displayTrackingID() {
 func main() {
 	spark.InitClient(os.Getenv("SPARK_TOKEN"))
 
-	// Get all memberships for a room
-	memberships := spark.Memberships{Roomid: os.Getenv("SPARK_TEST_ROOM")}
+	// Get all rooms
+	memberships := spark.Memberships{PersonEmail: "jgoecke@cisco.com"}
 	err := memberships.Get()
 	displayTrackingID()
 	if err != nil {

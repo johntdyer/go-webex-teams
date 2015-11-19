@@ -211,6 +211,12 @@ func serveHTTP(t *testing.T) *httptest.Server {
 				w.WriteHeader(200)
 				w.Write([]byte(SubscriptionsJSON))
 			}
+		case SubscriptionsResource + "?personId=123":
+			switch req.Method {
+			case "GET":
+				w.WriteHeader(200)
+				w.Write([]byte(SubscriptionsJSON))
+			}
 		case SubscriptionsResource + "/1":
 			switch req.Method {
 			case "GET":

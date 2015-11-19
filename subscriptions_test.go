@@ -19,6 +19,26 @@ func TestSubscriptionsSpec(t *testing.T) {
 	BaseURL = ts.URL
 	InitClient("123")
 	Convey("Given we want to interact with Spark subscriptions", t, func() {
+		Convey("Should construct proper query strings", func() {
+			Convey("Personid query", func() {
+				subscriptions := &Subscriptions{Personid: "123"}
+				query := subscriptions.buildQueryString()
+				So(query, ShouldEqual, "?personId=123")
+			})
+			Convey("Type query", func() {
+				subscriptions := &Subscriptions{Type: "string"}
+				query := subscriptions.buildQueryString()
+				So(query, ShouldEqual, "?type=string")
+			})
+			Convey("Personid & Type query", func() {
+				subscriptions := &Subscriptions{
+					Personid: "123",
+					Type:     "string",
+				}
+				query := subscriptions.buildQueryString()
+				So(query, ShouldEqual, "?personId=123&type=string")
+			})
+		})
 		Convey("For a subscription", func() {
 			Convey("It should generate the proper JSON message", func() {
 				subscription := &Subscription{
@@ -72,7 +92,7 @@ func TestSubscriptionsSpec(t *testing.T) {
 				defer ts.Close()
 				BaseURL = ts.URL
 				InitClient("123")
-				subscriptions := &Subscriptions{}
+				subscriptions := &Subscriptions{Personid: "123"}
 				err := subscriptions.Get()
 				So(err, ShouldBeNil)
 				So(subscriptions.Items[0].ID, ShouldEqual, "000")

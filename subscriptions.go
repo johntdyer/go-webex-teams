@@ -2,6 +2,7 @@ package spark
 
 import (
 	"encoding/json"
+	"net/url"
 	"time"
 )
 
@@ -19,11 +20,13 @@ type Subscriptions struct {
 	Items []struct {
 		Subscription
 	} `json:"items"`
+	Personid string
+	Type     string
 }
 
 // Subscriptions fetches all subscriptions
 func (subs *Subscriptions) Get() error {
-	body, err := get(SubscriptionsResource)
+	body, err := get(SubscriptionsResource + subs.buildQueryString())
 	if err != nil {
 		return err
 	}
@@ -51,4 +54,20 @@ func (sub *Subscription) Get() error {
 // DeleteSubscription deletes a subscription
 func (sub *Subscription) Delete() error {
 	return delete(SubscriptionsResource + "/" + sub.ID)
+}
+
+// Builds the query string
+func (subscriptions *Subscriptions) buildQueryString() string {
+	query := ""
+	if subscriptions.Personid != "" {
+		query = "?personId=" + subscriptions.Personid
+		if subscriptions.Type != "" {
+			query += "&type=" + url.QueryEscape(subscriptions.Type)
+		}
+	} else {
+		if subscriptions.Type != "" {
+			query = "?type=" + url.QueryEscape(subscriptions.Type)
+		}
+	}
+	return query
 }
