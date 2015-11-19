@@ -40,6 +40,7 @@ type Client struct {
 	TrackingID string
 	Sequence   int
 	Increment  chan int
+	Finished   chan bool
 	HTTP       *http.Client
 }
 
@@ -51,6 +52,7 @@ func InitClient(token string) {
 		TrackingID: "go-spark_" + uuid(),
 		Sequence:   0,
 		Increment:  make(chan int),
+		Finished:   make(chan bool),
 	}
 	go incrementer()
 }
@@ -60,6 +62,7 @@ func incrementer() {
 	for {
 		<-ActiveClient.Increment
 		ActiveClient.Sequence++
+		ActiveClient.Finished <- true
 	}
 }
 
@@ -112,6 +115,7 @@ func processRequest(req *http.Request) ([]byte, error) {
 // Set the headers for the HTTP requests
 func setHeaders(req *http.Request) {
 	ActiveClient.Increment <- 1
+	<-ActiveClient.Finished
 	req.Header.Set("Authorization", "Bearer "+ActiveClient.Token)
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Content-Type", "application/json")
