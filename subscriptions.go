@@ -26,7 +26,7 @@ type Subscriptions struct {
 
 // Subscriptions fetches all subscriptions
 func (subs *Subscriptions) Get() error {
-	body, err := get(SubscriptionsResource + subs.buildQueryString())
+	body, _, err := get(SubscriptionsResource + subs.buildQueryString())
 	if err != nil {
 		return err
 	}
@@ -40,7 +40,7 @@ func (subs *Subscriptions) Get() error {
 
 // Subscription fetches a subscription
 func (sub *Subscription) Get() error {
-	body, err := get(SubscriptionsResource + "/" + sub.ID)
+	body, _, err := get(SubscriptionsResource + "/" + sub.ID)
 	if err != nil {
 		return err
 	}

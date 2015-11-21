@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 )
 
 var (
@@ -44,6 +45,14 @@ type Client struct {
 	HTTP       *http.Client
 }
 
+// Links for pagination
+type Links struct {
+	NextURL     string
+	LastURL     string
+	FirstURL    string
+	PreviousURL string
+}
+
 // IntClient generates a new Spark client taking and setting the auth token
 func InitClient(token string) {
 	ActiveClient = &Client{
@@ -69,47 +78,52 @@ func incrementer() {
 // Calls an HTTP DELETE
 func delete(resource string) error {
 	req, _ := http.NewRequest("DELETE", BaseURL+resource, nil)
-	_, err := processRequest(req)
+	_, _, err := processRequest(req)
 	return err
 }
 
 // Calls an HTTP GET
-func get(resource string) ([]byte, error) {
+func get(resource string) ([]byte, *Links, error) {
 	req, _ := http.NewRequest("GET", BaseURL+resource, nil)
 	return processRequest(req)
 }
 
 // Calls an HTTP POST
-func post(resource string, body []byte) ([]byte, error) {
+func post(resource string, body []byte) ([]byte, *Links, error) {
 	req, _ := http.NewRequest("POST", BaseURL+resource, bytes.NewBuffer(body))
 	return processRequest(req)
 }
 
 // Calls an HTTP PUT
-func put(resource string, body []byte) ([]byte, error) {
+func put(resource string, body []byte) ([]byte, *Links, error) {
 	req, _ := http.NewRequest("PUT", BaseURL+resource, bytes.NewBuffer(body))
 	return processRequest(req)
 }
 
 // Processes a HTTP POST/PUT request
-func processRequest(req *http.Request) ([]byte, error) {
+func processRequest(req *http.Request) ([]byte, *Links, error) {
 	if ActiveClient.Token == "" {
-		return nil, InactiveClientErr
+		return nil, nil, InactiveClientErr
 	}
 	setHeaders(req)
 	res, err := ActiveClient.HTTP.Do(req)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	if res.StatusCode != 200 {
-		return nil, errors.New(res.Status)
+		return nil, nil, errors.New(res.Status)
 	}
 	defer res.Body.Close()
+	link := res.Header.Get("Link")
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
-	return body, nil
+	if link != "" {
+		links := parseLink(link)
+		return body, links, nil
+	}
+	return body, nil, nil
 }
 
 // Set the headers for the HTTP requests
@@ -120,6 +134,34 @@ func setHeaders(req *http.Request) {
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("TrackingID", ActiveClient.TrackingID+"_"+strconv.Itoa(ActiveClient.Sequence))
+}
+
+// Parses a link header
+func parseLink(link string) *Links {
+	links := &Links{}
+	items := strings.Split(link, ",")
+	for _, item := range items {
+		ele := strings.Split(item, `; rel="`)
+		switch strings.TrimRight(ele[1], `"`) {
+		case "next":
+			links.NextURL = parseURL(ele[0])
+		case "last":
+			links.LastURL = parseURL(ele[0])
+		case "first":
+			links.FirstURL = parseURL(ele[0])
+		case "prev":
+			links.PreviousURL = parseURL(ele[0])
+		}
+	}
+	return links
+}
+
+// Parses a URL from within a link header
+func parseURL(url string) string {
+	url = strings.TrimRight(url, ">")
+	url = strings.TrimLeft(url, " <")
+	url = strings.TrimLeft(url, "<")
+	return url
 }
 
 func uuid() string {

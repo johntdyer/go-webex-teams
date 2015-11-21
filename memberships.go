@@ -28,7 +28,7 @@ type Memberships struct {
 
 // Memberships fetches all memberships
 func (mems *Memberships) Get() error {
-	body, err := get(MembershipsResource + mems.buildQueryString())
+	body, _, err := get(MembershipsResource + mems.buildQueryString())
 	if err != nil {
 		return err
 	}
@@ -41,7 +41,7 @@ func (mems *Memberships) Get() error {
 
 // Membership fetches a membership
 func (mem *Membership) Get() error {
-	body, err := get(MembershipsResource + "/" + mem.ID)
+	body, _, err := get(MembershipsResource + "/" + mem.ID)
 	if err != nil {
 		return err
 	}
@@ -63,7 +63,7 @@ func (mem *Membership) Post() error {
 	if err != nil {
 		return err
 	}
-	body, err = post(MembershipsResource, body)
+	body, _, err = post(MembershipsResource, body)
 	if err != nil {
 		return err
 	}
@@ -80,7 +80,7 @@ func (mem *Membership) Put() error {
 	if err != nil {
 		return err
 	}
-	body, err = put(MembershipsResource+"/"+mem.ID, body)
+	body, _, err = put(MembershipsResource+"/"+mem.ID, body)
 	if err != nil {
 		return err
 	}

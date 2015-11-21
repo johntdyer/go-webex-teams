@@ -23,7 +23,7 @@ type Webhooks struct {
 
 // Rooms fetches all rooms
 func (webhooks *Webhooks) Get() error {
-	body, err := get(WebhooksResource)
+	body, _, err := get(WebhooksResource)
 	if err != nil {
 		return err
 	}
@@ -36,7 +36,7 @@ func (webhooks *Webhooks) Get() error {
 
 // Room fetchs a room
 func (webhook *Webhook) Get() error {
-	body, err := get(WebhooksResource + "/" + webhook.ID)
+	body, _, err := get(WebhooksResource + "/" + webhook.ID)
 	if err != nil {
 		return err
 	}
@@ -58,7 +58,7 @@ func (webhook *Webhook) Post() error {
 	if err != nil {
 		return err
 	}
-	body, err = post(WebhooksResource, body)
+	body, _, err = post(WebhooksResource, body)
 	if err != nil {
 		return err
 	}
@@ -75,7 +75,7 @@ func (webhook *Webhook) Put() error {
 	if err != nil {
 		return err
 	}
-	body, err = put(WebhooksResource+"/"+webhook.ID, body)
+	body, _, err = put(WebhooksResource+"/"+webhook.ID, body)
 	if err != nil {
 		return err
 	}

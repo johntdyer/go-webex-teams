@@ -25,7 +25,7 @@ type People struct {
 
 // Messages fetches all people
 func (people *People) Get() error {
-	body, err := get(PeopleResource + people.buildQueryString())
+	body, _, err := get(PeopleResource + people.buildQueryString())
 	if err != nil {
 		return err
 	}
@@ -38,7 +38,7 @@ func (people *People) Get() error {
 
 // Message fetches a person
 func (person *Person) Get() error {
-	body, err := get(PeopleResource + "/" + person.ID)
+	body, _, err := get(PeopleResource + "/" + person.ID)
 	if err != nil {
 		return err
 	}

@@ -2,6 +2,7 @@ package spark
 
 import (
 	"encoding/json"
+	"errors"
 	"time"
 )
 
@@ -20,15 +21,80 @@ type Messages struct {
 	} `json:"items"`
 	// Used as a URL query paramter
 	Roomid string
+	Links
 }
 
 // Messages fetches all messages based on the provided Roomid
 func (msgs *Messages) Get() error {
-	body, err := get(MessagesResource + "?roomId=" + msgs.Roomid)
+	body, links, err := get(MessagesResource + "?roomId=" + msgs.Roomid)
 	if err != nil {
 		return err
 	}
 	err = json.Unmarshal(body, msgs)
+	if links != nil {
+		msgs.Links = *links
+	}
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (msgs *Messages) Next() error {
+	if msgs.NextURL != "" {
+		err := msgs.getCursor(msgs.NextURL)
+		if err != nil {
+			return err
+		}
+		return nil
+	} else {
+		return errors.New("next cursor not available")
+	}
+}
+
+func (msgs *Messages) Last() error {
+	if msgs.LastURL != "" {
+		err := msgs.getCursor(msgs.LastURL)
+		if err != nil {
+			return err
+		}
+		return nil
+	} else {
+		return errors.New("last cursor not available")
+	}
+}
+
+func (msgs *Messages) First() error {
+	if msgs.FirstURL != "" {
+		err := msgs.getCursor(msgs.FirstURL)
+		if err != nil {
+			return err
+		}
+		return nil
+	} else {
+		return errors.New("first cursor not available")
+	}
+}
+
+func (msgs *Messages) Previous() error {
+	if msgs.PreviousURL != "" {
+		err := msgs.getCursor(msgs.PreviousURL)
+		if err != nil {
+			return err
+		}
+		return nil
+	} else {
+		return errors.New("previous cursor not available")
+	}
+}
+
+func (msgs *Messages) getCursor(url string) error {
+	body, links, err := get(url)
+	if err != nil {
+		return err
+	}
+	err = json.Unmarshal(body, msgs)
+	msgs.Links = *links
 	if err != nil {
 		return err
 	}
@@ -37,7 +103,7 @@ func (msgs *Messages) Get() error {
 
 // Message fetches a message based on the ID provided
 func (msg *Message) Get() error {
-	body, err := get(MessagesResource + "/" + msg.ID)
+	body, _, err := get(MessagesResource + "/" + msg.ID)
 	if err != nil {
 		return err
 	}
@@ -59,7 +125,7 @@ func (msg *Message) Post() error {
 	if err != nil {
 		return err
 	}
-	body, err = post(MessagesResource, body)
+	body, _, err = post(MessagesResource, body)
 	if err != nil {
 		return err
 	}

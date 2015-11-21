@@ -30,7 +30,7 @@ type Applications struct {
 
 // Get fetches all applications
 func (applications *Applications) Get() error {
-	body, err := get(ApplicationsResource)
+	body, _, err := get(ApplicationsResource)
 	if err != nil {
 		return err
 	}
@@ -43,7 +43,7 @@ func (applications *Applications) Get() error {
 
 // Get fetches an application
 func (app *Application) Get() error {
-	body, err := get(ApplicationsResource + "/" + app.ID)
+	body, _, err := get(ApplicationsResource + "/" + app.ID)
 	if err != nil {
 		return err
 	}
@@ -65,7 +65,7 @@ func (app *Application) Post() error {
 	if err != nil {
 		return err
 	}
-	body, err = post(ApplicationsResource, body)
+	body, _, err = post(ApplicationsResource, body)
 	if err != nil {
 		return err
 	}
@@ -82,7 +82,7 @@ func (app *Application) Put() error {
 	if err != nil {
 		return err
 	}
-	body, err = put(ApplicationsResource+"/"+app.ID, body)
+	body, _, err = put(ApplicationsResource+"/"+app.ID, body)
 	if err != nil {
 		return err
 	}

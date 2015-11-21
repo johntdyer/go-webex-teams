@@ -17,6 +17,20 @@ var (
 )
 
 func TestClientSpec(t *testing.T) {
+	Convey("Sould parse a link header", t, func() {
+		Convey("Parse url", func() {
+			url := `<https://api.github.com/search/code?q=addClass+user_mozilla&page=34>`
+			So(parseURL(url), ShouldEqual, "https://api.github.com/search/code?q=addClass+user_mozilla&page=34")
+		})
+		Convey("Parse header itself", func() {
+			link := `<https://api.ciscospark.com/v1/applications?max=10&before&after=>; rel="first", <https://api.ciscospark.com/v1/applications?max=10&before=Y2lzY29zcGFyazovL3VzL1BFT1BMRS83MTZlOWQxYy1jYTQ0LTRmZWQtOGZjYS05ZGY0YjRmNDE3ZjU&after>; rel="prev", <https://api.ciscospark.com/v1/applications?max=10&before&after=Y2lzY29zcGFyazovL3VzL1BFT1BMRS83MTZlOWQxYy1jYTQ0LTRmZWQtOGZjYS05ZGY0YjRmNDE3ZjU>; rel="next", <https://api.ciscospark.com/v1/applications?max=10&before&after=Y2lzY29zcGFyazovL3VzL1BFT1BMR>; rel="last"`
+			links := parseLink(link)
+			So(links.NextURL, ShouldEqual, "https://api.ciscospark.com/v1/applications?max=10&before&after=Y2lzY29zcGFyazovL3VzL1BFT1BMRS83MTZlOWQxYy1jYTQ0LTRmZWQtOGZjYS05ZGY0YjRmNDE3ZjU")
+			So(links.LastURL, ShouldEqual, "https://api.ciscospark.com/v1/applications?max=10&before&after=Y2lzY29zcGFyazovL3VzL1BFT1BMR")
+			So(links.FirstURL, ShouldEqual, "https://api.ciscospark.com/v1/applications?max=10&before&after=")
+			So(links.PreviousURL, ShouldEqual, "https://api.ciscospark.com/v1/applications?max=10&before=Y2lzY29zcGFyazovL3VzL1BFT1BMRS83MTZlOWQxYy1jYTQ0LTRmZWQtOGZjYS05ZGY0YjRmNDE3ZjU&after")
+		})
+	})
 	Convey("Constants should be set", t, func() {
 		So(BaseURL, ShouldStartWith, "https://")
 		So(BaseURL, ShouldNotEndWith, "/")
@@ -51,18 +65,18 @@ func TestClientSpec(t *testing.T) {
 			So(err, ShouldBeNil)
 		})
 		Convey("GET", func() {
-			body, err := get("/foo")
+			body, _, err := get("/foo")
 			So(err, ShouldBeNil)
 			So(string(body), ShouldEqual, "you GOT")
 		})
 		message := "foo-bar"
 		Convey("POST", func() {
-			body, err := post("/foo", []byte(message))
+			body, _, err := post("/foo", []byte(message))
 			So(err, ShouldBeNil)
 			So(string(body), ShouldEqual, "you POSTED")
 		})
 		Convey("PUT", func() {
-			body, err := put("/foo", []byte(message))
+			body, _, err := put("/foo", []byte(message))
 			So(err, ShouldBeNil)
 			So(string(body), ShouldEqual, "you PUT")
 		})

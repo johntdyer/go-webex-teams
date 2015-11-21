@@ -21,7 +21,7 @@ type Rooms struct {
 
 // Rooms fetches all rooms
 func (rooms *Rooms) Get() error {
-	body, err := get(RoomsResource)
+	body, _, err := get(RoomsResource)
 	if err != nil {
 		return err
 	}
@@ -34,7 +34,7 @@ func (rooms *Rooms) Get() error {
 
 // Room fetchs a room
 func (room *Room) Get() error {
-	body, err := get(RoomsResource + "/" + room.ID)
+	body, _, err := get(RoomsResource + "/" + room.ID)
 	if err != nil {
 		return err
 	}
@@ -56,7 +56,7 @@ func (room *Room) Post() error {
 	if err != nil {
 		return err
 	}
-	body, err = post(RoomsResource, body)
+	body, _, err = post(RoomsResource, body)
 	if err != nil {
 		return err
 	}
@@ -73,7 +73,7 @@ func (room *Room) Put() error {
 	if err != nil {
 		return err
 	}
-	body, err = put(RoomsResource+"/"+room.ID, body)
+	body, _, err = put(RoomsResource+"/"+room.ID, body)
 	if err != nil {
 		return err
 	}
