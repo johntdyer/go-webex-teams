@@ -14,8 +14,10 @@ import (
 
 func main() {
 	spark.InitClient("<YOUR TOKEN>")
-
-	// Applications
+```
+___
+```go
+	// Applications (not implemented in Spark API yet)
 
 	// Get all applications
 	applications := spark.Applications{}
@@ -72,7 +74,9 @@ func main() {
 		fmt.Println(err)
 	}
 	fmt.Println(application)
-
+```
+___
+```go
 	// Memberships
 	
 	// Get all memberships
@@ -146,7 +150,9 @@ func main() {
 		fmt.Println(err)
 	}
 	fmt.Println(membership)
-
+```
+___
+```go
 	// Messages
 	
 	// Get all messages for a room
@@ -205,7 +211,9 @@ func main() {
 		fmt.Println(err)
 	}
 	fmt.Println(message)
-
+```
+___
+```go
 	// People
 	
 	// Get people
@@ -223,7 +231,9 @@ func main() {
 		fmt.Println(err)
 	}
 	fmt.Println(person)
-
+```
+___
+```go
 	// Rooms
 	
 	// Get all rooms
@@ -271,8 +281,10 @@ func main() {
 		fmt.Println(err)
 	}
 	fmt.Println(room)
-
-	// Subscriptions
+```
+___
+```go
+	// Subscriptions (not implemented in Spark API yet)
 	
 	// Get all subscriptions
 	subscriptions := spark.Subscriptions{Personid: "abc123"}
@@ -296,7 +308,9 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-
+```
+___
+```go
 	// Webhooks
 	
 	// Get all webhooks
