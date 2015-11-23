@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-// Represent a relationship between a person and a room.
+// Membership represent a relationship between a person and a room.
 type Membership struct {
 	ID          string     `json:"id,omitempty"`
 	Roomid      string     `json:"roomId,omitempty"`
@@ -18,7 +18,7 @@ type Membership struct {
 	Created     *time.Time `json:"created,omitempty"`
 }
 
-// Represents a collection of Memberships
+// Memberships represents a collection of Memberships
 type Memberships struct {
 	Items []struct {
 		Membership
@@ -29,108 +29,106 @@ type Memberships struct {
 	Links
 }
 
-// GETs all memberships
-func (mems *Memberships) Get() error {
-	body, _, err := get(MembershipsResource + mems.buildQueryString())
+// Get - GETs all memberships
+func (memberships *Memberships) Get() error {
+	body, _, err := get(MembershipsResource + memberships.buildQueryString())
 	if err != nil {
 		return err
 	}
-	err = json.Unmarshal(body, mems)
+	err = json.Unmarshal(body, memberships)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-// Moves to the next link from a link header for a large collection
-func (mems *Memberships) Next() error {
-	if mems.NextURL != "" {
-		err := mems.getCursor(mems.NextURL)
+// Next - Moves to the next link from a link header for a large collection
+func (memberships *Memberships) Next() error {
+	if memberships.NextURL != "" {
+		err := memberships.getCursor(memberships.NextURL)
 		if err != nil {
 			return err
 		}
 		return nil
-	} else {
-		return errors.New("next cursor not available")
 	}
+	return errors.New("next cursor not available")
+
 }
 
-// Moves to the last link from a link header for a large collection
-func (mems *Memberships) Last() error {
-	if mems.LastURL != "" {
-		err := mems.getCursor(mems.LastURL)
+// Last - Moves to the last link from a link header for a large collection
+func (memberships *Memberships) Last() error {
+	if memberships.LastURL != "" {
+		err := memberships.getCursor(memberships.LastURL)
 		if err != nil {
 			return err
 		}
 		return nil
-	} else {
-		return errors.New("last cursor not available")
 	}
+	return errors.New("last cursor not available")
+
 }
 
-// Moves to the first link from a link header for a large collection
-func (mems *Memberships) First() error {
-	if mems.FirstURL != "" {
-		err := mems.getCursor(mems.FirstURL)
+// First - Moves to the first link from a link header for a large collection
+func (memberships *Memberships) First() error {
+	if memberships.FirstURL != "" {
+		err := memberships.getCursor(memberships.FirstURL)
 		if err != nil {
 			return err
 		}
 		return nil
-	} else {
-		return errors.New("first cursor not available")
 	}
+	return errors.New("first cursor not available")
 }
 
-// Moves to the previous link from a link header for a large collection
-func (mems *Memberships) Previous() error {
-	if mems.PreviousURL != "" {
-		err := mems.getCursor(mems.PreviousURL)
+// Previous - Moves to the previous link from a link header for a large collection
+func (memberships *Memberships) Previous() error {
+	if memberships.PreviousURL != "" {
+		err := memberships.getCursor(memberships.PreviousURL)
 		if err != nil {
 			return err
 		}
 		return nil
-	} else {
-		return errors.New("previous cursor not available")
 	}
+	return errors.New("previous cursor not available")
 }
 
-// Gets the appropriate link associated to the link header
-func (mems *Memberships) getCursor(url string) error {
+// getCursor - Gets the appropriate link associated to the link header
+func (memberships *Memberships) getCursor(url string) error {
 	body, links, err := get(url)
 	if err != nil {
 		return err
 	}
 	if links != nil {
-		mems.Links = *links
+		memberships.Links = *links
 	}
-	err = json.Unmarshal(body, mems)
+	err = json.Unmarshal(body, memberships)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-// Membership fetches a membership
-func (mem *Membership) Get() error {
-	body, _, err := get(MembershipsResource + "/" + mem.ID)
+// Get - Membership fetches a membership
+func (membership *Membership) Get() error {
+	body, _, err := get(MembershipsResource + "/" + membership.ID)
 	if err != nil {
 		return err
 	}
-	err = json.Unmarshal(body, mem)
+	err = json.Unmarshal(body, membership)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-// DeleteMembership deletes a membership
-func (mem *Membership) Delete() error {
-	return delete(MembershipsResource + "/" + mem.ID)
+// Delete - DELETEs a membership
+func (membership *Membership) Delete() error {
+	return delete(MembershipsResource + "/" + membership.ID)
 }
 
-// Post creates a new membership
-func (mem *Membership) Post() error {
-	body, err := json.Marshal(mem)
+// Post - Creates (POSTs) a new membership
+func (membership *Membership) Post() error {
+	body, err := json.Marshal(membership)
 	if err != nil {
 		return err
 	}
@@ -138,31 +136,31 @@ func (mem *Membership) Post() error {
 	if err != nil {
 		return err
 	}
-	err = json.Unmarshal(body, mem)
+	err = json.Unmarshal(body, membership)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-// Post updates a membership
-func (mem *Membership) Put() error {
-	body, err := json.Marshal(mem)
+// Put - Updates (PUTs) a membership
+func (membership *Membership) Put() error {
+	body, err := json.Marshal(membership)
 	if err != nil {
 		return err
 	}
-	body, _, err = put(MembershipsResource+"/"+mem.ID, body)
+	body, _, err = put(MembershipsResource+"/"+membership.ID, body)
 	if err != nil {
 		return err
 	}
-	err = json.Unmarshal(body, mem)
+	err = json.Unmarshal(body, membership)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-// Builds the query string
+// buildQueryString - Builds the query string
 func (memberships *Memberships) buildQueryString() string {
 	query := ""
 	if memberships.Roomid != "" {

@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// Represents a person
+// Person represents a person
 type Person struct {
 	ID          string     `json:"id,omitempty"`
 	Emails      []string   `json:"emails,omitempty"`
@@ -16,7 +16,7 @@ type Person struct {
 	Created     *time.Time `json:"created,omitempty"`
 }
 
-// Represents a collection of Persons
+// People represents a collection of Persons
 type People struct {
 	Items []struct {
 		Person
@@ -27,7 +27,7 @@ type People struct {
 	Links
 }
 
-// GETs all people
+// Get - GETs all people
 func (people *People) Get() error {
 	body, _, err := get(PeopleResource + people.buildQueryString())
 	if err != nil {
@@ -40,7 +40,7 @@ func (people *People) Get() error {
 	return nil
 }
 
-// Moves to the next link from a link header for a large collection
+// Next - Moves to the next link from a link header for a large collection
 func (people *People) Next() error {
 	if people.NextURL != "" {
 		err := people.getCursor(people.NextURL)
@@ -48,12 +48,11 @@ func (people *People) Next() error {
 			return err
 		}
 		return nil
-	} else {
-		return errors.New("next cursor not available")
 	}
+	return errors.New("next cursor not available")
 }
 
-// Moves to the last link from a link header for a large collection
+// Last - Moves to the last link from a link header for a large collection
 func (people *People) Last() error {
 	if people.LastURL != "" {
 		err := people.getCursor(people.LastURL)
@@ -61,12 +60,11 @@ func (people *People) Last() error {
 			return err
 		}
 		return nil
-	} else {
-		return errors.New("last cursor not available")
 	}
+	return errors.New("last cursor not available")
 }
 
-// Moves to the first link from a link header for a large collection
+// First - Moves to the first link from a link header for a large collection
 func (people *People) First() error {
 	if people.FirstURL != "" {
 		err := people.getCursor(people.FirstURL)
@@ -74,12 +72,11 @@ func (people *People) First() error {
 			return err
 		}
 		return nil
-	} else {
-		return errors.New("first cursor not available")
 	}
+	return errors.New("first cursor not available")
 }
 
-// Moves to the previous link from a link header for a large collection
+// Previous - Moves to the previous link from a link header for a large collection
 func (people *People) Previous() error {
 	if people.PreviousURL != "" {
 		err := people.getCursor(people.PreviousURL)
@@ -87,12 +84,11 @@ func (people *People) Previous() error {
 			return err
 		}
 		return nil
-	} else {
-		return errors.New("previous cursor not available")
 	}
+	return errors.New("previous cursor not available")
 }
 
-// Gets the appropriate link associated to the link header
+// getCursor - Gets the appropriate link associated to the link header
 func (people *People) getCursor(url string) error {
 	body, links, err := get(url)
 	if err != nil {
@@ -108,7 +104,7 @@ func (people *People) getCursor(url string) error {
 	return nil
 }
 
-// GETs a person by ID
+// Get - GETs a person by ID
 func (person *Person) Get() error {
 	body, _, err := get(PeopleResource + "/" + person.ID)
 	if err != nil {
@@ -121,7 +117,7 @@ func (person *Person) Get() error {
 	return nil
 }
 
-// GETs the current authenticated user
+// GetMe - GETs the current authenticated user
 func (person *Person) GetMe() error {
 	body, _, err := get(PeopleResource + "/me")
 	if err != nil {
@@ -134,7 +130,7 @@ func (person *Person) GetMe() error {
 	return nil
 }
 
-// Builds the query string
+// buildQueryString - Builds the query string
 func (people *People) buildQueryString() string {
 	query := ""
 	if people.Email != "" {

@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-// Represents a Webhook
+// Webhook represents a Webhook
 type Webhook struct {
 	ID        string     `json:"id,omitempty"`
 	Resource  string     `json:"resource,omitempty"`
@@ -17,7 +17,7 @@ type Webhook struct {
 	Created   *time.Time `json:"created,omitempty"`
 }
 
-// Represents a collection of Webhooks
+// Webhooks represents a collection of Webhooks
 type Webhooks struct {
 	Items []struct {
 		Webhook
@@ -25,7 +25,7 @@ type Webhooks struct {
 	Links
 }
 
-// GETs all rooms
+// Get - GETs all rooms
 func (webhooks *Webhooks) Get() error {
 	body, _, err := get(WebhooksResource)
 	if err != nil {
@@ -38,7 +38,7 @@ func (webhooks *Webhooks) Get() error {
 	return nil
 }
 
-// Moves to the next link from a link header for a large collection
+// Next - Moves to the next link from a link header for a large collection
 func (webhooks *Webhooks) Next() error {
 	if webhooks.NextURL != "" {
 		err := webhooks.getCursor(webhooks.NextURL)
@@ -46,12 +46,11 @@ func (webhooks *Webhooks) Next() error {
 			return err
 		}
 		return nil
-	} else {
-		return errors.New("next cursor not available")
 	}
+	return errors.New("next cursor not available")
 }
 
-// Moves to the last link from a link header for a large collection
+// Last - Moves to the last link from a link header for a large collection
 func (webhooks *Webhooks) Last() error {
 	if webhooks.LastURL != "" {
 		err := webhooks.getCursor(webhooks.LastURL)
@@ -59,12 +58,11 @@ func (webhooks *Webhooks) Last() error {
 			return err
 		}
 		return nil
-	} else {
-		return errors.New("last cursor not available")
 	}
+	return errors.New("last cursor not available")
 }
 
-// Moves to the first link from a link header for a large collection
+// First - Moves to the first link from a link header for a large collection
 func (webhooks *Webhooks) First() error {
 	if webhooks.FirstURL != "" {
 		err := webhooks.getCursor(webhooks.FirstURL)
@@ -72,12 +70,11 @@ func (webhooks *Webhooks) First() error {
 			return err
 		}
 		return nil
-	} else {
-		return errors.New("first cursor not available")
 	}
+	return errors.New("first cursor not available")
 }
 
-// Moves to the previous link from a link header for a large collection
+// Previous - Moves to the previous link from a link header for a large collection
 func (webhooks *Webhooks) Previous() error {
 	if webhooks.PreviousURL != "" {
 		err := webhooks.getCursor(webhooks.PreviousURL)
@@ -85,12 +82,11 @@ func (webhooks *Webhooks) Previous() error {
 			return err
 		}
 		return nil
-	} else {
-		return errors.New("previous cursor not available")
 	}
+	return errors.New("previous cursor not available")
 }
 
-// Gets the appropriate link associated to the link header
+// getCursor - Gets the appropriate link associated to the link header
 func (webhooks *Webhooks) getCursor(url string) error {
 	body, links, err := get(url)
 	if err != nil {
@@ -106,7 +102,7 @@ func (webhooks *Webhooks) getCursor(url string) error {
 	return nil
 }
 
-// GETs a room by ID
+// Get - GETs a room by ID
 func (webhook *Webhook) Get() error {
 	body, _, err := get(WebhooksResource + "/" + webhook.ID)
 	if err != nil {
@@ -119,12 +115,12 @@ func (webhook *Webhook) Get() error {
 	return nil
 }
 
-// DELETEs a room
+// Delete - DELETEs a room
 func (webhook *Webhook) Delete() error {
 	return delete(WebhooksResource + "/" + webhook.ID)
 }
 
-// Creates (POSTs) a new webhook
+// Post - Creates (POSTs) a new webhook
 func (webhook *Webhook) Post() error {
 	body, err := json.Marshal(webhook)
 	if err != nil {
@@ -141,7 +137,7 @@ func (webhook *Webhook) Post() error {
 	return nil
 }
 
-// Updates (PUTs) a webhook
+// Put - Updates (PUTs) a webhook
 func (webhook *Webhook) Put() error {
 	body, err := json.Marshal(webhook)
 	if err != nil {

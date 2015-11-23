@@ -19,9 +19,9 @@ var (
 	ApplicationsResource = "/applications"
 	// MembershipsResource is the resource for managing memberships
 	MembershipsResource = "/memberships"
-	// MessagesResource is the resource for managing messages
-	PeopleResource = "/people"
 	// PeopleResource is the resource for managing people
+	PeopleResource = "/people"
+	// MessagesResource is the resource for managing messages
 	MessagesResource = "/messages"
 	// RoomsResource is the resource for managing rooms
 	RoomsResource = "/rooms"
@@ -29,13 +29,13 @@ var (
 	SubscriptionsResource = "/subscriptions"
 	// WebhooksResource is the resource for managing webhooks
 	WebhooksResource = "/webhooks"
-	// ActiveClient
+	// ActiveClient represents the client used to connect to the Spark API
 	ActiveClient = &Client{}
-	// InactiveClientErr raises if you have not done an InitClient()
-	InactiveClientErr = errors.New("You must call InitalizeClient() before using this operation")
+	// ErrInactiveClient raises if you have not done an InitClient()
+	ErrInactiveClient = errors.New("You must call InitalizeClient() before using this operation")
 )
 
-// Creates a new Spark client
+// Client represents a new Spark client
 type Client struct {
 	Token      string
 	TrackingID string
@@ -45,7 +45,7 @@ type Client struct {
 	HTTP       *http.Client
 }
 
-// Struct to store pagination details from a link header
+// Links struct to store pagination details from a link header
 type Links struct {
 	NextURL     string
 	LastURL     string
@@ -53,7 +53,7 @@ type Links struct {
 	PreviousURL string
 }
 
-// Generates a new Spark client taking and setting the auth token
+// InitClient - Generates a new Spark client taking and setting the auth token
 func InitClient(token string) {
 	ActiveClient = &Client{
 		Token:      token,
@@ -66,7 +66,7 @@ func InitClient(token string) {
 	go incrementer()
 }
 
-// Updates the sequence of the request to ensure a unique identifier
+// Increment - Updates the sequence of the request to ensure a unique identifier
 // for each API request via the TrackingID header
 func incrementer() {
 	for {
@@ -76,35 +76,35 @@ func incrementer() {
 	}
 }
 
-// Calls an HTTP DELETE
+// delete - Calls an HTTP DELETE
 func delete(resource string) error {
 	req, _ := http.NewRequest("DELETE", BaseURL+resource, nil)
 	_, _, err := processRequest(req)
 	return err
 }
 
-// Calls an HTTP GET
+// get - Calls an HTTP GET
 func get(resource string) ([]byte, *Links, error) {
 	req, _ := http.NewRequest("GET", BaseURL+resource, nil)
 	return processRequest(req)
 }
 
-// Calls an HTTP POST
+// post - Calls an HTTP POST
 func post(resource string, body []byte) ([]byte, *Links, error) {
 	req, _ := http.NewRequest("POST", BaseURL+resource, bytes.NewBuffer(body))
 	return processRequest(req)
 }
 
-// Calls an HTTP PUT
+// put - Calls an HTTP PUT
 func put(resource string, body []byte) ([]byte, *Links, error) {
 	req, _ := http.NewRequest("PUT", BaseURL+resource, bytes.NewBuffer(body))
 	return processRequest(req)
 }
 
-// Processes an HTTP request
+// processRequest - Processes an HTTP request
 func processRequest(req *http.Request) ([]byte, *Links, error) {
 	if ActiveClient.Token == "" {
-		return nil, nil, InactiveClientErr
+		return nil, nil, ErrInactiveClient
 	}
 	setHeaders(req)
 	res, err := ActiveClient.HTTP.Do(req)
@@ -127,7 +127,7 @@ func processRequest(req *http.Request) ([]byte, *Links, error) {
 	return body, nil, nil
 }
 
-// Set the headers for the HTTP requests
+// setHeaders - Set the headers for the HTTP requests
 func setHeaders(req *http.Request) {
 	ActiveClient.Increment <- 1
 	<-ActiveClient.Finished
@@ -137,7 +137,7 @@ func setHeaders(req *http.Request) {
 	req.Header.Set("TrackingID", ActiveClient.TrackingID+"_"+strconv.Itoa(ActiveClient.Sequence))
 }
 
-// Parses a link header
+// parseLink - Parses a link header
 func parseLink(link string) *Links {
 	links := &Links{}
 	items := strings.Split(link, ",")
@@ -157,7 +157,7 @@ func parseLink(link string) *Links {
 	return links
 }
 
-// Parses a URL from within a link header
+// parseURL - Parses a URL from within a link header
 func parseURL(url string) string {
 	url = strings.TrimRight(url, ">")
 	url = strings.TrimLeft(url, " <")
@@ -165,7 +165,7 @@ func parseURL(url string) string {
 	return url
 }
 
-// Creates a UUID to be used for a unique identifier
+// uuid - Creates a UUID to be used for a unique identifier
 // for the tracing TrackingID header
 func uuid() string {
 	b := make([]byte, 16)

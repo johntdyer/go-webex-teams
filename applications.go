@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-// Represents how a developer requests access to perform Spark operations on behalf of a user
+// Application represents how a developer requests access to perform Spark operations on behalf of a user
 type Application struct {
 	ID                string     `json:"id,omitempty"`
 	Name              string     `json:"name,omitempty"`
@@ -30,7 +30,7 @@ type Applications struct {
 	Links
 }
 
-// GETs all applications
+// Get - GETs all applications
 func (applications *Applications) Get() error {
 	body, _, err := get(ApplicationsResource)
 	if err != nil {
@@ -43,7 +43,7 @@ func (applications *Applications) Get() error {
 	return nil
 }
 
-// Moves to the next link from a link header for a large collection of Applications
+// Next - Moves to the next link from a link header for a large collection of Applications
 func (applications *Applications) Next() error {
 	if applications.NextURL != "" {
 		err := applications.getCursor(applications.NextURL)
@@ -51,12 +51,11 @@ func (applications *Applications) Next() error {
 			return err
 		}
 		return nil
-	} else {
-		return errors.New("next cursor not available")
 	}
+	return errors.New("next cursor not available")
 }
 
-// Moves to the last link from a link header for a large collection of Applications
+// Last - Moves to the last link from a link header for a large collection of Applications
 func (applications *Applications) Last() error {
 	if applications.LastURL != "" {
 		err := applications.getCursor(applications.LastURL)
@@ -64,12 +63,11 @@ func (applications *Applications) Last() error {
 			return err
 		}
 		return nil
-	} else {
-		return errors.New("last cursor not available")
 	}
+	return errors.New("last cursor not available")
 }
 
-// Moves to the next first from a link header for a large collection of Applications
+// First - Moves to the next first from a link header for a large collection of Applications
 func (applications *Applications) First() error {
 	if applications.FirstURL != "" {
 		err := applications.getCursor(applications.FirstURL)
@@ -77,12 +75,11 @@ func (applications *Applications) First() error {
 			return err
 		}
 		return nil
-	} else {
-		return errors.New("first cursor not available")
 	}
+	return errors.New("first cursor not available")
 }
 
-// Moves to the prev link from a link header for a large collection
+// Previous - Moves to the prev link from a link header for a large collection
 func (applications *Applications) Previous() error {
 	if applications.PreviousURL != "" {
 		err := applications.getCursor(applications.PreviousURL)
@@ -90,12 +87,11 @@ func (applications *Applications) Previous() error {
 			return err
 		}
 		return nil
-	} else {
-		return errors.New("previous cursor not available")
 	}
+	return errors.New("previous cursor not available")
 }
 
-// Gets the appropriate link associated to the link header
+// getCursor - Gets the appropriate link associated to the link header
 func (applications *Applications) getCursor(url string) error {
 	body, links, err := get(url)
 	if err != nil {
@@ -111,7 +107,7 @@ func (applications *Applications) getCursor(url string) error {
 	return nil
 }
 
-// GETs an application by ID
+// Get - GETs an application by ID
 func (app *Application) Get() error {
 	body, _, err := get(ApplicationsResource + "/" + app.ID)
 	if err != nil {
@@ -124,12 +120,12 @@ func (app *Application) Get() error {
 	return nil
 }
 
-// DELETEs an application by ID
+// Delete - DELETEs an application by ID
 func (app *Application) Delete() error {
 	return delete(ApplicationsResource + "/" + app.ID)
 }
 
-// Creates (POSTs) a new application
+// Post - Creates (POSTs) a new application
 func (app *Application) Post() error {
 	body, err := json.Marshal(app)
 	if err != nil {
@@ -146,7 +142,7 @@ func (app *Application) Post() error {
 	return nil
 }
 
-// Updates (PUTs) an existing application
+// Put - Updates (PUTs) an existing application
 func (app *Application) Put() error {
 	body, err := json.Marshal(app)
 	if err != nil {

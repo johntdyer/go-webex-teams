@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-// Represets a virtual meeting places for getting work done.
+// Room represets a virtual meeting places for getting work done.
 type Room struct {
 	ID         string     `json:"id,omitempty"`
 	Title      string     `json:"title,omitempty"`
@@ -15,7 +15,7 @@ type Room struct {
 	Created    *time.Time `json:"created,omitempty"`
 }
 
-// Represents a collection of Rooms
+// Rooms represents a collection of Rooms
 type Rooms struct {
 	Items []struct {
 		Room
@@ -23,7 +23,7 @@ type Rooms struct {
 	Links
 }
 
-// GETs all rooms
+// Get - GETs all rooms
 func (rooms *Rooms) Get() error {
 	body, _, err := get(RoomsResource)
 	if err != nil {
@@ -36,7 +36,7 @@ func (rooms *Rooms) Get() error {
 	return nil
 }
 
-// Moves to the next link from a link header for a large collection
+// Next - Moves to the next link from a link header for a large collection
 func (rooms *Rooms) Next() error {
 	if rooms.NextURL != "" {
 		err := rooms.getCursor(rooms.NextURL)
@@ -44,12 +44,11 @@ func (rooms *Rooms) Next() error {
 			return err
 		}
 		return nil
-	} else {
-		return errors.New("next cursor not available")
 	}
+	return errors.New("next cursor not available")
 }
 
-// Moves to the last link from a link header for a large collection
+// Last - Moves to the last link from a link header for a large collection
 func (rooms *Rooms) Last() error {
 	if rooms.LastURL != "" {
 		err := rooms.getCursor(rooms.LastURL)
@@ -57,12 +56,11 @@ func (rooms *Rooms) Last() error {
 			return err
 		}
 		return nil
-	} else {
-		return errors.New("last cursor not available")
 	}
+	return errors.New("last cursor not available")
 }
 
-// Moves to the first link from a link header for a large collection
+// First - Moves to the first link from a link header for a large collection
 func (rooms *Rooms) First() error {
 	if rooms.FirstURL != "" {
 		err := rooms.getCursor(rooms.FirstURL)
@@ -70,12 +68,11 @@ func (rooms *Rooms) First() error {
 			return err
 		}
 		return nil
-	} else {
-		return errors.New("first cursor not available")
 	}
+	return errors.New("first cursor not available")
 }
 
-// Moves to the previous link from a link header for a large collection
+// Previous - Moves to the previous link from a link header for a large collection
 func (rooms *Rooms) Previous() error {
 	if rooms.PreviousURL != "" {
 		err := rooms.getCursor(rooms.PreviousURL)
@@ -83,12 +80,11 @@ func (rooms *Rooms) Previous() error {
 			return err
 		}
 		return nil
-	} else {
-		return errors.New("previous cursor not available")
 	}
+	return errors.New("previous cursor not available")
 }
 
-// Gets the appropriate link associated to the link header
+// getCursor - Gets the appropriate link associated to the link header
 func (rooms *Rooms) getCursor(url string) error {
 	body, links, err := get(url)
 	if err != nil {
@@ -104,7 +100,7 @@ func (rooms *Rooms) getCursor(url string) error {
 	return nil
 }
 
-// GETs a room by ID
+// Get - GETs a room by ID
 func (room *Room) Get() error {
 	body, _, err := get(RoomsResource + "/" + room.ID)
 	if err != nil {
@@ -117,12 +113,12 @@ func (room *Room) Get() error {
 	return nil
 }
 
-// DELETEs a room
+// Delete - DELETEs a room
 func (room *Room) Delete() error {
 	return delete(RoomsResource + "/" + room.ID)
 }
 
-// Creates (POSTs) a new room
+// Post - Creates (POSTs) a new room
 func (room *Room) Post() error {
 	body, err := json.Marshal(room)
 	if err != nil {
@@ -139,7 +135,7 @@ func (room *Room) Post() error {
 	return nil
 }
 
-// Updates (PUTs) a room
+// Put - Updates (PUTs) a room
 func (room *Room) Put() error {
 	body, err := json.Marshal(room)
 	if err != nil {
