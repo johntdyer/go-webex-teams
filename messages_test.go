@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	MessageJSON         = `{"id":"123","roomId":"456","text":"foo","files":["image1.jpg","image2.jpg"],"created":"2015-10-18T07:26:16-07:00"}`
+	MessageJSON         = `{"id":"123","personId":"789","personEmail":"john@doe.com","roomId":"456","text":"foo","files":["image1.jpg","image2.jpg"],"created":"2015-10-18T07:26:16-07:00"}`
 	MessagesJSON        = `{"items":[` + MessageJSON + `]}`
 	MessageResponseJSON = `{"id":"123","personId":"456","personEmail":"matt@example.com","roomId":"789","text":"PROJECT UPDATE - A new project project plan has been published on Box","files":["http://www.example.com/images/media.png"],"created":"2015-10-18T14:26:16+00:00"}`
 )
@@ -25,6 +25,8 @@ func TestMessagesSpec(t *testing.T) {
 				messages := &Messages{Roomid: "1"}
 				err := messages.Get()
 				So(err, ShouldBeNil)
+				So(messages.Items[0].Personid, ShouldEqual, "789")
+				So(messages.Items[0].PersonEmail, ShouldEqual, "john@doe.com")
 				So(messages.Items[0].Roomid, ShouldEqual, "456")
 				So(messages.Items[0].Text, ShouldEqual, "foo")
 				So(messages.Items[0].Files[0], ShouldEqual, "image1.jpg")
@@ -34,6 +36,8 @@ func TestMessagesSpec(t *testing.T) {
 				messages := &Messages{}
 				err := json.Unmarshal([]byte(MessagesJSON)[:], &messages)
 				So(err, ShouldBeNil)
+				So(messages.Items[0].Personid, ShouldEqual, "789")
+				So(messages.Items[0].PersonEmail, ShouldEqual, "john@doe.com")
 				So(messages.Items[0].Roomid, ShouldEqual, "456")
 				So(messages.Items[0].Text, ShouldEqual, "foo")
 				So(messages.Items[0].Files[0], ShouldEqual, "image1.jpg")
@@ -43,11 +47,13 @@ func TestMessagesSpec(t *testing.T) {
 		Convey("For a message", func() {
 			Convey("It should generate the proper JSON message", func() {
 				message := &Message{
-					ID:      "123",
-					Roomid:  "456",
-					Text:    "foo",
-					Files:   []string{"image1.jpg", "image2.jpg"},
-					Created: &CreatedTime,
+					ID:          "123",
+					Personid:    "789",
+					PersonEmail: "john@doe.com",
+					Roomid:      "456",
+					Text:        "foo",
+					Files:       []string{"image1.jpg", "image2.jpg"},
+					Created:     &CreatedTime,
 				}
 				body, err := json.Marshal(message)
 				So(err, ShouldBeNil)
@@ -57,6 +63,8 @@ func TestMessagesSpec(t *testing.T) {
 				message := &Message{}
 				err := json.Unmarshal([]byte(MessageJSON)[:], message)
 				So(err, ShouldBeNil)
+				So(message.Personid, ShouldEqual, "789")
+				So(message.PersonEmail, ShouldEqual, "john@doe.com")
 				So(message.Roomid, ShouldEqual, "456")
 				So(message.Text, ShouldEqual, "foo")
 				So(message.Files[0], ShouldEqual, "image1.jpg")
@@ -66,6 +74,8 @@ func TestMessagesSpec(t *testing.T) {
 				message := &Message{ID: "1"}
 				err := message.Get()
 				So(err, ShouldBeNil)
+				So(message.Personid, ShouldEqual, "789")
+				So(message.PersonEmail, ShouldEqual, "john@doe.com")
 				So(message.Roomid, ShouldEqual, "456")
 				So(message.Text, ShouldEqual, "foo")
 				So(message.Files[0], ShouldEqual, "image1.jpg")
@@ -78,9 +88,11 @@ func TestMessagesSpec(t *testing.T) {
 			})
 			Convey("Post message", func() {
 				message := &Message{
-					Roomid: "123",
-					Text:   "foobar",
-					Files:  []string{"foo.txt", "bar.txt"},
+					Roomid:      "123",
+					Text:        "foobar",
+					Personid:    "789",
+					PersonEmail: "john@doe.com",
+					Files:       []string{"foo.txt", "bar.txt"},
 				}
 				err := message.Post()
 				So(err, ShouldBeNil)

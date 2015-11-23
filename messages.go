@@ -8,11 +8,13 @@ import (
 
 // Message is how people communicate in rooms. Individual messages are timestamped and represented in the Spark app followed by a line break.
 type Message struct {
-	ID      string     `json:"id,omitempty"`
-	Roomid  string     `json:"roomId,omitempty"`
-	Text    string     `json:"text,omitempty"`
-	Files   []string   `json:"files,omitempty"`
-	Created *time.Time `json:"created,omitempty"`
+	ID          string     `json:"id,omitempty"`
+	Personid    string     `json:"personId,omitempty"`
+	PersonEmail string     `json:"personEmail,omitempty"`
+	Roomid      string     `json:"roomId,omitempty"`
+	Text        string     `json:"text,omitempty"`
+	Files       []string   `json:"files,omitempty"`
+	Created     *time.Time `json:"created,omitempty"`
 }
 
 type Messages struct {
