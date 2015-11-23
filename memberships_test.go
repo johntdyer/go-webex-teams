@@ -148,6 +148,36 @@ func TestMembershipsSpec(t *testing.T) {
 				So(memberships.Items[0].Ismonitor, ShouldEqual, true)
 				So(memberships.Items[0].Islocked, ShouldEqual, true)
 			})
+			Convey("It should raise an error when no link cursor", func() {
+				memberships := &Memberships{}
+				err := memberships.First()
+				So(err.Error(), ShouldEqual, "first cursor not available")
+				err = memberships.Next()
+				So(err.Error(), ShouldEqual, "next cursor not available")
+				err = memberships.Last()
+				So(err.Error(), ShouldEqual, "last cursor not available")
+				err = memberships.Previous()
+				So(err.Error(), ShouldEqual, "previous cursor not available")
+			})
+			Convey("Should get our link cursor", func() {
+				memberships := &Memberships{}
+				memberships.FirstURL = "/messages/first"
+				err := memberships.First()
+				So(err, ShouldBeNil)
+				So(memberships.Items[0].ID, ShouldEqual, "123")
+				memberships.LastURL = "/messages/last"
+				err = memberships.Last()
+				So(err, ShouldBeNil)
+				So(memberships.Items[0].ID, ShouldEqual, "123")
+				memberships.NextURL = "/messages/next"
+				err = memberships.Next()
+				So(err, ShouldBeNil)
+				So(memberships.Items[0].ID, ShouldEqual, "123")
+				memberships.PreviousURL = "/messages/prev"
+				err = memberships.Previous()
+				So(err, ShouldBeNil)
+				So(memberships.Items[0].ID, ShouldEqual, "123")
+			})
 		})
 	})
 	BaseURL = previousURL

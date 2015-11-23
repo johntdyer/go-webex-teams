@@ -2,6 +2,7 @@ package spark
 
 import (
 	"encoding/json"
+	"errors"
 	"time"
 )
 
@@ -24,6 +25,7 @@ type Memberships struct {
 	Roomid      string
 	Personid    string
 	PersonEmail string
+	Links
 }
 
 // Memberships fetches all memberships
@@ -31,6 +33,69 @@ func (mems *Memberships) Get() error {
 	body, _, err := get(MembershipsResource + mems.buildQueryString())
 	if err != nil {
 		return err
+	}
+	err = json.Unmarshal(body, mems)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (mems *Memberships) Next() error {
+	if mems.NextURL != "" {
+		err := mems.getCursor(mems.NextURL)
+		if err != nil {
+			return err
+		}
+		return nil
+	} else {
+		return errors.New("next cursor not available")
+	}
+}
+
+func (mems *Memberships) Last() error {
+	if mems.LastURL != "" {
+		err := mems.getCursor(mems.LastURL)
+		if err != nil {
+			return err
+		}
+		return nil
+	} else {
+		return errors.New("last cursor not available")
+	}
+}
+
+func (mems *Memberships) First() error {
+	if mems.FirstURL != "" {
+		err := mems.getCursor(mems.FirstURL)
+		if err != nil {
+			return err
+		}
+		return nil
+	} else {
+		return errors.New("first cursor not available")
+	}
+}
+
+func (mems *Memberships) Previous() error {
+	if mems.PreviousURL != "" {
+		err := mems.getCursor(mems.PreviousURL)
+		if err != nil {
+			return err
+		}
+		return nil
+	} else {
+		return errors.New("previous cursor not available")
+	}
+}
+
+func (mems *Memberships) getCursor(url string) error {
+	body, links, err := get(url)
+	if err != nil {
+		return err
+	}
+	if links != nil {
+		mems.Links = *links
 	}
 	err = json.Unmarshal(body, mems)
 	if err != nil {

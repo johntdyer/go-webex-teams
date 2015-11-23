@@ -83,6 +83,28 @@ func main() {
 	}
 	fmt.Println(memberhips)
 
+	// Get memberships based on returned link header when available
+	err := memberships.Next()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(memberships)
+	err := memberships.Previous()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(memberships)
+	err := memberships.Last()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(memberships)
+	err := memberships.First()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(memberships)
+
 	// Get an membership by ID
 	membership := spark.Membership{ID: "123"}
 	err := membership.Get()
@@ -326,5 +348,5 @@ func main() {
 
 ## TODO
 
-* Add PUT functions
-* Finish coverage for link headers
+* Add PUT functions to all resources
+* Finish coverage for link headers for /applications, /people, /rooms, /subscriptions and /webooks
