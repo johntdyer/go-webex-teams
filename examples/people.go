@@ -46,4 +46,14 @@ func main() {
 	} else {
 		fmt.Println(person)
 	}
+
+	// Get the authenticated user
+	person = spark.Person{}
+	err = person.GetMe()
+	displayTrackingID()
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println(person)
+	}
 }
