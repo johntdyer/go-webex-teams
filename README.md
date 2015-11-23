@@ -2,6 +2,10 @@
 
 A [Go](https://golang.org/) library for the [Spark REST APIs](https://developer.ciscospark.com).
 
+## Installation
+
+`go get sqbu-github.cisco.com/jgoecke/go-spark`
+
 ## Usage
 
 ```go
@@ -9,7 +13,7 @@ package main
 
 import (
   "fmt"
-  "github.com/ciscospark/go-spark"
+  "sqbu-github.cisco.com/jgoecke/go-spark"
 )
 
 func main() {
