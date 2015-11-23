@@ -243,6 +243,7 @@ func main() {
 		fmt.Println(err)
 	}
 	fmt.Println(person)```
+```
 
 ### Rooms
 ```go
