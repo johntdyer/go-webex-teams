@@ -287,6 +287,12 @@ func serveHTTP(t *testing.T) *httptest.Server {
 				w.WriteHeader(200)
 				w.Write([]byte(WebhooksResponseJSON))
 			}
+		case "/webhooks/next", "/webhooks/last", "/webhooks/prev", "/webhooks/first":
+			switch req.Method {
+			case "GET":
+				w.WriteHeader(200)
+				w.Write([]byte(WebhooksJSON))
+			}
 		case WebhooksResource + "/1":
 			switch req.Method {
 			case "GET":

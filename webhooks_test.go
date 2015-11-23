@@ -98,6 +98,36 @@ func TestWebhooksSpec(t *testing.T) {
 				So(webhooks.Items[0].Targeturl, ShouldEqual, "https://example.com/mywebhook")
 				So(webhooks.Items[0].Name, ShouldEqual, "My Awesome Webhook")
 			})
+			Convey("It should raise an error when no link cursor", func() {
+				webhooks := &Webhooks{}
+				err := webhooks.First()
+				So(err.Error(), ShouldEqual, "first cursor not available")
+				err = webhooks.Next()
+				So(err.Error(), ShouldEqual, "next cursor not available")
+				err = webhooks.Last()
+				So(err.Error(), ShouldEqual, "last cursor not available")
+				err = webhooks.Previous()
+				So(err.Error(), ShouldEqual, "previous cursor not available")
+			})
+			Convey("Should get our link cursor", func() {
+				webhooks := &Webhooks{}
+				webhooks.FirstURL = "/webhooks/first"
+				err := webhooks.First()
+				So(err, ShouldBeNil)
+				So(webhooks.Items[0].ID, ShouldEqual, "123")
+				webhooks.LastURL = "/webhooks/last"
+				err = webhooks.Last()
+				So(err, ShouldBeNil)
+				So(webhooks.Items[0].ID, ShouldEqual, "123")
+				webhooks.NextURL = "/webhooks/next"
+				err = webhooks.Next()
+				So(err, ShouldBeNil)
+				So(webhooks.Items[0].ID, ShouldEqual, "123")
+				webhooks.PreviousURL = "/webhooks/prev"
+				err = webhooks.Previous()
+				So(err, ShouldBeNil)
+				So(webhooks.Items[0].ID, ShouldEqual, "123")
+			})
 		})
 	})
 	BaseURL = previousURL

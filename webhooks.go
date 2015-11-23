@@ -2,6 +2,7 @@ package spark
 
 import (
 	"encoding/json"
+	"errors"
 	"time"
 )
 
@@ -19,6 +20,7 @@ type Webhooks struct {
 	Items []struct {
 		Webhook
 	} `json:"items"`
+	Links
 }
 
 // Rooms fetches all rooms
@@ -26,6 +28,69 @@ func (webhooks *Webhooks) Get() error {
 	body, _, err := get(WebhooksResource)
 	if err != nil {
 		return err
+	}
+	err = json.Unmarshal(body, webhooks)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (webhooks *Webhooks) Next() error {
+	if webhooks.NextURL != "" {
+		err := webhooks.getCursor(webhooks.NextURL)
+		if err != nil {
+			return err
+		}
+		return nil
+	} else {
+		return errors.New("next cursor not available")
+	}
+}
+
+func (webhooks *Webhooks) Last() error {
+	if webhooks.LastURL != "" {
+		err := webhooks.getCursor(webhooks.LastURL)
+		if err != nil {
+			return err
+		}
+		return nil
+	} else {
+		return errors.New("last cursor not available")
+	}
+}
+
+func (webhooks *Webhooks) First() error {
+	if webhooks.FirstURL != "" {
+		err := webhooks.getCursor(webhooks.FirstURL)
+		if err != nil {
+			return err
+		}
+		return nil
+	} else {
+		return errors.New("first cursor not available")
+	}
+}
+
+func (webhooks *Webhooks) Previous() error {
+	if webhooks.PreviousURL != "" {
+		err := webhooks.getCursor(webhooks.PreviousURL)
+		if err != nil {
+			return err
+		}
+		return nil
+	} else {
+		return errors.New("previous cursor not available")
+	}
+}
+
+func (webhooks *Webhooks) getCursor(url string) error {
+	body, links, err := get(url)
+	if err != nil {
+		return err
+	}
+	if links != nil {
+		webhooks.Links = *links
 	}
 	err = json.Unmarshal(body, webhooks)
 	if err != nil {
