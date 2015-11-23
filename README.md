@@ -348,5 +348,4 @@ func main() {
 
 ## TODO
 
-* Add PUT functions to all resources
 * Finish coverage for link headers for /applications, /people, /rooms, /subscriptions and /webooks
