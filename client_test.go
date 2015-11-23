@@ -23,12 +23,12 @@ func TestClientSpec(t *testing.T) {
 			So(parseURL(url), ShouldEqual, "https://api.github.com/search/code?q=addClass+user_mozilla&page=34")
 		})
 		Convey("Parse header itself", func() {
-			link := `<https://api.ciscospark.com/v1/applications?max=10&before&after=>; rel="first", <https://api.ciscospark.com/v1/applications?max=10&before=Y2lzY29zcGFyazovL3VzL1BFT1BMRS83MTZlOWQxYy1jYTQ0LTRmZWQtOGZjYS05ZGY0YjRmNDE3ZjU&after>; rel="prev", <https://api.ciscospark.com/v1/applications?max=10&before&after=Y2lzY29zcGFyazovL3VzL1BFT1BMRS83MTZlOWQxYy1jYTQ0LTRmZWQtOGZjYS05ZGY0YjRmNDE3ZjU>; rel="next", <https://api.ciscospark.com/v1/applications?max=10&before&after=Y2lzY29zcGFyazovL3VzL1BFT1BMR>; rel="last"`
+			link := `<https://api.ciscospark.com/v1/applications/first>; rel="first", <https://api.ciscospark.com/v1/applications/prev>; rel="prev", <https://api.ciscospark.com/v1/applications/next>; rel="next", <https://api.ciscospark.com/v1/applications/last>; rel="last"`
 			links := parseLink(link)
-			So(links.NextURL, ShouldEqual, "https://api.ciscospark.com/v1/applications?max=10&before&after=Y2lzY29zcGFyazovL3VzL1BFT1BMRS83MTZlOWQxYy1jYTQ0LTRmZWQtOGZjYS05ZGY0YjRmNDE3ZjU")
-			So(links.LastURL, ShouldEqual, "https://api.ciscospark.com/v1/applications?max=10&before&after=Y2lzY29zcGFyazovL3VzL1BFT1BMR")
-			So(links.FirstURL, ShouldEqual, "https://api.ciscospark.com/v1/applications?max=10&before&after=")
-			So(links.PreviousURL, ShouldEqual, "https://api.ciscospark.com/v1/applications?max=10&before=Y2lzY29zcGFyazovL3VzL1BFT1BMRS83MTZlOWQxYy1jYTQ0LTRmZWQtOGZjYS05ZGY0YjRmNDE3ZjU&after")
+			So(links.NextURL, ShouldEqual, "https://api.ciscospark.com/v1/applications/next")
+			So(links.LastURL, ShouldEqual, "https://api.ciscospark.com/v1/applications/last")
+			So(links.FirstURL, ShouldEqual, "https://api.ciscospark.com/v1/applications/first")
+			So(links.PreviousURL, ShouldEqual, "https://api.ciscospark.com/v1/applications/prev")
 		})
 	})
 	Convey("Constants should be set", t, func() {

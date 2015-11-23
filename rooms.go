@@ -7,10 +7,11 @@ import (
 
 // Room is virtual meeting places for getting work done.
 type Room struct {
-	ID      string     `json:"id,omitempty"`
-	Title   string     `json:"title,omitempty"`
-	Members []string   `json:"members,omitempty"`
-	Created *time.Time `json:"created,omitempty"`
+	ID         string     `json:"id,omitempty"`
+	Title      string     `json:"title,omitempty"`
+	SIPAddress string     `json:"sipAddress,omitempty"`
+	Members    []string   `json:"members,omitempty"`
+	Created    *time.Time `json:"created,omitempty"`
 }
 
 type Rooms struct {

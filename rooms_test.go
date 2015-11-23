@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	RoomJSON         = `{"id":"123","title":"foo","members":["foo","bar"],"created":"2015-10-18T07:26:16-07:00"}`
+	RoomJSON         = `{"id":"123","title":"foo","sipAddress":"foo@bar.com","members":["foo","bar"],"created":"2015-10-18T07:26:16-07:00"}`
 	RoomsJSON        = `{"items":[` + RoomJSON + `]}`
 	RoomResponseJSON = `{"title":"Project Unicorn - Sprint 0","members":["john@example.com","123"]}`
 )
@@ -41,10 +41,11 @@ func TestRoomsSpec(t *testing.T) {
 		Convey("For room", func() {
 			Convey("It should generate the proper JSON message", func() {
 				room := &Room{
-					ID:      "123",
-					Title:   "foo",
-					Members: []string{"foo", "bar"},
-					Created: &CreatedTime,
+					ID:         "123",
+					Title:      "foo",
+					SIPAddress: "foo@bar.com",
+					Members:    []string{"foo", "bar"},
+					Created:    &CreatedTime,
 				}
 				body, err := json.Marshal(room)
 				So(err, ShouldBeNil)
@@ -55,6 +56,7 @@ func TestRoomsSpec(t *testing.T) {
 				err := json.Unmarshal([]byte(RoomJSON)[:], room)
 				So(err, ShouldBeNil)
 				So(room.Title, ShouldEqual, "foo")
+				So(room.SIPAddress, ShouldEqual, "foo@bar.com")
 				So(room.Members[0], ShouldEqual, "foo")
 				So(room.Members[1], ShouldEqual, "bar")
 			})
@@ -63,6 +65,7 @@ func TestRoomsSpec(t *testing.T) {
 				err := room.Get()
 				So(err, ShouldBeNil)
 				So(room.Title, ShouldEqual, "foo")
+				So(room.SIPAddress, ShouldEqual, "foo@bar.com")
 				So(room.Members[0], ShouldEqual, "foo")
 				So(room.Members[1], ShouldEqual, "bar")
 			})
@@ -73,17 +76,19 @@ func TestRoomsSpec(t *testing.T) {
 			})
 			Convey("Post room", func() {
 				room := &Room{
-					Title:   "Project Unicorn",
-					Members: []string{"john@doe.com", "456"},
+					Title:      "Project Unicorn",
+					SIPAddress: "foo@bar.com",
+					Members:    []string{"john@doe.com", "456"},
 				}
 				err := room.Post()
 				So(err, ShouldBeNil)
 			})
 			Convey("Put room", func() {
 				room := &Room{
-					ID:      "1",
-					Title:   "Project Unicorn",
-					Members: []string{"john@doe.com", "456"},
+					ID:         "1",
+					Title:      "Project Unicorn",
+					SIPAddress: "foo@bar.com",
+					Members:    []string{"john@doe.com", "456"},
 				}
 				err := room.Put()
 				So(err, ShouldBeNil)
