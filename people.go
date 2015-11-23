@@ -49,6 +49,19 @@ func (person *Person) Get() error {
 	return nil
 }
 
+// GetMe fetches the current authenticated user
+func (person *Person) GetMe() error {
+	body, _, err := get(PeopleResource + "/me")
+	if err != nil {
+		return err
+	}
+	err = json.Unmarshal(body, person)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // Builds the query string
 func (people *People) buildQueryString() string {
 	query := ""

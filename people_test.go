@@ -97,6 +97,21 @@ func TestPeopleSpec(t *testing.T) {
 				So(person.Avatar, ShouldEqual, "TODO")
 				BaseURL = previousURL
 			})
+			Convey("Get me", func() {
+				ts := serveHTTP(t)
+				defer ts.Close()
+				previousURL := BaseURL
+				BaseURL = ts.URL
+				InitClient("123")
+				person := &Person{}
+				err := person.GetMe()
+				So(err, ShouldBeNil)
+				So(person.ID, ShouldEqual, "OTZhYmMy")
+				So(person.Emails[0], ShouldEqual, "johnny.chang@foomail.com")
+				So(person.Displayname, ShouldEqual, "John Andersen")
+				So(person.Avatar, ShouldEqual, "TODO")
+				BaseURL = previousURL
+			})
 		})
 	})
 }

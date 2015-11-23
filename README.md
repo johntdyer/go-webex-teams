@@ -234,8 +234,15 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(person)
-```
+	fmt.Println(person
+
+	// Get the current authenticated user
+	person := spark.Person{}
+	err := person.GetMe()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(person)```
 
 ### Rooms
 ```go
