@@ -141,7 +141,7 @@ func main() {
 		fmt.Println(err)
 	}
 	fmt.Println(messages)
-	err := messages.Prev()
+	err := messages.Previous()
 	if err != nil {
 		fmt.Println(err)
 	}
