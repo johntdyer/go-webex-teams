@@ -374,6 +374,28 @@ func main() {
 	}
 	fmt.Println(subscriptions)
 
+	// Get subscriptions based on returned link header when available
+	err := subscriptions.Next()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(subscriptions)
+	err := subscriptions.Previous()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(subscriptions)
+	err := subscriptions.Last()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(subscriptions)
+	err := subscriptions.First()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(subscriptions)
+
 	// Get a subscription by ID
 	subscription := spark.Subscription{ID: "123"}
 	err := subscription.Get()
@@ -443,4 +465,4 @@ func main() {
 
 ## TODO
 
-* Finish coverage for link headers for /subscriptions and /webooks
+* Finish coverage for link headers for /webooks

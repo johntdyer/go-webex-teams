@@ -74,7 +74,6 @@ func TestSubscriptionsSpec(t *testing.T) {
 				subscription := &Subscription{ID: "1"}
 				err := subscription.Delete()
 				So(err, ShouldBeNil)
-				BaseURL = previousURL
 			})
 		})
 		Convey("For subscriptions", func() {
@@ -88,10 +87,6 @@ func TestSubscriptionsSpec(t *testing.T) {
 				So(subscriptions.Items[0].Applicationname, ShouldEqual, "foo")
 			})
 			Convey("Get subscriptions", func() {
-				ts := serveHTTP(t)
-				defer ts.Close()
-				BaseURL = ts.URL
-				InitClient("123")
 				subscriptions := &Subscriptions{Personid: "123"}
 				err := subscriptions.Get()
 				So(err, ShouldBeNil)
@@ -99,6 +94,36 @@ func TestSubscriptionsSpec(t *testing.T) {
 				So(subscriptions.Items[0].Personid, ShouldEqual, "123")
 				So(subscriptions.Items[0].Applicationid, ShouldEqual, "456")
 				So(subscriptions.Items[0].Applicationname, ShouldEqual, "foo")
+			})
+			Convey("It should raise an error when no link cursor", func() {
+				subscriptions := &Subscriptions{}
+				err := subscriptions.First()
+				So(err.Error(), ShouldEqual, "first cursor not available")
+				err = subscriptions.Next()
+				So(err.Error(), ShouldEqual, "next cursor not available")
+				err = subscriptions.Last()
+				So(err.Error(), ShouldEqual, "last cursor not available")
+				err = subscriptions.Previous()
+				So(err.Error(), ShouldEqual, "previous cursor not available")
+			})
+			Convey("Should get our link cursor", func() {
+				subscriptions := &Subscriptions{}
+				subscriptions.FirstURL = "/subscriptions/first"
+				err := subscriptions.First()
+				So(err, ShouldBeNil)
+				So(subscriptions.Items[0].ID, ShouldEqual, "000")
+				subscriptions.LastURL = "/subscriptions/last"
+				err = subscriptions.Last()
+				So(err, ShouldBeNil)
+				So(subscriptions.Items[0].ID, ShouldEqual, "000")
+				subscriptions.NextURL = "/subscriptions/next"
+				err = subscriptions.Next()
+				So(err, ShouldBeNil)
+				So(subscriptions.Items[0].ID, ShouldEqual, "000")
+				subscriptions.PreviousURL = "/subscriptions/prev"
+				err = subscriptions.Previous()
+				So(err, ShouldBeNil)
+				So(subscriptions.Items[0].ID, ShouldEqual, "000")
 			})
 		})
 	})

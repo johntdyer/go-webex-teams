@@ -2,6 +2,7 @@ package spark
 
 import (
 	"encoding/json"
+	"errors"
 	"net/url"
 	"time"
 )
@@ -22,6 +23,7 @@ type Subscriptions struct {
 	} `json:"items"`
 	Personid string
 	Type     string
+	Links
 }
 
 // Subscriptions fetches all subscriptions
@@ -36,6 +38,69 @@ func (subs *Subscriptions) Get() error {
 	}
 	return nil
 
+}
+
+func (subs *Subscriptions) Next() error {
+	if subs.NextURL != "" {
+		err := subs.getCursor(subs.NextURL)
+		if err != nil {
+			return err
+		}
+		return nil
+	} else {
+		return errors.New("next cursor not available")
+	}
+}
+
+func (subs *Subscriptions) Last() error {
+	if subs.LastURL != "" {
+		err := subs.getCursor(subs.LastURL)
+		if err != nil {
+			return err
+		}
+		return nil
+	} else {
+		return errors.New("last cursor not available")
+	}
+}
+
+func (subs *Subscriptions) First() error {
+	if subs.FirstURL != "" {
+		err := subs.getCursor(subs.FirstURL)
+		if err != nil {
+			return err
+		}
+		return nil
+	} else {
+		return errors.New("first cursor not available")
+	}
+}
+
+func (subs *Subscriptions) Previous() error {
+	if subs.PreviousURL != "" {
+		err := subs.getCursor(subs.PreviousURL)
+		if err != nil {
+			return err
+		}
+		return nil
+	} else {
+		return errors.New("previous cursor not available")
+	}
+}
+
+func (subs *Subscriptions) getCursor(url string) error {
+	body, links, err := get(url)
+	if err != nil {
+		return err
+	}
+	if links != nil {
+		subs.Links = *links
+	}
+	err = json.Unmarshal(body, subs)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // Subscription fetches a subscription
