@@ -250,6 +250,28 @@ func main() {
 	}
 	fmt.Println(people)
 
+	// Get people based on returned link header when available
+	err := people.Next()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(people)
+	err := people.Previous()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(people)
+	err := people.Last()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(people)
+	err := people.First()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(people)
+
 	// Get a person by ID
 	person := spark.Person{ID: "123"}
 	err := person.Get()
@@ -399,4 +421,4 @@ func main() {
 
 ## TODO
 
-* Finish coverage for link headers for /people, /rooms, /subscriptions and /webooks
+* Finish coverage for link headers for /rooms, /subscriptions and /webooks

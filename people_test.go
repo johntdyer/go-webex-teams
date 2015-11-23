@@ -50,6 +50,41 @@ func TestPeopleSpec(t *testing.T) {
 				So(people.Items[0].Avatar, ShouldEqual, "TODO")
 				BaseURL = previousURL
 			})
+			Convey("It should raise an error when no link cursor", func() {
+				people := &People{}
+				err := people.First()
+				So(err.Error(), ShouldEqual, "first cursor not available")
+				err = people.Next()
+				So(err.Error(), ShouldEqual, "next cursor not available")
+				err = people.Last()
+				So(err.Error(), ShouldEqual, "last cursor not available")
+				err = people.Previous()
+				So(err.Error(), ShouldEqual, "previous cursor not available")
+			})
+			Convey("Should get our link cursor", func() {
+				ts := serveHTTP(t)
+				defer ts.Close()
+				previousURL := BaseURL
+				BaseURL = ts.URL
+				people := &People{}
+				people.FirstURL = "/messages/first"
+				err := people.First()
+				So(err, ShouldBeNil)
+				So(people.Items[0].ID, ShouldEqual, "123")
+				people.LastURL = "/messages/last"
+				err = people.Last()
+				So(err, ShouldBeNil)
+				So(people.Items[0].ID, ShouldEqual, "123")
+				people.NextURL = "/messages/next"
+				err = people.Next()
+				So(err, ShouldBeNil)
+				So(people.Items[0].ID, ShouldEqual, "123")
+				people.PreviousURL = "/messages/prev"
+				err = people.Previous()
+				So(err, ShouldBeNil)
+				So(people.Items[0].ID, ShouldEqual, "123")
+				BaseURL = previousURL
+			})
 			Convey("It should generate the proper struct from the JSON", func() {
 				people := &People{}
 				err := json.Unmarshal([]byte(PeopleJSON)[:], &people)
