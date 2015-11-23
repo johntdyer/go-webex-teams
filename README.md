@@ -9,7 +9,7 @@ package main
 
 import (
   "fmt"
-  "github.com/jsgoecke/go-spark"
+  "github.com/ciscospark/go-spark"
 )
 
 func main() {
