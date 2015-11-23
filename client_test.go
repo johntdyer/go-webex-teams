@@ -118,6 +118,12 @@ func serveHTTP(t *testing.T) *httptest.Server {
 				w.WriteHeader(200)
 				w.Write([]byte(ApplicationResponseJSON))
 			}
+		case "/applications/next", "/applications/last", "/applications/prev", "/applications/first":
+			switch req.Method {
+			case "GET":
+				w.WriteHeader(200)
+				w.Write([]byte(ApplicationsJSON))
+			}
 		case ApplicationsResource + "/1":
 			switch req.Method {
 			case "GET":

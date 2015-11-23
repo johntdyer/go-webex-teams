@@ -98,6 +98,36 @@ func TestApplicationsSpec(t *testing.T) {
 				So(err, ShouldBeNil)
 				validateApplications(t, applications)
 			})
+			Convey("It should raise an error when no link cursor", func() {
+				applications := &Applications{}
+				err := applications.First()
+				So(err.Error(), ShouldEqual, "first cursor not available")
+				err = applications.Next()
+				So(err.Error(), ShouldEqual, "next cursor not available")
+				err = applications.Last()
+				So(err.Error(), ShouldEqual, "last cursor not available")
+				err = applications.Previous()
+				So(err.Error(), ShouldEqual, "previous cursor not available")
+			})
+			Convey("Should get our link cursor", func() {
+				applications := &Applications{}
+				applications.FirstURL = "/applications/first"
+				err := applications.First()
+				So(err, ShouldBeNil)
+				So(applications.Items[0].ID, ShouldEqual, "123")
+				applications.LastURL = "/applications/last"
+				err = applications.Last()
+				So(err, ShouldBeNil)
+				So(applications.Items[0].ID, ShouldEqual, "123")
+				applications.NextURL = "/applications/next"
+				err = applications.Next()
+				So(err, ShouldBeNil)
+				So(applications.Items[0].ID, ShouldEqual, "123")
+				applications.PreviousURL = "/applications/prev"
+				err = applications.Previous()
+				So(err, ShouldBeNil)
+				So(applications.Items[0].ID, ShouldEqual, "123")
+			})
 		})
 	})
 	BaseURL = previousURL

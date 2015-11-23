@@ -28,6 +28,28 @@ func main() {
 	}
 	fmt.Println(applications)
 
+	// Get applications based on returned link header when available
+	err := applications.Next()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(applications)
+	err := applications.Previous()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(applications)
+	err := applications.Last()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(applications)
+	err := applications.First()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(applications)
+
 	// Get an application by ID
 	application := spark.Application{ID: "123"}
 	err := application.Get()
@@ -377,4 +399,4 @@ func main() {
 
 ## TODO
 
-* Finish coverage for link headers for /applications, /people, /rooms, /subscriptions and /webooks
+* Finish coverage for link headers for /people, /rooms, /subscriptions and /webooks

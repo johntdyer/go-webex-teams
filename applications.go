@@ -2,6 +2,7 @@ package spark
 
 import (
 	"encoding/json"
+	"errors"
 	"time"
 )
 
@@ -26,6 +27,7 @@ type Applications struct {
 	Items []struct {
 		Application
 	} `json:"items"`
+	Links
 }
 
 // Get fetches all applications
@@ -33,6 +35,69 @@ func (applications *Applications) Get() error {
 	body, _, err := get(ApplicationsResource)
 	if err != nil {
 		return err
+	}
+	err = json.Unmarshal(body, applications)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (applications *Applications) Next() error {
+	if applications.NextURL != "" {
+		err := applications.getCursor(applications.NextURL)
+		if err != nil {
+			return err
+		}
+		return nil
+	} else {
+		return errors.New("next cursor not available")
+	}
+}
+
+func (applications *Applications) Last() error {
+	if applications.LastURL != "" {
+		err := applications.getCursor(applications.LastURL)
+		if err != nil {
+			return err
+		}
+		return nil
+	} else {
+		return errors.New("last cursor not available")
+	}
+}
+
+func (applications *Applications) First() error {
+	if applications.FirstURL != "" {
+		err := applications.getCursor(applications.FirstURL)
+		if err != nil {
+			return err
+		}
+		return nil
+	} else {
+		return errors.New("first cursor not available")
+	}
+}
+
+func (applications *Applications) Previous() error {
+	if applications.PreviousURL != "" {
+		err := applications.getCursor(applications.PreviousURL)
+		if err != nil {
+			return err
+		}
+		return nil
+	} else {
+		return errors.New("previous cursor not available")
+	}
+}
+
+func (applications *Applications) getCursor(url string) error {
+	body, links, err := get(url)
+	if err != nil {
+		return err
+	}
+	if links != nil {
+		applications.Links = *links
 	}
 	err = json.Unmarshal(body, applications)
 	if err != nil {
