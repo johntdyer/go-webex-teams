@@ -15,7 +15,7 @@ import (
 func main() {
 	spark.InitClient("<YOUR TOKEN>")
 ```
-___
+
 ### Applications
 ```go
 	// Applications (not implemented in Spark API yet)
@@ -76,7 +76,7 @@ ___
 	}
 	fmt.Println(application)
 ```
-___
+
 ### Memberships
 ```go
 	// Memberships
@@ -153,7 +153,7 @@ ___
 	}
 	fmt.Println(membership)
 ```
-___
+
 ### Messages
 ```go
 	// Messages
@@ -215,7 +215,7 @@ ___
 	}
 	fmt.Println(message)
 ```
-___
+
 ### People
 ```go
 	// People
@@ -236,7 +236,7 @@ ___
 	}
 	fmt.Println(person)
 ```
-___
+
 ### Rooms
 ```go
 	// Rooms
@@ -287,7 +287,7 @@ ___
 	}
 	fmt.Println(room)
 ```
-___
+
 ### Subscriptions
 ```go
 	// Subscriptions (not implemented in Spark API yet)
@@ -315,7 +315,7 @@ ___
 		fmt.Println(err)
 	}
 ```
-___
+
 ### Webhooks
 ```go
 	// Webhooks
