@@ -13,6 +13,11 @@ var (
 )
 
 func TestPeopleSpec(t *testing.T) {
+	ts := serveHTTP(t)
+	defer ts.Close()
+	previousURL := BaseURL
+	BaseURL = ts.URL
+	InitClient("123")
 	Convey("Given we want to interact with Spark people", t, func() {
 		Convey("For people", func() {
 			Convey("Should construct proper query strings", func() {
@@ -36,11 +41,6 @@ func TestPeopleSpec(t *testing.T) {
 				})
 			})
 			Convey("Get people", func() {
-				ts := serveHTTP(t)
-				defer ts.Close()
-				previousURL := BaseURL
-				BaseURL = ts.URL
-				InitClient("123")
 				people := &People{Email: "john@doe.com"}
 				err := people.Get()
 				So(err, ShouldBeNil)
@@ -48,7 +48,6 @@ func TestPeopleSpec(t *testing.T) {
 				So(people.Items[0].Emails[0], ShouldEqual, "johnny.chang@foomail.com")
 				So(people.Items[0].Displayname, ShouldEqual, "John Andersen")
 				So(people.Items[0].Avatar, ShouldEqual, "TODO")
-				BaseURL = previousURL
 			})
 			Convey("It should raise an error when no link cursor", func() {
 				people := &People{}
@@ -62,10 +61,6 @@ func TestPeopleSpec(t *testing.T) {
 				So(err.Error(), ShouldEqual, "previous cursor not available")
 			})
 			Convey("Should get our link cursor", func() {
-				ts := serveHTTP(t)
-				defer ts.Close()
-				previousURL := BaseURL
-				BaseURL = ts.URL
 				people := &People{}
 				people.FirstURL = "/messages/first"
 				err := people.First()
@@ -83,7 +78,6 @@ func TestPeopleSpec(t *testing.T) {
 				err = people.Previous()
 				So(err, ShouldBeNil)
 				So(people.Items[0].ID, ShouldEqual, "123")
-				BaseURL = previousURL
 			})
 			Convey("It should generate the proper struct from the JSON", func() {
 				people := &People{}
@@ -118,11 +112,6 @@ func TestPeopleSpec(t *testing.T) {
 				So(person.Avatar, ShouldEqual, "TODO")
 			})
 			Convey("Get person", func() {
-				ts := serveHTTP(t)
-				defer ts.Close()
-				previousURL := BaseURL
-				BaseURL = ts.URL
-				InitClient("123")
 				person := &Person{ID: "1"}
 				err := person.Get()
 				So(err, ShouldBeNil)
@@ -130,14 +119,8 @@ func TestPeopleSpec(t *testing.T) {
 				So(person.Emails[0], ShouldEqual, "johnny.chang@foomail.com")
 				So(person.Displayname, ShouldEqual, "John Andersen")
 				So(person.Avatar, ShouldEqual, "TODO")
-				BaseURL = previousURL
 			})
 			Convey("Get me", func() {
-				ts := serveHTTP(t)
-				defer ts.Close()
-				previousURL := BaseURL
-				BaseURL = ts.URL
-				InitClient("123")
 				person := &Person{}
 				err := person.GetMe()
 				So(err, ShouldBeNil)
@@ -145,8 +128,8 @@ func TestPeopleSpec(t *testing.T) {
 				So(person.Emails[0], ShouldEqual, "johnny.chang@foomail.com")
 				So(person.Displayname, ShouldEqual, "John Andersen")
 				So(person.Avatar, ShouldEqual, "TODO")
-				BaseURL = previousURL
 			})
 		})
 	})
+	BaseURL = previousURL
 }
