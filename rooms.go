@@ -2,6 +2,7 @@ package spark
 
 import (
 	"encoding/json"
+	"errors"
 	"time"
 )
 
@@ -18,6 +19,7 @@ type Rooms struct {
 	Items []struct {
 		Room
 	} `json:"items"`
+	Links
 }
 
 // Rooms fetches all rooms
@@ -25,6 +27,69 @@ func (rooms *Rooms) Get() error {
 	body, _, err := get(RoomsResource)
 	if err != nil {
 		return err
+	}
+	err = json.Unmarshal(body, rooms)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (rooms *Rooms) Next() error {
+	if rooms.NextURL != "" {
+		err := rooms.getCursor(rooms.NextURL)
+		if err != nil {
+			return err
+		}
+		return nil
+	} else {
+		return errors.New("next cursor not available")
+	}
+}
+
+func (rooms *Rooms) Last() error {
+	if rooms.LastURL != "" {
+		err := rooms.getCursor(rooms.LastURL)
+		if err != nil {
+			return err
+		}
+		return nil
+	} else {
+		return errors.New("last cursor not available")
+	}
+}
+
+func (rooms *Rooms) First() error {
+	if rooms.FirstURL != "" {
+		err := rooms.getCursor(rooms.FirstURL)
+		if err != nil {
+			return err
+		}
+		return nil
+	} else {
+		return errors.New("first cursor not available")
+	}
+}
+
+func (rooms *Rooms) Previous() error {
+	if rooms.PreviousURL != "" {
+		err := rooms.getCursor(rooms.PreviousURL)
+		if err != nil {
+			return err
+		}
+		return nil
+	} else {
+		return errors.New("previous cursor not available")
+	}
+}
+
+func (rooms *Rooms) getCursor(url string) error {
+	body, links, err := get(url)
+	if err != nil {
+		return err
+	}
+	if links != nil {
+		rooms.Links = *links
 	}
 	err = json.Unmarshal(body, rooms)
 	if err != nil {

@@ -301,6 +301,28 @@ func main() {
 	}
 	fmt.Println(rooms)
 
+	// Get rooms based on returned link header when available
+	err := rooms.Next()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(rooms)
+	err := rooms.Previous()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(rooms)
+	err := rooms.Last()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(rooms)
+	err := rooms.First()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(rooms)
+
 	// Get a room by ID
 	room := spark.Room{ID: "123"}
 	err := room.Get()
@@ -421,4 +443,4 @@ func main() {
 
 ## TODO
 
-* Finish coverage for link headers for /rooms, /subscriptions and /webooks
+* Finish coverage for link headers for /subscriptions and /webooks

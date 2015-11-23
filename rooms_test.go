@@ -37,6 +37,36 @@ func TestRoomsSpec(t *testing.T) {
 				So(rooms.Items[0].Members[0], ShouldEqual, "foo")
 				So(rooms.Items[0].Members[1], ShouldEqual, "bar")
 			})
+			Convey("It should raise an error when no link cursor", func() {
+				rooms := &Rooms{}
+				err := rooms.First()
+				So(err.Error(), ShouldEqual, "first cursor not available")
+				err = rooms.Next()
+				So(err.Error(), ShouldEqual, "next cursor not available")
+				err = rooms.Last()
+				So(err.Error(), ShouldEqual, "last cursor not available")
+				err = rooms.Previous()
+				So(err.Error(), ShouldEqual, "previous cursor not available")
+			})
+			Convey("Should get our link cursor", func() {
+				rooms := &Rooms{}
+				rooms.FirstURL = "/rooms/first"
+				err := rooms.First()
+				So(err, ShouldBeNil)
+				So(rooms.Items[0].ID, ShouldEqual, "123")
+				rooms.LastURL = "/rooms/last"
+				err = rooms.Last()
+				So(err, ShouldBeNil)
+				So(rooms.Items[0].ID, ShouldEqual, "123")
+				rooms.NextURL = "/rooms/next"
+				err = rooms.Next()
+				So(err, ShouldBeNil)
+				So(rooms.Items[0].ID, ShouldEqual, "123")
+				rooms.PreviousURL = "/rooms/prev"
+				err = rooms.Previous()
+				So(err, ShouldBeNil)
+				So(rooms.Items[0].ID, ShouldEqual, "123")
+			})
 		})
 		Convey("For room", func() {
 			Convey("It should generate the proper JSON message", func() {
