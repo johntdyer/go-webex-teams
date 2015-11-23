@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-// Room is virtual meeting places for getting work done.
+// Represets a virtual meeting places for getting work done.
 type Room struct {
 	ID         string     `json:"id,omitempty"`
 	Title      string     `json:"title,omitempty"`
@@ -15,6 +15,7 @@ type Room struct {
 	Created    *time.Time `json:"created,omitempty"`
 }
 
+// Represents a collection of Rooms
 type Rooms struct {
 	Items []struct {
 		Room
@@ -22,7 +23,7 @@ type Rooms struct {
 	Links
 }
 
-// Rooms fetches all rooms
+// GETs all rooms
 func (rooms *Rooms) Get() error {
 	body, _, err := get(RoomsResource)
 	if err != nil {
@@ -35,6 +36,7 @@ func (rooms *Rooms) Get() error {
 	return nil
 }
 
+// Moves to the next link from a link header for a large collection
 func (rooms *Rooms) Next() error {
 	if rooms.NextURL != "" {
 		err := rooms.getCursor(rooms.NextURL)
@@ -47,6 +49,7 @@ func (rooms *Rooms) Next() error {
 	}
 }
 
+// Moves to the last link from a link header for a large collection
 func (rooms *Rooms) Last() error {
 	if rooms.LastURL != "" {
 		err := rooms.getCursor(rooms.LastURL)
@@ -59,6 +62,7 @@ func (rooms *Rooms) Last() error {
 	}
 }
 
+// Moves to the first link from a link header for a large collection
 func (rooms *Rooms) First() error {
 	if rooms.FirstURL != "" {
 		err := rooms.getCursor(rooms.FirstURL)
@@ -71,6 +75,7 @@ func (rooms *Rooms) First() error {
 	}
 }
 
+// Moves to the previous link from a link header for a large collection
 func (rooms *Rooms) Previous() error {
 	if rooms.PreviousURL != "" {
 		err := rooms.getCursor(rooms.PreviousURL)
@@ -83,6 +88,7 @@ func (rooms *Rooms) Previous() error {
 	}
 }
 
+// Gets the appropriate link associated to the link header
 func (rooms *Rooms) getCursor(url string) error {
 	body, links, err := get(url)
 	if err != nil {
@@ -98,7 +104,7 @@ func (rooms *Rooms) getCursor(url string) error {
 	return nil
 }
 
-// Room fetchs a room
+// GETs a room by ID
 func (room *Room) Get() error {
 	body, _, err := get(RoomsResource + "/" + room.ID)
 	if err != nil {
@@ -111,12 +117,12 @@ func (room *Room) Get() error {
 	return nil
 }
 
-// DeleteRoom deletes a room
+// DELETEs a room
 func (room *Room) Delete() error {
 	return delete(RoomsResource + "/" + room.ID)
 }
 
-// Post creates a new room
+// Creates (POSTs) a new room
 func (room *Room) Post() error {
 	body, err := json.Marshal(room)
 	if err != nil {
@@ -133,7 +139,7 @@ func (room *Room) Post() error {
 	return nil
 }
 
-// Post updates a room
+// Updates (PUTs) a room
 func (room *Room) Put() error {
 	body, err := json.Marshal(room)
 	if err != nil {

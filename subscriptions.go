@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// Subscription represents a relationship between a person and an application.
+// Represents a relationship between a person and an application.
 type Subscription struct {
 	ID              string     `json:"id,omitempty"`
 	Personid        string     `json:"personId,omitempty"`
@@ -16,7 +16,7 @@ type Subscription struct {
 	Created         *time.Time `json:"created,omitempty"`
 }
 
-// Subscriptions represent a slice of Subscription
+// Represents a collection of Subscriptions
 type Subscriptions struct {
 	Items []struct {
 		Subscription
@@ -26,7 +26,7 @@ type Subscriptions struct {
 	Links
 }
 
-// Subscriptions fetches all subscriptions
+// GETs all subscriptions
 func (subs *Subscriptions) Get() error {
 	body, _, err := get(SubscriptionsResource + subs.buildQueryString())
 	if err != nil {
@@ -40,6 +40,7 @@ func (subs *Subscriptions) Get() error {
 
 }
 
+// Moves to the next link from a link header for a large collection
 func (subs *Subscriptions) Next() error {
 	if subs.NextURL != "" {
 		err := subs.getCursor(subs.NextURL)
@@ -52,6 +53,7 @@ func (subs *Subscriptions) Next() error {
 	}
 }
 
+// Moves to the last link from a link header for a large collection
 func (subs *Subscriptions) Last() error {
 	if subs.LastURL != "" {
 		err := subs.getCursor(subs.LastURL)
@@ -64,6 +66,7 @@ func (subs *Subscriptions) Last() error {
 	}
 }
 
+// Moves to the first link from a link header for a large collection
 func (subs *Subscriptions) First() error {
 	if subs.FirstURL != "" {
 		err := subs.getCursor(subs.FirstURL)
@@ -76,6 +79,7 @@ func (subs *Subscriptions) First() error {
 	}
 }
 
+// Moves to the previous link from a link header for a large collection
 func (subs *Subscriptions) Previous() error {
 	if subs.PreviousURL != "" {
 		err := subs.getCursor(subs.PreviousURL)
@@ -88,6 +92,7 @@ func (subs *Subscriptions) Previous() error {
 	}
 }
 
+// Gets the appropriate link associated to the link header
 func (subs *Subscriptions) getCursor(url string) error {
 	body, links, err := get(url)
 	if err != nil {
@@ -103,7 +108,7 @@ func (subs *Subscriptions) getCursor(url string) error {
 	return nil
 }
 
-// Subscription fetches a subscription
+// GETs a subscription
 func (sub *Subscription) Get() error {
 	body, _, err := get(SubscriptionsResource + "/" + sub.ID)
 	if err != nil {
@@ -116,7 +121,7 @@ func (sub *Subscription) Get() error {
 	return nil
 }
 
-// DeleteSubscription deletes a subscription
+// DELETEs a subscription
 func (sub *Subscription) Delete() error {
 	return delete(SubscriptionsResource + "/" + sub.ID)
 }

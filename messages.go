@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-// Message is how people communicate in rooms. Individual messages are timestamped and represented in the Spark app followed by a line break.
+// Represents how people communicate in rooms. Individual messages are timestamped and represented in the Spark app followed by a line break.
 type Message struct {
 	ID          string     `json:"id,omitempty"`
 	Personid    string     `json:"personId,omitempty"`
@@ -17,6 +17,7 @@ type Message struct {
 	Created     *time.Time `json:"created,omitempty"`
 }
 
+// A collection of Messages
 type Messages struct {
 	Items []struct {
 		Message
@@ -26,7 +27,7 @@ type Messages struct {
 	Links
 }
 
-// Messages fetches all messages based on the provided Roomid
+// GETs all messages based on the provided Roomid
 func (msgs *Messages) Get() error {
 	body, links, err := get(MessagesResource + "?roomId=" + msgs.Roomid)
 	if err != nil {
@@ -42,6 +43,7 @@ func (msgs *Messages) Get() error {
 	return nil
 }
 
+// Moves to the next link from a link header for a large collection
 func (msgs *Messages) Next() error {
 	if msgs.NextURL != "" {
 		err := msgs.getCursor(msgs.NextURL)
@@ -54,6 +56,7 @@ func (msgs *Messages) Next() error {
 	}
 }
 
+// Moves to the last link from a link header for a large collection
 func (msgs *Messages) Last() error {
 	if msgs.LastURL != "" {
 		err := msgs.getCursor(msgs.LastURL)
@@ -66,6 +69,7 @@ func (msgs *Messages) Last() error {
 	}
 }
 
+// Moves to the first link from a link header for a large collection
 func (msgs *Messages) First() error {
 	if msgs.FirstURL != "" {
 		err := msgs.getCursor(msgs.FirstURL)
@@ -78,6 +82,7 @@ func (msgs *Messages) First() error {
 	}
 }
 
+// Moves to the previous link from a link header for a large collection
 func (msgs *Messages) Previous() error {
 	if msgs.PreviousURL != "" {
 		err := msgs.getCursor(msgs.PreviousURL)
@@ -90,6 +95,7 @@ func (msgs *Messages) Previous() error {
 	}
 }
 
+// Gets the appropriate link associated to the link header
 func (msgs *Messages) getCursor(url string) error {
 	body, links, err := get(url)
 	if err != nil {
@@ -105,7 +111,7 @@ func (msgs *Messages) getCursor(url string) error {
 	return nil
 }
 
-// Message fetches a message based on the ID provided
+// GETs a message by ID
 func (msg *Message) Get() error {
 	body, _, err := get(MessagesResource + "/" + msg.ID)
 	if err != nil {
@@ -118,12 +124,12 @@ func (msg *Message) Get() error {
 	return nil
 }
 
-// DeleteMessage deletes a message based on the ID provided
+// Deletes a message based on the ID provided
 func (msg *Message) Delete() error {
 	return delete(MessagesResource + "/" + msg.ID)
 }
 
-// Post creates a new message
+// Creates (POSTs) a new message
 func (msg *Message) Post() error {
 	body, err := json.Marshal(msg)
 	if err != nil {

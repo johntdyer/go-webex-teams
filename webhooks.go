@@ -6,6 +6,7 @@ import (
 	"time"
 )
 
+// Represents a Webhook
 type Webhook struct {
 	ID        string     `json:"id,omitempty"`
 	Resource  string     `json:"resource,omitempty"`
@@ -16,6 +17,7 @@ type Webhook struct {
 	Created   *time.Time `json:"created,omitempty"`
 }
 
+// Represents a collection of Webhooks
 type Webhooks struct {
 	Items []struct {
 		Webhook
@@ -23,7 +25,7 @@ type Webhooks struct {
 	Links
 }
 
-// Rooms fetches all rooms
+// GETs all rooms
 func (webhooks *Webhooks) Get() error {
 	body, _, err := get(WebhooksResource)
 	if err != nil {
@@ -36,6 +38,7 @@ func (webhooks *Webhooks) Get() error {
 	return nil
 }
 
+// Moves to the next link from a link header for a large collection
 func (webhooks *Webhooks) Next() error {
 	if webhooks.NextURL != "" {
 		err := webhooks.getCursor(webhooks.NextURL)
@@ -48,6 +51,7 @@ func (webhooks *Webhooks) Next() error {
 	}
 }
 
+// Moves to the last link from a link header for a large collection
 func (webhooks *Webhooks) Last() error {
 	if webhooks.LastURL != "" {
 		err := webhooks.getCursor(webhooks.LastURL)
@@ -60,6 +64,7 @@ func (webhooks *Webhooks) Last() error {
 	}
 }
 
+// Moves to the first link from a link header for a large collection
 func (webhooks *Webhooks) First() error {
 	if webhooks.FirstURL != "" {
 		err := webhooks.getCursor(webhooks.FirstURL)
@@ -72,6 +77,7 @@ func (webhooks *Webhooks) First() error {
 	}
 }
 
+// Moves to the previous link from a link header for a large collection
 func (webhooks *Webhooks) Previous() error {
 	if webhooks.PreviousURL != "" {
 		err := webhooks.getCursor(webhooks.PreviousURL)
@@ -84,6 +90,7 @@ func (webhooks *Webhooks) Previous() error {
 	}
 }
 
+// Gets the appropriate link associated to the link header
 func (webhooks *Webhooks) getCursor(url string) error {
 	body, links, err := get(url)
 	if err != nil {
@@ -99,7 +106,7 @@ func (webhooks *Webhooks) getCursor(url string) error {
 	return nil
 }
 
-// Room fetchs a room
+// GETs a room by ID
 func (webhook *Webhook) Get() error {
 	body, _, err := get(WebhooksResource + "/" + webhook.ID)
 	if err != nil {
@@ -112,12 +119,12 @@ func (webhook *Webhook) Get() error {
 	return nil
 }
 
-// DeleteRoom deletes a room
+// DELETEs a room
 func (webhook *Webhook) Delete() error {
 	return delete(WebhooksResource + "/" + webhook.ID)
 }
 
-// Post creates a new webhook
+// Creates (POSTs) a new webhook
 func (webhook *Webhook) Post() error {
 	body, err := json.Marshal(webhook)
 	if err != nil {
@@ -134,7 +141,7 @@ func (webhook *Webhook) Post() error {
 	return nil
 }
 
-// Post updates a webhook
+// Updates (PUTs) a webhook
 func (webhook *Webhook) Put() error {
 	body, err := json.Marshal(webhook)
 	if err != nil {

@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-// Application is how a developer requests access to perform Spark operations on behalf of a user
+// Represents how a developer requests access to perform Spark operations on behalf of a user
 type Application struct {
 	ID                string     `json:"id,omitempty"`
 	Name              string     `json:"name,omitempty"`
@@ -30,7 +30,7 @@ type Applications struct {
 	Links
 }
 
-// Get fetches all applications
+// GETs all applications
 func (applications *Applications) Get() error {
 	body, _, err := get(ApplicationsResource)
 	if err != nil {
@@ -43,6 +43,7 @@ func (applications *Applications) Get() error {
 	return nil
 }
 
+// Moves to the next link from a link header for a large collection of Applications
 func (applications *Applications) Next() error {
 	if applications.NextURL != "" {
 		err := applications.getCursor(applications.NextURL)
@@ -55,6 +56,7 @@ func (applications *Applications) Next() error {
 	}
 }
 
+// Moves to the last link from a link header for a large collection of Applications
 func (applications *Applications) Last() error {
 	if applications.LastURL != "" {
 		err := applications.getCursor(applications.LastURL)
@@ -67,6 +69,7 @@ func (applications *Applications) Last() error {
 	}
 }
 
+// Moves to the next first from a link header for a large collection of Applications
 func (applications *Applications) First() error {
 	if applications.FirstURL != "" {
 		err := applications.getCursor(applications.FirstURL)
@@ -79,6 +82,7 @@ func (applications *Applications) First() error {
 	}
 }
 
+// Moves to the prev link from a link header for a large collection
 func (applications *Applications) Previous() error {
 	if applications.PreviousURL != "" {
 		err := applications.getCursor(applications.PreviousURL)
@@ -91,6 +95,7 @@ func (applications *Applications) Previous() error {
 	}
 }
 
+// Gets the appropriate link associated to the link header
 func (applications *Applications) getCursor(url string) error {
 	body, links, err := get(url)
 	if err != nil {
@@ -106,7 +111,7 @@ func (applications *Applications) getCursor(url string) error {
 	return nil
 }
 
-// Get fetches an application
+// GETs an application by ID
 func (app *Application) Get() error {
 	body, _, err := get(ApplicationsResource + "/" + app.ID)
 	if err != nil {
@@ -119,12 +124,12 @@ func (app *Application) Get() error {
 	return nil
 }
 
-// Delete deletes an application
+// DELETEs an application by ID
 func (app *Application) Delete() error {
 	return delete(ApplicationsResource + "/" + app.ID)
 }
 
-// Post creates a new application
+// Creates (POSTs) a new application
 func (app *Application) Post() error {
 	body, err := json.Marshal(app)
 	if err != nil {
@@ -141,7 +146,7 @@ func (app *Application) Post() error {
 	return nil
 }
 
-// Post updates a new application
+// Updates (PUTs) an existing application
 func (app *Application) Put() error {
 	body, err := json.Marshal(app)
 	if err != nil {

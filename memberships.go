@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-// Membership represent a relationship between a person and a room.
+// Represent a relationship between a person and a room.
 type Membership struct {
 	ID          string     `json:"id,omitempty"`
 	Roomid      string     `json:"roomId,omitempty"`
@@ -18,6 +18,7 @@ type Membership struct {
 	Created     *time.Time `json:"created,omitempty"`
 }
 
+// Represents a collection of Memberships
 type Memberships struct {
 	Items []struct {
 		Membership
@@ -28,7 +29,7 @@ type Memberships struct {
 	Links
 }
 
-// Memberships fetches all memberships
+// GETs all memberships
 func (mems *Memberships) Get() error {
 	body, _, err := get(MembershipsResource + mems.buildQueryString())
 	if err != nil {
@@ -41,6 +42,7 @@ func (mems *Memberships) Get() error {
 	return nil
 }
 
+// Moves to the next link from a link header for a large collection
 func (mems *Memberships) Next() error {
 	if mems.NextURL != "" {
 		err := mems.getCursor(mems.NextURL)
@@ -53,6 +55,7 @@ func (mems *Memberships) Next() error {
 	}
 }
 
+// Moves to the last link from a link header for a large collection
 func (mems *Memberships) Last() error {
 	if mems.LastURL != "" {
 		err := mems.getCursor(mems.LastURL)
@@ -65,6 +68,7 @@ func (mems *Memberships) Last() error {
 	}
 }
 
+// Moves to the first link from a link header for a large collection
 func (mems *Memberships) First() error {
 	if mems.FirstURL != "" {
 		err := mems.getCursor(mems.FirstURL)
@@ -77,6 +81,7 @@ func (mems *Memberships) First() error {
 	}
 }
 
+// Moves to the previous link from a link header for a large collection
 func (mems *Memberships) Previous() error {
 	if mems.PreviousURL != "" {
 		err := mems.getCursor(mems.PreviousURL)
@@ -89,6 +94,7 @@ func (mems *Memberships) Previous() error {
 	}
 }
 
+// Gets the appropriate link associated to the link header
 func (mems *Memberships) getCursor(url string) error {
 	body, links, err := get(url)
 	if err != nil {

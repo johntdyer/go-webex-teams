@@ -35,7 +35,7 @@ var (
 	InactiveClientErr = errors.New("You must call InitalizeClient() before using this operation")
 )
 
-// Client is a new Spark client
+// Creates a new Spark client
 type Client struct {
 	Token      string
 	TrackingID string
@@ -45,7 +45,7 @@ type Client struct {
 	HTTP       *http.Client
 }
 
-// Links for pagination
+// Struct to store pagination details from a link header
 type Links struct {
 	NextURL     string
 	LastURL     string
@@ -53,7 +53,7 @@ type Links struct {
 	PreviousURL string
 }
 
-// IntClient generates a new Spark client taking and setting the auth token
+// Generates a new Spark client taking and setting the auth token
 func InitClient(token string) {
 	ActiveClient = &Client{
 		Token:      token,
@@ -66,7 +66,8 @@ func InitClient(token string) {
 	go incrementer()
 }
 
-// incrementer updates the Sequence of the request
+// Updates the sequence of the request to ensure a unique identifier
+// for each API request via the TrackingID header
 func incrementer() {
 	for {
 		<-ActiveClient.Increment
@@ -100,7 +101,7 @@ func put(resource string, body []byte) ([]byte, *Links, error) {
 	return processRequest(req)
 }
 
-// Processes a HTTP POST/PUT request
+// Processes an HTTP request
 func processRequest(req *http.Request) ([]byte, *Links, error) {
 	if ActiveClient.Token == "" {
 		return nil, nil, InactiveClientErr
@@ -164,6 +165,8 @@ func parseURL(url string) string {
 	return url
 }
 
+// Creates a UUID to be used for a unique identifier
+// for the tracing TrackingID header
 func uuid() string {
 	b := make([]byte, 16)
 	_, err := rand.Read(b)
