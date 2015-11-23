@@ -95,8 +95,10 @@ func (msgs *Messages) getCursor(url string) error {
 	if err != nil {
 		return err
 	}
+	if links != nil {
+		msgs.Links = *links
+	}
 	err = json.Unmarshal(body, msgs)
-	msgs.Links = *links
 	if err != nil {
 		return err
 	}

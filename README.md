@@ -135,6 +135,28 @@ func main() {
 	}
 	fmt.Println(messages)
 
+	// Get messages based on returned link header when available
+	err := messages.Next()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(messages)
+	err := messages.Prev()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(messages)
+	err := messages.Last()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(messages)
+	err := messages.First()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(messages)
+
 	// Get an message by ID
 	message := spark.Message{ID: "5678"}
 	err := message.Get()
@@ -143,7 +165,7 @@ func main() {
 	}
 	fmt.Println(message)
 
-	// Delete an membership by ID
+	// Delete an message by ID
 	message := spark.Message{ID: "5678"}
 	err := message.Delete()
 	if err != nil {

@@ -181,6 +181,12 @@ func serveHTTP(t *testing.T) *httptest.Server {
 				w.WriteHeader(404)
 				t.Error("Unknown HTTP method for Messages")
 			}
+		case "/messages/next", "/messages/last", "/messages/prev", "/messages/first":
+			switch req.Method {
+			case "GET":
+				w.WriteHeader(200)
+				w.Write([]byte(MessagesJSON))
+			}
 		case RoomsResource:
 			switch req.Method {
 			case "GET":

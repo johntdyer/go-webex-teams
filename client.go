@@ -114,13 +114,13 @@ func processRequest(req *http.Request) ([]byte, *Links, error) {
 		return nil, nil, errors.New(res.Status)
 	}
 	defer res.Body.Close()
-	link := res.Header.Get("Link")
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		return nil, nil, err
 	}
-	if link != "" {
-		links := parseLink(link)
+	linkHeader := res.Header.Get("Link")
+	if linkHeader != "" {
+		links := parseLink(linkHeader)
 		return body, links, nil
 	}
 	return body, nil, nil

@@ -43,6 +43,36 @@ func TestMessagesSpec(t *testing.T) {
 				So(messages.Items[0].Files[0], ShouldEqual, "image1.jpg")
 				So(messages.Items[0].Files[1], ShouldEqual, "image2.jpg")
 			})
+			Convey("It should raise an error when no link cursor", func() {
+				messages := &Messages{}
+				err := messages.First()
+				So(err.Error(), ShouldEqual, "first cursor not available")
+				err = messages.Next()
+				So(err.Error(), ShouldEqual, "next cursor not available")
+				err = messages.Last()
+				So(err.Error(), ShouldEqual, "last cursor not available")
+				err = messages.Previous()
+				So(err.Error(), ShouldEqual, "previous cursor not available")
+			})
+			Convey("Should get our link cursor", func() {
+				messages := &Messages{}
+				messages.FirstURL = "/messages/first"
+				err := messages.First()
+				So(err, ShouldBeNil)
+				So(messages.Items[0].ID, ShouldEqual, "123")
+				messages.LastURL = "/messages/last"
+				err = messages.Last()
+				So(err, ShouldBeNil)
+				So(messages.Items[0].ID, ShouldEqual, "123")
+				messages.NextURL = "/messages/next"
+				err = messages.Next()
+				So(err, ShouldBeNil)
+				So(messages.Items[0].ID, ShouldEqual, "123")
+				messages.PreviousURL = "/messages/prev"
+				err = messages.Previous()
+				So(err, ShouldBeNil)
+				So(messages.Items[0].ID, ShouldEqual, "123")
+			})
 		})
 		Convey("For a message", func() {
 			Convey("It should generate the proper JSON message", func() {
