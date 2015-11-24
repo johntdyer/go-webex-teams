@@ -10,15 +10,9 @@ package main
 import (
 	"fmt"
 	"os"
-	"strconv"
 
 	"../."
 )
-
-// Output the TrackingID HTTP header value
-func displayTrackingID() {
-	fmt.Println("***Request TrackingID -> " + spark.ActiveClient.TrackingID + "_" + strconv.Itoa(spark.ActiveClient.Sequence))
-}
 
 func main() {
 	spark.InitClient(os.Getenv("SPARK_TOKEN"))
@@ -26,7 +20,7 @@ func main() {
 	// Get all rooms
 	rooms := spark.Rooms{}
 	err := rooms.Get()
-	displayTrackingID()
+	fmt.Println(spark.TrackingID())
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -34,7 +28,7 @@ func main() {
 	// Get all messages from a room
 	messages := spark.Messages{Roomid: rooms.Items[1].ID}
 	err = messages.Get()
-	displayTrackingID()
+	fmt.Println(spark.TrackingID())
 	fmt.Println("Displaying messages for room -> " + rooms.Items[1].Title)
 	if err != nil {
 		fmt.Println(err)
@@ -46,7 +40,7 @@ func main() {
 		// Display an individual message
 		message := spark.Message{ID: messages.Items[0].ID}
 		err = message.Get()
-		displayTrackingID()
+		fmt.Println(spark.TrackingID())
 		if err != nil {
 			fmt.Println(err)
 		} else {
@@ -62,7 +56,7 @@ func main() {
 		Files:  []string{"http://49.media.tumblr.com/0cb3d95bf6263c0e27e2b141d0bd9409/tumblr_nnjbwx8fNo1rf78nfo1_500.gif"},
 	}
 	err = message.Post()
-	displayTrackingID()
+	fmt.Println(spark.TrackingID())
 	if err != nil {
 		fmt.Println(err)
 	} else {
@@ -72,7 +66,7 @@ func main() {
 	// Delete the posted message
 	// Not implemented
 	// err = message.Delete()
-	// displayTrackingID()
+	// fmt.Println(spark.TrackingID())
 	// if err != nil {
 	// 	fmt.Println(err)
 	// } else {

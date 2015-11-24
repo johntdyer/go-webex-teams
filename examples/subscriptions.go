@@ -10,15 +10,9 @@ package main
 import (
 	"fmt"
 	"os"
-	"strconv"
 
 	"../."
 )
-
-// Output the TrackingID HTTP header value
-func displayTrackingID() {
-	fmt.Println("***Request TrackingID -> " + spark.ActiveClient.TrackingID + "_" + strconv.Itoa(spark.ActiveClient.Sequence))
-}
 
 func main() {
 	spark.InitClient(os.Getenv("SPARK_TOKEN"))
@@ -26,7 +20,7 @@ func main() {
 	// Get all rooms
 	subscriptions := spark.Subscriptions{Personid: "456"}
 	err := subscriptions.Get()
-	displayTrackingID()
+	fmt.Println(spark.TrackingID())
 	if err != nil {
 		fmt.Println(err)
 	} else {

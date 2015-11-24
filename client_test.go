@@ -52,7 +52,7 @@ func TestClientSpec(t *testing.T) {
 		So(req.Header.Get("Authorization"), ShouldEqual, "Bearer 1234")
 		So(req.Header.Get("Content-Type"), ShouldEqual, "application/json")
 		So(req.Header.Get("Accept"), ShouldEqual, "application/json")
-		So(req.Header.Get("TrackingID"), ShouldEqual, ActiveClient.TrackingID+"_1")
+		So(req.Header.Get("TrackingID"), ShouldEqual, TrackingID())
 	})
 	Convey("Should DELETE, GET, POST and PUT request", t, func() {
 		ts := serveHTTP(t)

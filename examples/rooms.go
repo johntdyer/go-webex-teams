@@ -9,15 +9,9 @@ package main
 import (
 	"fmt"
 	"os"
-	"strconv"
 
 	"../."
 )
-
-// Output the TrackingID HTTP header value
-func displayTrackingID() {
-	fmt.Println("***Request TrackingID -> " + spark.ActiveClient.TrackingID + "_" + strconv.Itoa(spark.ActiveClient.Sequence))
-}
 
 func main() {
 	token := os.Getenv("SPARK_TOKEN")
@@ -34,7 +28,7 @@ func main() {
 	// 	for _, room := range rooms.Items {
 	// 		fmt.Println(room)
 	// 	}
-	// 	displayTrackingID()
+	// 	fmt.Println(spark.TrackingID())
 	// }
 
 	// // Get a room by ID
@@ -44,7 +38,7 @@ func main() {
 	// 	fmt.Println(err)
 	// } else {
 	// 	fmt.Println(room)
-	// 	displayTrackingID()
+	// 	fmt.Println(spark.TrackingID())
 	// }
 
 	// // Create a room
@@ -54,7 +48,7 @@ func main() {
 		fmt.Println(err)
 	} else {
 		fmt.Println(newRoom)
-		displayTrackingID()
+		fmt.Println(spark.TrackingID())
 	}
 
 	// time.Sleep(3 * time.Second)
@@ -65,7 +59,7 @@ func main() {
 	// 	fmt.Println(err)
 	// } else {
 	// 	fmt.Println(newRoom)
-	// 	displayTrackingID()
+	// 	fmt.Println(spark.TrackingID())
 	// }
 
 	// time.Sleep(3 * time.Second)
@@ -75,6 +69,6 @@ func main() {
 	// 	fmt.Println(err)
 	// } else {
 	// 	fmt.Println("Room " + newRoom.Title + " deleted!")
-	// 	displayTrackingID()
+	// 	fmt.Println(spark.TrackingID())
 	// }
 }

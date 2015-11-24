@@ -9,15 +9,9 @@ package main
 import (
 	"fmt"
 	"os"
-	"strconv"
 
 	"../."
 )
-
-// Output the TrackingID HTTP header value
-func displayTrackingID() {
-	fmt.Println("***Request TrackingID -> " + spark.ActiveClient.TrackingID + "_" + strconv.Itoa(spark.ActiveClient.Sequence))
-}
 
 func main() {
 	token := os.Getenv("SPARK_TOKEN")
@@ -28,7 +22,7 @@ func main() {
 	// Get people
 	people := spark.People{Email: "jgoecke@cisco.com"}
 	err := people.Get()
-	displayTrackingID()
+	fmt.Println(spark.TrackingID())
 	if err != nil {
 		fmt.Println(err)
 	} else {
@@ -40,7 +34,7 @@ func main() {
 	// Get a person
 	person := spark.Person{ID: people.Items[0].ID}
 	err = person.Get()
-	displayTrackingID()
+	fmt.Println(spark.TrackingID())
 	if err != nil {
 		fmt.Println(err)
 	} else {
@@ -50,7 +44,7 @@ func main() {
 	// Get the authenticated user
 	person = spark.Person{}
 	err = person.GetMe()
-	displayTrackingID()
+	fmt.Println(spark.TrackingID())
 	if err != nil {
 		fmt.Println(err)
 	} else {

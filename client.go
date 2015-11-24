@@ -37,12 +37,12 @@ var (
 
 // Client represents a new Spark client
 type Client struct {
-	Token      string
-	TrackingID string
-	Sequence   int
-	Increment  chan int
-	Finished   chan bool
-	HTTP       *http.Client
+	Token            string
+	TrackingIDPrefix string
+	Sequence         int
+	Increment        chan int
+	Finished         chan bool
+	HTTP             *http.Client
 }
 
 // Links struct to store pagination details from a link header
@@ -56,12 +56,12 @@ type Links struct {
 // InitClient - Generates a new Spark client taking and setting the auth token
 func InitClient(token string) {
 	ActiveClient = &Client{
-		Token:      token,
-		HTTP:       &http.Client{},
-		TrackingID: "go-spark_" + uuid(),
-		Sequence:   0,
-		Increment:  make(chan int),
-		Finished:   make(chan bool),
+		Token:            token,
+		HTTP:             &http.Client{},
+		TrackingIDPrefix: "go-spark_" + uuid(),
+		Sequence:         0,
+		Increment:        make(chan int),
+		Finished:         make(chan bool),
 	}
 	go incrementer()
 }
@@ -134,7 +134,7 @@ func setHeaders(req *http.Request) {
 	req.Header.Set("Authorization", "Bearer "+ActiveClient.Token)
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("TrackingID", ActiveClient.TrackingID+"_"+strconv.Itoa(ActiveClient.Sequence))
+	req.Header.Set("TrackingID", TrackingID())
 }
 
 // parseLink - Parses a link header
@@ -163,6 +163,13 @@ func parseURL(url string) string {
 	url = strings.TrimLeft(url, " <")
 	url = strings.TrimLeft(url, "<")
 	return url
+}
+
+// TrackingID returns the current value used to set the
+// unique TrackingID HTTP header with each request to the
+// Spark API
+func TrackingID() string {
+	return ActiveClient.TrackingIDPrefix + "_" + strconv.Itoa(ActiveClient.Sequence)
 }
 
 // uuid - Creates a UUID to be used for a unique identifier
