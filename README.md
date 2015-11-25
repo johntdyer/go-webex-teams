@@ -6,6 +6,17 @@ A [Go](https://golang.org/) library for the [Spark REST APIs](https://developer.
 
 `go get sqbu-github.cisco.com/jgoecke/go-spark`
 
+If this fails, you may also do:
+
+```
+cd $GOPATH/src
+mkdir sqbu-github.cisco.com
+cd sqbu-github.cisco.com
+mkdir jgoecke
+cd jgoecke
+git clone https://sqbu-github.cisco.com/jgoecke/go-spark.git
+```
+
 ## Usage
 
 ```go
