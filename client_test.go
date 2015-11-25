@@ -1,6 +1,7 @@
 package spark
 
 import (
+	"encoding/json"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
@@ -76,20 +77,53 @@ func TestClientSpec(t *testing.T) {
 			})
 		})
 		Convey("GET", func() {
-			body, _, err := get("/foo")
-			So(err, ShouldBeNil)
-			So(string(body), ShouldEqual, "you GOT")
+			Convey("Happy case", func() {
+				body, _, err := get("/foo")
+				So(err, ShouldBeNil)
+				So(string(body), ShouldEqual, "you GOT")
+			})
+			Convey("Negative case", func() {
+				body, _, err := get("/negative")
+				result := &Result{}
+				json.Unmarshal(body, result)
+				So(err.Error(), ShouldEqual, "400 Bad Request")
+				So(result.Errors[0].Description, ShouldEqual, "Failed to get conversation.")
+				So(result.Message, ShouldEqual, "Failed to get conversation.")
+				So(result.Trackingid, ShouldEqual, "go-spark_6D15B3DA-BF4B-0601-C7DB-F9315AE0783E_76")
+			})
 		})
 		message := "foo-bar"
 		Convey("POST", func() {
-			body, _, err := post("/foo", []byte(message))
-			So(err, ShouldBeNil)
-			So(string(body), ShouldEqual, "you POSTED")
+			Convey("Happy case", func() {
+				body, _, err := post("/foo", []byte(message))
+				So(err, ShouldBeNil)
+				So(string(body), ShouldEqual, "you POSTED")
+			})
+			Convey("Negative case", func() {
+				body, _, err := post("/negative", []byte(message))
+				result := &Result{}
+				json.Unmarshal(body, result)
+				So(err.Error(), ShouldEqual, "400 Bad Request")
+				So(result.Errors[0].Description, ShouldEqual, "Failed to get conversation.")
+				So(result.Message, ShouldEqual, "Failed to get conversation.")
+				So(result.Trackingid, ShouldEqual, "go-spark_6D15B3DA-BF4B-0601-C7DB-F9315AE0783E_76")
+			})
 		})
 		Convey("PUT", func() {
-			body, _, err := put("/foo", []byte(message))
-			So(err, ShouldBeNil)
-			So(string(body), ShouldEqual, "you PUT")
+			Convey("Happy case", func() {
+				body, _, err := put("/foo", []byte(message))
+				So(err, ShouldBeNil)
+				So(string(body), ShouldEqual, "you PUT")
+			})
+			Convey("Negative case", func() {
+				body, _, err := put("/negative", []byte(message))
+				result := &Result{}
+				json.Unmarshal(body, result)
+				So(err.Error(), ShouldEqual, "400 Bad Request")
+				So(result.Errors[0].Description, ShouldEqual, "Failed to get conversation.")
+				So(result.Message, ShouldEqual, "Failed to get conversation.")
+				So(result.Trackingid, ShouldEqual, "go-spark_6D15B3DA-BF4B-0601-C7DB-F9315AE0783E_76")
+			})
 		})
 		BaseURL = previousURL
 	})
