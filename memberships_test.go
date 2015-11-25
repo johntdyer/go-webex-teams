@@ -91,7 +91,8 @@ func TestMembershipsSpec(t *testing.T) {
 			})
 			Convey("Get membership", func() {
 				membership := &Membership{ID: "1"}
-				err := membership.Get()
+				result, err := membership.Get()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 				So(membership.ID, ShouldEqual, "000")
 				So(membership.Roomid, ShouldEqual, "123")
@@ -111,7 +112,8 @@ func TestMembershipsSpec(t *testing.T) {
 					PersonEmail: "john@doe.com",
 					Ismoderator: true,
 				}
-				err := membership.Post()
+				result, err := membership.Post()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 			})
 			Convey("Put membership", func() {
@@ -122,7 +124,8 @@ func TestMembershipsSpec(t *testing.T) {
 					PersonEmail: "john@doe.com",
 					Ismoderator: true,
 				}
-				err := membership.Put()
+				result, err := membership.Put()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 			})
 		})
@@ -140,7 +143,8 @@ func TestMembershipsSpec(t *testing.T) {
 			})
 			Convey("Get memberships", func() {
 				memberships := &Memberships{Roomid: "123"}
-				err := memberships.Get()
+				result, err := memberships.Get()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 				So(memberships.Items[0].ID, ShouldEqual, "000")
 				So(memberships.Items[0].Roomid, ShouldEqual, "123")
@@ -151,31 +155,39 @@ func TestMembershipsSpec(t *testing.T) {
 			})
 			Convey("It should raise an error when no link cursor", func() {
 				memberships := &Memberships{}
-				err := memberships.First()
+				result, err := memberships.First()
+				So(result, ShouldBeNil)
 				So(err.Error(), ShouldEqual, "first cursor not available")
-				err = memberships.Next()
+				result, err = memberships.Next()
+				So(result, ShouldBeNil)
 				So(err.Error(), ShouldEqual, "next cursor not available")
-				err = memberships.Last()
+				result, err = memberships.Last()
+				So(result, ShouldBeNil)
 				So(err.Error(), ShouldEqual, "last cursor not available")
-				err = memberships.Previous()
+				result, err = memberships.Previous()
+				So(result, ShouldBeNil)
 				So(err.Error(), ShouldEqual, "previous cursor not available")
 			})
 			Convey("Should get our link cursor", func() {
 				memberships := &Memberships{}
 				memberships.FirstURL = "/messages/first"
-				err := memberships.First()
+				result, err := memberships.First()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 				So(memberships.Items[0].ID, ShouldEqual, "123")
 				memberships.LastURL = "/messages/last"
-				err = memberships.Last()
+				result, err = memberships.Last()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 				So(memberships.Items[0].ID, ShouldEqual, "123")
 				memberships.NextURL = "/messages/next"
-				err = memberships.Next()
+				result, err = memberships.Next()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 				So(memberships.Items[0].ID, ShouldEqual, "123")
 				memberships.PreviousURL = "/messages/prev"
-				err = memberships.Previous()
+				result, err = memberships.Previous()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 				So(memberships.Items[0].ID, ShouldEqual, "123")
 			})

@@ -129,39 +129,45 @@ func main() {
 	
 	// Get all memberships
 	memberships := spark.Memberships{PersonEmail: "john@doe.com"}
-	err := memberships.Get()
+	result, err := memberships.Get()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(memberhips)
 
 	// Get memberships based on returned link header when available
-	err := memberships.Next()
+	result, err := memberships.Next()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(memberships)
-	err := memberships.Previous()
+	result, err := memberships.Previous()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(memberships)
-	err := memberships.Last()
+	result, err := memberships.Last()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(memberships)
-	err := memberships.First()
+	result, err := memberships.First()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(memberships)
 
 	// Get an membership by ID
 	membership := spark.Membership{ID: "123"}
-	err := membership.Get()
+	result, err := membership.Get()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(membership)
 
@@ -180,9 +186,10 @@ func main() {
 		PersonEmail: "john@doe.com",
 		Ismoderator: true,
 	}
-	err := membership.Post()
+	result, err := membership.Post()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(membership)
 
@@ -194,9 +201,10 @@ func main() {
 		PersonEmail: "john@doe.com",
 		Ismoderator: true,
 	}
-	err := membership.Put()
+	result, err := membership.Put()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(membership)
 ```
@@ -516,4 +524,4 @@ func main() {
 
 ## TODO
 
-* Add proper body error handling to /memberships, /messages, /people, /rooms, /subscriptions and /webhooks
+* Add proper body error handling to /messages, /people, /rooms, /subscriptions and /webhooks
