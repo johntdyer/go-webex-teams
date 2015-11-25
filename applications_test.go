@@ -48,7 +48,8 @@ func TestApplicationsSpec(t *testing.T) {
 			})
 			Convey("Get application", func() {
 				application := &Application{ID: "1"}
-				err := application.Get()
+				result, err := application.Get()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 				validateApplication(t, application)
 			})
@@ -68,7 +69,8 @@ func TestApplicationsSpec(t *testing.T) {
 					Redirecturls:  []string{"http://myapp.com/verify", "http://myapp.fr/verify"},
 					Scopes:        []string{"foo", "bar"},
 				}
-				err := application.Post()
+				result, err := application.Post()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 			})
 			Convey("Put application", func() {
@@ -82,7 +84,8 @@ func TestApplicationsSpec(t *testing.T) {
 					Redirecturls:  []string{"http://myapp.com/verify", "http://myapp.fr/verify"},
 					Scopes:        []string{"foo", "bar"},
 				}
-				err := application.Put()
+				result, err := application.Put()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 			})
 		})
@@ -95,37 +98,46 @@ func TestApplicationsSpec(t *testing.T) {
 			})
 			Convey("Get applications", func() {
 				applications := &Applications{}
-				err := applications.Get()
+				result, err := applications.Get()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 				validateApplications(t, applications)
 			})
 			Convey("It should raise an error when no link cursor", func() {
 				applications := &Applications{}
-				err := applications.First()
+				result, err := applications.First()
+				So(result, ShouldBeNil)
 				So(err.Error(), ShouldEqual, "first cursor not available")
-				err = applications.Next()
+				result, err = applications.Next()
+				So(result, ShouldBeNil)
 				So(err.Error(), ShouldEqual, "next cursor not available")
-				err = applications.Last()
+				result, err = applications.Last()
+				So(result, ShouldBeNil)
 				So(err.Error(), ShouldEqual, "last cursor not available")
-				err = applications.Previous()
+				result, err = applications.Previous()
+				So(result, ShouldBeNil)
 				So(err.Error(), ShouldEqual, "previous cursor not available")
 			})
 			Convey("Should get our link cursor", func() {
 				applications := &Applications{}
 				applications.FirstURL = "/applications/first"
-				err := applications.First()
+				result, err := applications.First()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 				So(applications.Items[0].ID, ShouldEqual, "123")
 				applications.LastURL = "/applications/last"
-				err = applications.Last()
+				result, err = applications.Last()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 				So(applications.Items[0].ID, ShouldEqual, "123")
 				applications.NextURL = "/applications/next"
-				err = applications.Next()
+				result, err = applications.Next()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 				So(applications.Items[0].ID, ShouldEqual, "123")
 				applications.PreviousURL = "/applications/prev"
-				err = applications.Previous()
+				result, err = applications.Previous()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 				So(applications.Items[0].ID, ShouldEqual, "123")
 			})

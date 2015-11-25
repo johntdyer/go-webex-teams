@@ -31,93 +31,105 @@ type Applications struct {
 }
 
 // Get - GETs all applications
-func (applications *Applications) Get() error {
+func (applications *Applications) Get() (*Result, error) {
 	body, _, err := get(ApplicationsResource)
 	if err != nil {
-		return err
+		result := &Result{}
+		json.Unmarshal(body, result)
+		return result, err
 	}
 	err = json.Unmarshal(body, applications)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return nil, nil
 }
 
 // Next - Moves to the next link from a link header for a large collection of Applications
-func (applications *Applications) Next() error {
+func (applications *Applications) Next() (*Result, error) {
 	if applications.NextURL != "" {
-		err := applications.getCursor(applications.NextURL)
+		body, err := applications.getCursor(applications.NextURL)
 		if err != nil {
-			return err
+			result := &Result{}
+			json.Unmarshal(body, result)
+			return result, err
 		}
-		return nil
+		return nil, nil
 	}
-	return errors.New("next cursor not available")
+	return nil, errors.New("next cursor not available")
 }
 
 // Last - Moves to the last link from a link header for a large collection of Applications
-func (applications *Applications) Last() error {
+func (applications *Applications) Last() (*Result, error) {
 	if applications.LastURL != "" {
-		err := applications.getCursor(applications.LastURL)
+		body, err := applications.getCursor(applications.LastURL)
 		if err != nil {
-			return err
+			result := &Result{}
+			json.Unmarshal(body, result)
+			return result, err
 		}
-		return nil
+		return nil, nil
 	}
-	return errors.New("last cursor not available")
+	return nil, errors.New("last cursor not available")
 }
 
 // First - Moves to the next first from a link header for a large collection of Applications
-func (applications *Applications) First() error {
+func (applications *Applications) First() (*Result, error) {
 	if applications.FirstURL != "" {
-		err := applications.getCursor(applications.FirstURL)
+		body, err := applications.getCursor(applications.FirstURL)
 		if err != nil {
-			return err
+			result := &Result{}
+			json.Unmarshal(body, result)
+			return result, err
 		}
-		return nil
+		return nil, nil
 	}
-	return errors.New("first cursor not available")
+	return nil, errors.New("first cursor not available")
 }
 
 // Previous - Moves to the prev link from a link header for a large collection
-func (applications *Applications) Previous() error {
+func (applications *Applications) Previous() (*Result, error) {
 	if applications.PreviousURL != "" {
-		err := applications.getCursor(applications.PreviousURL)
+		body, err := applications.getCursor(applications.PreviousURL)
 		if err != nil {
-			return err
+			result := &Result{}
+			json.Unmarshal(body, result)
+			return result, err
 		}
-		return nil
+		return nil, nil
 	}
-	return errors.New("previous cursor not available")
+	return nil, errors.New("previous cursor not available")
 }
 
 // getCursor - Gets the appropriate link associated to the link header
-func (applications *Applications) getCursor(url string) error {
+func (applications *Applications) getCursor(url string) ([]byte, error) {
 	body, links, err := get(url)
 	if err != nil {
-		return err
+		return body, err
 	}
 	if links != nil {
 		applications.Links = *links
 	}
 	err = json.Unmarshal(body, applications)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return nil, nil
 }
 
 // Get - GETs an application by ID
-func (app *Application) Get() error {
+func (app *Application) Get() (*Result, error) {
 	body, _, err := get(ApplicationsResource + "/" + app.ID)
 	if err != nil {
-		return err
+		result := &Result{}
+		json.Unmarshal(body, result)
+		return result, err
 	}
 	err = json.Unmarshal(body, app)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return nil, nil
 }
 
 // Delete - DELETEs an application by ID
@@ -126,35 +138,39 @@ func (app *Application) Delete() (*Result, error) {
 }
 
 // Post - Creates (POSTs) a new application
-func (app *Application) Post() error {
+func (app *Application) Post() (*Result, error) {
 	body, err := json.Marshal(app)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	body, _, err = post(ApplicationsResource, body)
 	if err != nil {
-		return err
+		result := &Result{}
+		json.Unmarshal(body, result)
+		return result, err
 	}
 	err = json.Unmarshal(body, app)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return nil, nil
 }
 
 // Put - Updates (PUTs) an existing application
-func (app *Application) Put() error {
+func (app *Application) Put() (*Result, error) {
 	body, err := json.Marshal(app)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	body, _, err = put(ApplicationsResource+"/"+app.ID, body)
 	if err != nil {
-		return err
+		result := &Result{}
+		json.Unmarshal(body, result)
+		return result, err
 	}
 	err = json.Unmarshal(body, app)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return nil, nil
 }

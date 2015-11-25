@@ -26,39 +26,45 @@ func main() {
 
 	// Get all applications
 	applications := spark.Applications{}
-	err := applications.Get()
+	result, err := applications.Get()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(applications)
 
 	// Get applications based on returned link header when available
-	err := applications.Next()
+	result, err := applications.Next()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(applications)
-	err := applications.Previous()
+	result, err := applications.Previous()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(applications)
-	err := applications.Last()
+	result, err := applications.Last()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(applications)
-	err := applications.First()
+	result, err := applications.First()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(applications)
 
 	// Get an application by ID
 	application := spark.Application{ID: "123"}
-	err := application.Get()
+	result, err := application.Get()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(application)
 
@@ -80,9 +86,10 @@ func main() {
 		Redirecturls:  []string{"http://myapp.com/verify", "http://myapp.fr/verify"},
 		Scopes:        []string{"foo", "bar"},
 	}
-	err := application.Post()
+	result, err := application.Post()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(application)
 
@@ -97,9 +104,10 @@ func main() {
 		Redirecturls:  []string{"http://myapp.com/verify", "http://myapp.fr/verify"},
 		Scopes:        []string{"foo", "bar"},
 	}
-	err := application.Put()
+	result, err := application.Put()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(application)
 ```
