@@ -502,3 +502,7 @@ func main() {
 
 * To use the examples in the /examples folder, you must set an environment variable SPARK_TOKEN. You may obtain a token by logging in @ [http://developer.ciscospark.com](http://developer.ciscospark.com).
 * This library also implements the TrackingID header used to trace requests in the Spark platform. If troubleshooting and working with our support, output the current values, seen in the example above, and send along with your support request.
+
+## TODO
+
+* Add proper body error handling to /memberships, /messages, /people, /rooms, /subscriptions and /webhooks
