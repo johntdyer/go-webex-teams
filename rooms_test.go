@@ -23,7 +23,8 @@ func TestRoomsSpec(t *testing.T) {
 		Convey("For rooms", func() {
 			Convey("Get rooms", func() {
 				rooms := &Rooms{}
-				err := rooms.Get()
+				result, err := rooms.Get()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 				So(rooms.Items[0].Title, ShouldEqual, "foo")
 				So(rooms.Items[0].Members[0], ShouldEqual, "foo")
@@ -39,31 +40,39 @@ func TestRoomsSpec(t *testing.T) {
 			})
 			Convey("It should raise an error when no link cursor", func() {
 				rooms := &Rooms{}
-				err := rooms.First()
+				result, err := rooms.First()
+				So(result, ShouldBeNil)
 				So(err.Error(), ShouldEqual, "first cursor not available")
-				err = rooms.Next()
+				result, err = rooms.Next()
+				So(result, ShouldBeNil)
 				So(err.Error(), ShouldEqual, "next cursor not available")
-				err = rooms.Last()
+				result, err = rooms.Last()
+				So(result, ShouldBeNil)
 				So(err.Error(), ShouldEqual, "last cursor not available")
-				err = rooms.Previous()
+				result, err = rooms.Previous()
+				So(result, ShouldBeNil)
 				So(err.Error(), ShouldEqual, "previous cursor not available")
 			})
 			Convey("Should get our link cursor", func() {
 				rooms := &Rooms{}
 				rooms.FirstURL = "/rooms/first"
-				err := rooms.First()
+				result, err := rooms.First()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 				So(rooms.Items[0].ID, ShouldEqual, "123")
 				rooms.LastURL = "/rooms/last"
-				err = rooms.Last()
+				result, err = rooms.Last()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 				So(rooms.Items[0].ID, ShouldEqual, "123")
 				rooms.NextURL = "/rooms/next"
-				err = rooms.Next()
+				result, err = rooms.Next()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 				So(rooms.Items[0].ID, ShouldEqual, "123")
 				rooms.PreviousURL = "/rooms/prev"
-				err = rooms.Previous()
+				result, err = rooms.Previous()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 				So(rooms.Items[0].ID, ShouldEqual, "123")
 			})
@@ -92,7 +101,8 @@ func TestRoomsSpec(t *testing.T) {
 			})
 			Convey("Get room", func() {
 				room := &Room{ID: "1"}
-				err := room.Get()
+				result, err := room.Get()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 				So(room.Title, ShouldEqual, "foo")
 				So(room.SIPAddress, ShouldEqual, "foo@bar.com")
@@ -111,7 +121,8 @@ func TestRoomsSpec(t *testing.T) {
 					SIPAddress: "foo@bar.com",
 					Members:    []string{"john@doe.com", "456"},
 				}
-				err := room.Post()
+				result, err := room.Post()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 			})
 			Convey("Put room", func() {
@@ -121,7 +132,8 @@ func TestRoomsSpec(t *testing.T) {
 					SIPAddress: "foo@bar.com",
 					Members:    []string{"john@doe.com", "456"},
 				}
-				err := room.Put()
+				result, err := room.Put()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 			})
 		})

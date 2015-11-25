@@ -63,7 +63,8 @@ func TestSubscriptionsSpec(t *testing.T) {
 			})
 			Convey("Get subscription", func() {
 				subscription := &Subscription{ID: "1"}
-				err := subscription.Get()
+				result, err := subscription.Get()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 				So(subscription.ID, ShouldEqual, "000")
 				So(subscription.Personid, ShouldEqual, "123")
@@ -89,7 +90,8 @@ func TestSubscriptionsSpec(t *testing.T) {
 			})
 			Convey("Get subscriptions", func() {
 				subscriptions := &Subscriptions{Personid: "123"}
-				err := subscriptions.Get()
+				result, err := subscriptions.Get()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 				So(subscriptions.Items[0].ID, ShouldEqual, "000")
 				So(subscriptions.Items[0].Personid, ShouldEqual, "123")
@@ -98,31 +100,39 @@ func TestSubscriptionsSpec(t *testing.T) {
 			})
 			Convey("It should raise an error when no link cursor", func() {
 				subscriptions := &Subscriptions{}
-				err := subscriptions.First()
+				result, err := subscriptions.First()
+				So(result, ShouldBeNil)
 				So(err.Error(), ShouldEqual, "first cursor not available")
-				err = subscriptions.Next()
+				result, err = subscriptions.Next()
+				So(result, ShouldBeNil)
 				So(err.Error(), ShouldEqual, "next cursor not available")
-				err = subscriptions.Last()
+				result, err = subscriptions.Last()
+				So(result, ShouldBeNil)
 				So(err.Error(), ShouldEqual, "last cursor not available")
-				err = subscriptions.Previous()
+				result, err = subscriptions.Previous()
+				So(result, ShouldBeNil)
 				So(err.Error(), ShouldEqual, "previous cursor not available")
 			})
 			Convey("Should get our link cursor", func() {
 				subscriptions := &Subscriptions{}
 				subscriptions.FirstURL = "/subscriptions/first"
-				err := subscriptions.First()
+				result, err := subscriptions.First()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 				So(subscriptions.Items[0].ID, ShouldEqual, "000")
 				subscriptions.LastURL = "/subscriptions/last"
-				err = subscriptions.Last()
+				result, err = subscriptions.Last()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 				So(subscriptions.Items[0].ID, ShouldEqual, "000")
 				subscriptions.NextURL = "/subscriptions/next"
-				err = subscriptions.Next()
+				result, err = subscriptions.Next()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 				So(subscriptions.Items[0].ID, ShouldEqual, "000")
 				subscriptions.PreviousURL = "/subscriptions/prev"
-				err = subscriptions.Previous()
+				result, err = subscriptions.Previous()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 				So(subscriptions.Items[0].ID, ShouldEqual, "000")
 			})

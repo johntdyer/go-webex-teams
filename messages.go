@@ -28,96 +28,108 @@ type Messages struct {
 }
 
 // Get - GETs all messages based on the provided Roomid
-func (msgs *Messages) Get() error {
+func (msgs *Messages) Get() (*Result, error) {
 	body, links, err := get(MessagesResource + "?roomId=" + msgs.Roomid)
 	if err != nil {
-		return err
+		result := &Result{}
+		json.Unmarshal(body, result)
+		return result, err
 	}
 	err = json.Unmarshal(body, msgs)
 	if links != nil {
 		msgs.Links = *links
 	}
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return nil, nil
 }
 
 // Next - Moves to the next link from a link header for a large collection
-func (msgs *Messages) Next() error {
+func (msgs *Messages) Next() (*Result, error) {
 	if msgs.NextURL != "" {
-		err := msgs.getCursor(msgs.NextURL)
+		body, err := msgs.getCursor(msgs.NextURL)
 		if err != nil {
-			return err
+			result := &Result{}
+			json.Unmarshal(body, result)
+			return result, err
 		}
-		return nil
+		return nil, nil
 	}
-	return errors.New("next cursor not available")
+	return nil, errors.New("next cursor not available")
 }
 
 // Last - Moves to the last link from a link header for a large collection
-func (msgs *Messages) Last() error {
+func (msgs *Messages) Last() (*Result, error) {
 	if msgs.LastURL != "" {
-		err := msgs.getCursor(msgs.LastURL)
+		body, err := msgs.getCursor(msgs.LastURL)
 		if err != nil {
-			return err
+			result := &Result{}
+			json.Unmarshal(body, result)
+			return result, err
 		}
-		return nil
+		return nil, nil
 	}
-	return errors.New("last cursor not available")
+	return nil, errors.New("last cursor not available")
 }
 
 // First - Moves to the first link from a link header for a large collection
-func (msgs *Messages) First() error {
+func (msgs *Messages) First() (*Result, error) {
 	if msgs.FirstURL != "" {
-		err := msgs.getCursor(msgs.FirstURL)
+		body, err := msgs.getCursor(msgs.FirstURL)
 		if err != nil {
-			return err
+			result := &Result{}
+			json.Unmarshal(body, result)
+			return result, err
 		}
-		return nil
+		return nil, nil
 	}
-	return errors.New("first cursor not available")
+	return nil, errors.New("first cursor not available")
 }
 
 // Previous - Moves to the previous link from a link header for a large collection
-func (msgs *Messages) Previous() error {
+func (msgs *Messages) Previous() (*Result, error) {
 	if msgs.PreviousURL != "" {
-		err := msgs.getCursor(msgs.PreviousURL)
+		body, err := msgs.getCursor(msgs.PreviousURL)
 		if err != nil {
-			return err
+			result := &Result{}
+			json.Unmarshal(body, result)
+			return result, err
 		}
-		return nil
+		return nil, nil
 	}
-	return errors.New("previous cursor not available")
+	return nil, errors.New("previous cursor not available")
 }
 
 // getCursor - Gets the appropriate link associated to the link header
-func (msgs *Messages) getCursor(url string) error {
+func (msgs *Messages) getCursor(url string) ([]byte, error) {
 	body, links, err := get(url)
 	if err != nil {
-		return err
+		return body, err
 	}
 	if links != nil {
 		msgs.Links = *links
 	}
 	err = json.Unmarshal(body, msgs)
 	if err != nil {
-		return err
+		return body, err
 	}
-	return nil
+	return body, nil
 }
 
 // Get - GETs a message by ID
-func (msg *Message) Get() error {
+func (msg *Message) Get() (*Result, error) {
 	body, _, err := get(MessagesResource + "/" + msg.ID)
 	if err != nil {
-		return err
+		result := &Result{}
+		json.Unmarshal(body, result)
+		return result, err
 	}
 	err = json.Unmarshal(body, msg)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return nil, nil
 }
 
 // Delete - Deletes a message based on the ID provided
@@ -126,18 +138,20 @@ func (msg *Message) Delete() (*Result, error) {
 }
 
 // Post - Creates (POSTs) a new message
-func (msg *Message) Post() error {
+func (msg *Message) Post() (*Result, error) {
 	body, err := json.Marshal(msg)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	body, _, err = post(MessagesResource, body)
 	if err != nil {
-		return err
+		result := &Result{}
+		json.Unmarshal(body, result)
+		return result, err
 	}
 	err = json.Unmarshal(body, msg)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return nil, nil
 }

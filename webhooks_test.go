@@ -48,7 +48,8 @@ func TestWebhooksSpec(t *testing.T) {
 			})
 			Convey("Get webhook", func() {
 				webhook := &Webhook{ID: "1"}
-				err := webhook.Get()
+				result, err := webhook.Get()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 				So(webhook.ID, ShouldEqual, "123")
 				So(webhook.Resource, ShouldEqual, "messages")
@@ -71,7 +72,8 @@ func TestWebhooksSpec(t *testing.T) {
 					Targeturl: "http://foo.com/bar",
 					Name:      "My Awesome webhook",
 				}
-				err := webhook.Post()
+				result, err := webhook.Post()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 			})
 			Convey("Put webhook", func() {
@@ -83,14 +85,16 @@ func TestWebhooksSpec(t *testing.T) {
 					Targeturl: "http://foo.com/bar",
 					Name:      "My Awesome webhook",
 				}
-				err := webhook.Put()
+				result, err := webhook.Put()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 			})
 		})
 		Convey("For webhooks", func() {
 			Convey("Get webhooks", func() {
 				webhooks := &Webhooks{}
-				err := webhooks.Get()
+				result, err := webhooks.Get()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 				So(webhooks.Items[0].ID, ShouldEqual, "123")
 				So(webhooks.Items[0].Resource, ShouldEqual, "messages")
@@ -101,31 +105,39 @@ func TestWebhooksSpec(t *testing.T) {
 			})
 			Convey("It should raise an error when no link cursor", func() {
 				webhooks := &Webhooks{}
-				err := webhooks.First()
+				result, err := webhooks.First()
+				So(result, ShouldBeNil)
 				So(err.Error(), ShouldEqual, "first cursor not available")
-				err = webhooks.Next()
+				result, err = webhooks.Next()
+				So(result, ShouldBeNil)
 				So(err.Error(), ShouldEqual, "next cursor not available")
-				err = webhooks.Last()
+				result, err = webhooks.Last()
+				So(result, ShouldBeNil)
 				So(err.Error(), ShouldEqual, "last cursor not available")
-				err = webhooks.Previous()
+				result, err = webhooks.Previous()
+				So(result, ShouldBeNil)
 				So(err.Error(), ShouldEqual, "previous cursor not available")
 			})
 			Convey("Should get our link cursor", func() {
 				webhooks := &Webhooks{}
 				webhooks.FirstURL = "/webhooks/first"
-				err := webhooks.First()
+				result, err := webhooks.First()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 				So(webhooks.Items[0].ID, ShouldEqual, "123")
 				webhooks.LastURL = "/webhooks/last"
-				err = webhooks.Last()
+				result, err = webhooks.Last()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 				So(webhooks.Items[0].ID, ShouldEqual, "123")
 				webhooks.NextURL = "/webhooks/next"
-				err = webhooks.Next()
+				result, err = webhooks.Next()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 				So(webhooks.Items[0].ID, ShouldEqual, "123")
 				webhooks.PreviousURL = "/webhooks/prev"
-				err = webhooks.Previous()
+				result, err = webhooks.Previous()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 				So(webhooks.Items[0].ID, ShouldEqual, "123")
 			})

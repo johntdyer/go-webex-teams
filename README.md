@@ -215,39 +215,45 @@ func main() {
 	
 	// Get all messages for a room
 	messages := spark.Messages{Roomid: "1234"}
-	err := messages.Get()
+	result, err := messages.Get()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(messages)
 
 	// Get messages based on returned link header when available
-	err := messages.Next()
+	result, err := messages.Next()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(messages)
-	err := messages.Previous()
+	result, err := messages.Previous()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(messages)
-	err := messages.Last()
+	result, err := messages.Last()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(messages)
-	err := messages.First()
+	result, err := messages.First()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(messages)
 
 	// Get an message by ID
 	message := spark.Message{ID: "5678"}
-	err := message.Get()
+	result, err := message.Get()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(message)
 
@@ -265,9 +271,10 @@ func main() {
 		Text:	"This is my awesome message!",
 		Files: 	[]string{"http://foo.com/image1.jpg", "http://foo.comimage2.jpg"},
 	}
-	err := message.Post()
+	result, err := message.Post()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(message)
 ```
@@ -278,47 +285,54 @@ func main() {
 	
 	// Get people
 	people := spark.People{PersonEmail: "john@doe.com"}
-	err := people.Get()
+	result, err := people.Get()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(people)
 
 	// Get people based on returned link header when available
-	err := people.Next()
+	result, err := people.Next()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(people)
-	err := people.Previous()
+	result, err := people.Previous()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(people)
-	err := people.Last()
+	result, err := people.Last()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(people)
-	err := people.First()
+	result, err := people.First()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(people)
 
 	// Get a person by ID
 	person := spark.Person{ID: "123"}
-	err := person.Get()
+	result, err := person.Get()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(person
 
 	// Get the current authenticated user
 	person := spark.Person{}
-	err := person.GetMe()
+	result, err := person.GetMe()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(person)```
 ```
@@ -329,39 +343,45 @@ func main() {
 	
 	// Get all rooms
 	rooms := spark.Rooms{Personid: "abc123"}
-	err := rooms.Get()
+	result, err := rooms.Get()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(rooms)
 
 	// Get rooms based on returned link header when available
-	err := rooms.Next()
+	result, err := rooms.Next()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(rooms)
-	err := rooms.Previous()
+	result, err := rooms.Previous()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(rooms)
-	err := rooms.Last()
+	result, err := rooms.Last()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(rooms)
-	err := rooms.First()
+	result, err := rooms.First()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(rooms)
 
 	// Get a room by ID
 	room := spark.Room{ID: "123"}
-	err := room.Get()
+	result, err := room.Get()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(room)
 
@@ -378,9 +398,10 @@ func main() {
 		Title:   "Project Unicorn",
 		Members: []string{"john@doe.com", "456"},
 	}
-	err := room.Post()
+	result, err := room.Post()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(room)
 
@@ -390,9 +411,10 @@ func main() {
 		Title:   "Project Unicorn",
 		Members: []string{"john@doe.com", "456"},
 	}
-	err := room.Put()
+	result, err := room.Put()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(room)
 ```
@@ -403,39 +425,45 @@ func main() {
 	
 	// Get all subscriptions
 	subscriptions := spark.Subscriptions{Personid: "abc123"}
-	err := subscriptions.Get()
+	result, err := subscriptions.Get()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(subscriptions)
 
 	// Get subscriptions based on returned link header when available
-	err := subscriptions.Next()
+	result, err := subscriptions.Next()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(subscriptions)
-	err := subscriptions.Previous()
+	result, err := subscriptions.Previous()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(subscriptions)
-	err := subscriptions.Last()
+	result, err := subscriptions.Last()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(subscriptions)
-	err := subscriptions.First()
+	result, err := subscriptions.First()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(subscriptions)
 
 	// Get a subscription by ID
 	subscription := spark.Subscription{ID: "123"}
-	err := subscription.Get()
+	result, err := subscription.Get()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(subscription)
 
@@ -454,39 +482,45 @@ func main() {
 	
 	// Get all webhooks
 	webhooks := spark.Webhooks{}
-	err := webhooks.Get()
+	result, err := webhooks.Get()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(webhooks)
 
 	// Get webhooks based on returned link header when available
-	err := webhooks.Next()
+	result, err := webhooks.Next()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(webhooks)
-	err := webhooks.Previous()
+	result, err := webhooks.Previous()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(webhooks)
-	err := webhooks.Last()
+	result, err := webhooks.Last()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(webhooks)
-	err := webhooks.First()
+	result, err := webhooks.First()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(webhooks)
 
 	// Get a webhook by ID
 	webhook := spark.Webhook{ID: "123"}
-	err := webhook.Get()
+	result, err := webhook.Get()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(webhook)
 
@@ -506,14 +540,12 @@ func main() {
 		Targeturl: "http://foo.com/bar",
 		Name:      "My Awesome webhook",
 	}
-	err := webhook.Put()
+	result, err := webhook.Put()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 	fmt.Println(webhook)
-
-	// Output current TrackingID HTTP header value
-	fmt.Println("***Request TrackingID -> " + spark.ActiveClient.TrackingID + "_" + strconv.Itoa(spark.ActiveClient.Sequence))
 }
 ```
 
@@ -521,7 +553,3 @@ func main() {
 
 * To use the examples in the /examples folder, you must set an environment variable SPARK_TOKEN. You may obtain a token by logging in @ [http://developer.ciscospark.com](http://developer.ciscospark.com).
 * This library also implements the TrackingID header used to trace requests in the Spark platform. If troubleshooting and working with our support, output the current values, seen in the example above, and send along with your support request.
-
-## TODO
-
-* Add proper body error handling to /messages, /people, /rooms, /subscriptions and /webhooks

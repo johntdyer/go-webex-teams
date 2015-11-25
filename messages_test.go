@@ -23,7 +23,8 @@ func TestMessagesSpec(t *testing.T) {
 		Convey("For messages", func() {
 			Convey("Get messages", func() {
 				messages := &Messages{Roomid: "1"}
-				err := messages.Get()
+				result, err := messages.Get()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 				So(messages.Items[0].Personid, ShouldEqual, "789")
 				So(messages.Items[0].PersonEmail, ShouldEqual, "john@doe.com")
@@ -45,31 +46,39 @@ func TestMessagesSpec(t *testing.T) {
 			})
 			Convey("It should raise an error when no link cursor", func() {
 				messages := &Messages{}
-				err := messages.First()
+				result, err := messages.First()
+				So(result, ShouldBeNil)
 				So(err.Error(), ShouldEqual, "first cursor not available")
-				err = messages.Next()
+				result, err = messages.Next()
+				So(result, ShouldBeNil)
 				So(err.Error(), ShouldEqual, "next cursor not available")
-				err = messages.Last()
+				result, err = messages.Last()
+				So(result, ShouldBeNil)
 				So(err.Error(), ShouldEqual, "last cursor not available")
-				err = messages.Previous()
+				result, err = messages.Previous()
+				So(result, ShouldBeNil)
 				So(err.Error(), ShouldEqual, "previous cursor not available")
 			})
 			Convey("Should get our link cursor", func() {
 				messages := &Messages{}
 				messages.FirstURL = "/messages/first"
-				err := messages.First()
+				result, err := messages.First()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 				So(messages.Items[0].ID, ShouldEqual, "123")
 				messages.LastURL = "/messages/last"
-				err = messages.Last()
+				result, err = messages.Last()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 				So(messages.Items[0].ID, ShouldEqual, "123")
 				messages.NextURL = "/messages/next"
-				err = messages.Next()
+				result, err = messages.Next()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 				So(messages.Items[0].ID, ShouldEqual, "123")
 				messages.PreviousURL = "/messages/prev"
-				err = messages.Previous()
+				result, err = messages.Previous()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 				So(messages.Items[0].ID, ShouldEqual, "123")
 			})
@@ -102,7 +111,8 @@ func TestMessagesSpec(t *testing.T) {
 			})
 			Convey("Get message", func() {
 				message := &Message{ID: "1"}
-				err := message.Get()
+				result, err := message.Get()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 				So(message.Personid, ShouldEqual, "789")
 				So(message.PersonEmail, ShouldEqual, "john@doe.com")
@@ -125,7 +135,8 @@ func TestMessagesSpec(t *testing.T) {
 					PersonEmail: "john@doe.com",
 					Files:       []string{"foo.txt", "bar.txt"},
 				}
-				err := message.Post()
+				result, err := message.Post()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 			})
 		})

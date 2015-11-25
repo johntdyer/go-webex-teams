@@ -26,93 +26,105 @@ type Webhooks struct {
 }
 
 // Get - GETs all rooms
-func (webhooks *Webhooks) Get() error {
+func (webhooks *Webhooks) Get() (*Result, error) {
 	body, _, err := get(WebhooksResource)
 	if err != nil {
-		return err
+		result := &Result{}
+		json.Unmarshal(body, result)
+		return result, err
 	}
 	err = json.Unmarshal(body, webhooks)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return nil, nil
 }
 
 // Next - Moves to the next link from a link header for a large collection
-func (webhooks *Webhooks) Next() error {
+func (webhooks *Webhooks) Next() (*Result, error) {
 	if webhooks.NextURL != "" {
-		err := webhooks.getCursor(webhooks.NextURL)
+		body, err := webhooks.getCursor(webhooks.NextURL)
 		if err != nil {
-			return err
+			result := &Result{}
+			json.Unmarshal(body, result)
+			return result, err
 		}
-		return nil
+		return nil, nil
 	}
-	return errors.New("next cursor not available")
+	return nil, errors.New("next cursor not available")
 }
 
 // Last - Moves to the last link from a link header for a large collection
-func (webhooks *Webhooks) Last() error {
+func (webhooks *Webhooks) Last() (*Result, error) {
 	if webhooks.LastURL != "" {
-		err := webhooks.getCursor(webhooks.LastURL)
+		body, err := webhooks.getCursor(webhooks.LastURL)
 		if err != nil {
-			return err
+			result := &Result{}
+			json.Unmarshal(body, result)
+			return result, err
 		}
-		return nil
+		return nil, nil
 	}
-	return errors.New("last cursor not available")
+	return nil, errors.New("last cursor not available")
 }
 
 // First - Moves to the first link from a link header for a large collection
-func (webhooks *Webhooks) First() error {
+func (webhooks *Webhooks) First() (*Result, error) {
 	if webhooks.FirstURL != "" {
-		err := webhooks.getCursor(webhooks.FirstURL)
+		body, err := webhooks.getCursor(webhooks.FirstURL)
 		if err != nil {
-			return err
+			result := &Result{}
+			json.Unmarshal(body, result)
+			return result, err
 		}
-		return nil
+		return nil, nil
 	}
-	return errors.New("first cursor not available")
+	return nil, errors.New("first cursor not available")
 }
 
 // Previous - Moves to the previous link from a link header for a large collection
-func (webhooks *Webhooks) Previous() error {
+func (webhooks *Webhooks) Previous() (*Result, error) {
 	if webhooks.PreviousURL != "" {
-		err := webhooks.getCursor(webhooks.PreviousURL)
+		body, err := webhooks.getCursor(webhooks.PreviousURL)
 		if err != nil {
-			return err
+			result := &Result{}
+			json.Unmarshal(body, result)
+			return result, err
 		}
-		return nil
+		return nil, nil
 	}
-	return errors.New("previous cursor not available")
+	return nil, errors.New("previous cursor not available")
 }
 
 // getCursor - Gets the appropriate link associated to the link header
-func (webhooks *Webhooks) getCursor(url string) error {
+func (webhooks *Webhooks) getCursor(url string) ([]byte, error) {
 	body, links, err := get(url)
 	if err != nil {
-		return err
+		return body, err
 	}
 	if links != nil {
 		webhooks.Links = *links
 	}
 	err = json.Unmarshal(body, webhooks)
 	if err != nil {
-		return err
+		return body, err
 	}
-	return nil
+	return body, nil
 }
 
 // Get - GETs a room by ID
-func (webhook *Webhook) Get() error {
+func (webhook *Webhook) Get() (*Result, error) {
 	body, _, err := get(WebhooksResource + "/" + webhook.ID)
 	if err != nil {
-		return err
+		result := &Result{}
+		json.Unmarshal(body, result)
+		return result, err
 	}
 	err = json.Unmarshal(body, webhook)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return nil, nil
 }
 
 // Delete - DELETEs a room
@@ -121,35 +133,39 @@ func (webhook *Webhook) Delete() (*Result, error) {
 }
 
 // Post - Creates (POSTs) a new webhook
-func (webhook *Webhook) Post() error {
+func (webhook *Webhook) Post() (*Result, error) {
 	body, err := json.Marshal(webhook)
 	if err != nil {
-		return err
+		result := &Result{}
+		json.Unmarshal(body, result)
+		return result, err
 	}
 	body, _, err = post(WebhooksResource, body)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	err = json.Unmarshal(body, webhook)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return nil, nil
 }
 
 // Put - Updates (PUTs) a webhook
-func (webhook *Webhook) Put() error {
+func (webhook *Webhook) Put() (*Result, error) {
 	body, err := json.Marshal(webhook)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	body, _, err = put(WebhooksResource+"/"+webhook.ID, body)
 	if err != nil {
-		return err
+		result := &Result{}
+		json.Unmarshal(body, result)
+		return result, err
 	}
 	err = json.Unmarshal(body, webhook)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return nil, nil
 }

@@ -24,93 +24,105 @@ type Rooms struct {
 }
 
 // Get - GETs all rooms
-func (rooms *Rooms) Get() error {
+func (rooms *Rooms) Get() (*Result, error) {
 	body, _, err := get(RoomsResource)
 	if err != nil {
-		return err
+		result := &Result{}
+		json.Unmarshal(body, result)
+		return result, err
 	}
 	err = json.Unmarshal(body, rooms)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return nil, nil
 }
 
 // Next - Moves to the next link from a link header for a large collection
-func (rooms *Rooms) Next() error {
+func (rooms *Rooms) Next() (*Result, error) {
 	if rooms.NextURL != "" {
-		err := rooms.getCursor(rooms.NextURL)
+		body, err := rooms.getCursor(rooms.NextURL)
 		if err != nil {
-			return err
+			result := &Result{}
+			json.Unmarshal(body, result)
+			return result, err
 		}
-		return nil
+		return nil, nil
 	}
-	return errors.New("next cursor not available")
+	return nil, errors.New("next cursor not available")
 }
 
 // Last - Moves to the last link from a link header for a large collection
-func (rooms *Rooms) Last() error {
+func (rooms *Rooms) Last() (*Result, error) {
 	if rooms.LastURL != "" {
-		err := rooms.getCursor(rooms.LastURL)
+		body, err := rooms.getCursor(rooms.LastURL)
 		if err != nil {
-			return err
+			result := &Result{}
+			json.Unmarshal(body, result)
+			return result, err
 		}
-		return nil
+		return nil, nil
 	}
-	return errors.New("last cursor not available")
+	return nil, errors.New("last cursor not available")
 }
 
 // First - Moves to the first link from a link header for a large collection
-func (rooms *Rooms) First() error {
+func (rooms *Rooms) First() (*Result, error) {
 	if rooms.FirstURL != "" {
-		err := rooms.getCursor(rooms.FirstURL)
+		body, err := rooms.getCursor(rooms.FirstURL)
 		if err != nil {
-			return err
+			result := &Result{}
+			json.Unmarshal(body, result)
+			return result, err
 		}
-		return nil
+		return nil, nil
 	}
-	return errors.New("first cursor not available")
+	return nil, errors.New("first cursor not available")
 }
 
 // Previous - Moves to the previous link from a link header for a large collection
-func (rooms *Rooms) Previous() error {
+func (rooms *Rooms) Previous() (*Result, error) {
 	if rooms.PreviousURL != "" {
-		err := rooms.getCursor(rooms.PreviousURL)
+		body, err := rooms.getCursor(rooms.PreviousURL)
 		if err != nil {
-			return err
+			result := &Result{}
+			json.Unmarshal(body, result)
+			return result, err
 		}
-		return nil
+		return nil, nil
 	}
-	return errors.New("previous cursor not available")
+	return nil, errors.New("previous cursor not available")
 }
 
 // getCursor - Gets the appropriate link associated to the link header
-func (rooms *Rooms) getCursor(url string) error {
+func (rooms *Rooms) getCursor(url string) ([]byte, error) {
 	body, links, err := get(url)
 	if err != nil {
-		return err
+		return body, err
 	}
 	if links != nil {
 		rooms.Links = *links
 	}
 	err = json.Unmarshal(body, rooms)
 	if err != nil {
-		return err
+		return body, err
 	}
-	return nil
+	return body, nil
 }
 
 // Get - GETs a room by ID
-func (room *Room) Get() error {
+func (room *Room) Get() (*Result, error) {
 	body, _, err := get(RoomsResource + "/" + room.ID)
 	if err != nil {
-		return err
+		result := &Result{}
+		json.Unmarshal(body, result)
+		return result, err
 	}
 	err = json.Unmarshal(body, room)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return nil, nil
 }
 
 // Delete - DELETEs a room
@@ -119,35 +131,39 @@ func (room *Room) Delete() (*Result, error) {
 }
 
 // Post - Creates (POSTs) a new room
-func (room *Room) Post() error {
+func (room *Room) Post() (*Result, error) {
 	body, err := json.Marshal(room)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	body, _, err = post(RoomsResource, body)
 	if err != nil {
-		return err
+		result := &Result{}
+		json.Unmarshal(body, result)
+		return result, err
 	}
 	err = json.Unmarshal(body, room)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return nil, nil
 }
 
 // Put - Updates (PUTs) a room
-func (room *Room) Put() error {
+func (room *Room) Put() (*Result, error) {
 	body, err := json.Marshal(room)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	body, _, err = put(RoomsResource+"/"+room.ID, body)
 	if err != nil {
-		return err
+		result := &Result{}
+		json.Unmarshal(body, result)
+		return result, err
 	}
 	err = json.Unmarshal(body, room)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return nil, nil
 }

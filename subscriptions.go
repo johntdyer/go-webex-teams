@@ -27,94 +27,106 @@ type Subscriptions struct {
 }
 
 // Get - GETs all subscriptions
-func (subscriptions *Subscriptions) Get() error {
+func (subscriptions *Subscriptions) Get() (*Result, error) {
 	body, _, err := get(SubscriptionsResource + subscriptions.buildQueryString())
 	if err != nil {
-		return err
+		result := &Result{}
+		json.Unmarshal(body, result)
+		return result, err
 	}
 	err = json.Unmarshal(body, subscriptions)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return nil, nil
 
 }
 
 // Next - Moves to the next link from a link header for a large collection
-func (subscriptions *Subscriptions) Next() error {
+func (subscriptions *Subscriptions) Next() (*Result, error) {
 	if subscriptions.NextURL != "" {
-		err := subscriptions.getCursor(subscriptions.NextURL)
+		body, err := subscriptions.getCursor(subscriptions.NextURL)
 		if err != nil {
-			return err
+			result := &Result{}
+			json.Unmarshal(body, result)
+			return result, err
 		}
-		return nil
+		return nil, nil
 	}
-	return errors.New("next cursor not available")
+	return nil, errors.New("next cursor not available")
 }
 
 // Last - Moves to the last link from a link header for a large collection
-func (subscriptions *Subscriptions) Last() error {
+func (subscriptions *Subscriptions) Last() (*Result, error) {
 	if subscriptions.LastURL != "" {
-		err := subscriptions.getCursor(subscriptions.LastURL)
+		body, err := subscriptions.getCursor(subscriptions.LastURL)
 		if err != nil {
-			return err
+			result := &Result{}
+			json.Unmarshal(body, result)
+			return result, err
 		}
-		return nil
+		return nil, nil
 	}
-	return errors.New("last cursor not available")
+	return nil, errors.New("last cursor not available")
 }
 
 // First - Moves to the first link from a link header for a large collection
-func (subscriptions *Subscriptions) First() error {
+func (subscriptions *Subscriptions) First() (*Result, error) {
 	if subscriptions.FirstURL != "" {
-		err := subscriptions.getCursor(subscriptions.FirstURL)
+		body, err := subscriptions.getCursor(subscriptions.FirstURL)
 		if err != nil {
-			return err
+			result := &Result{}
+			json.Unmarshal(body, result)
+			return result, err
 		}
-		return nil
+		return nil, nil
 	}
-	return errors.New("first cursor not available")
+	return nil, errors.New("first cursor not available")
 }
 
 // Previous - Moves to the previous link from a link header for a large collection
-func (subscriptions *Subscriptions) Previous() error {
+func (subscriptions *Subscriptions) Previous() (*Result, error) {
 	if subscriptions.PreviousURL != "" {
-		err := subscriptions.getCursor(subscriptions.PreviousURL)
+		body, err := subscriptions.getCursor(subscriptions.PreviousURL)
 		if err != nil {
-			return err
+			result := &Result{}
+			json.Unmarshal(body, result)
+			return result, err
 		}
-		return nil
+		return nil, nil
 	}
-	return errors.New("previous cursor not available")
+	return nil, errors.New("previous cursor not available")
 }
 
 // getCursor - Gets the appropriate link associated to the link header
-func (subscriptions *Subscriptions) getCursor(url string) error {
+func (subscriptions *Subscriptions) getCursor(url string) ([]byte, error) {
 	body, links, err := get(url)
 	if err != nil {
-		return err
+		return body, err
 	}
 	if links != nil {
 		subscriptions.Links = *links
 	}
 	err = json.Unmarshal(body, subscriptions)
 	if err != nil {
-		return err
+		return body, err
 	}
-	return nil
+	return body, nil
 }
 
 // Get - GETs a subscription
-func (subscription *Subscription) Get() error {
+func (subscription *Subscription) Get() (*Result, error) {
 	body, _, err := get(SubscriptionsResource + "/" + subscription.ID)
 	if err != nil {
-		return err
+		result := &Result{}
+		json.Unmarshal(body, result)
+		return result, err
 	}
 	err = json.Unmarshal(body, subscription)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return nil, nil
 }
 
 // Delete - DELETEs a subscription

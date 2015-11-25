@@ -28,106 +28,120 @@ type People struct {
 }
 
 // Get - GETs all people
-func (people *People) Get() error {
+func (people *People) Get() (*Result, error) {
 	body, _, err := get(PeopleResource + people.buildQueryString())
 	if err != nil {
-		return err
+		result := &Result{}
+		json.Unmarshal(body, result)
+		return result, err
 	}
 	err = json.Unmarshal(body, people)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return nil, nil
 }
 
 // Next - Moves to the next link from a link header for a large collection
-func (people *People) Next() error {
+func (people *People) Next() (*Result, error) {
 	if people.NextURL != "" {
-		err := people.getCursor(people.NextURL)
+		body, err := people.getCursor(people.NextURL)
 		if err != nil {
-			return err
+			result := &Result{}
+			json.Unmarshal(body, result)
+			return result, err
 		}
-		return nil
+		return nil, nil
 	}
-	return errors.New("next cursor not available")
+	return nil, errors.New("next cursor not available")
 }
 
 // Last - Moves to the last link from a link header for a large collection
-func (people *People) Last() error {
+func (people *People) Last() (*Result, error) {
 	if people.LastURL != "" {
-		err := people.getCursor(people.LastURL)
+		body, err := people.getCursor(people.LastURL)
 		if err != nil {
-			return err
+			result := &Result{}
+			json.Unmarshal(body, result)
+			return result, err
 		}
-		return nil
+		return nil, nil
 	}
-	return errors.New("last cursor not available")
+	return nil, errors.New("last cursor not available")
 }
 
 // First - Moves to the first link from a link header for a large collection
-func (people *People) First() error {
+func (people *People) First() (*Result, error) {
 	if people.FirstURL != "" {
-		err := people.getCursor(people.FirstURL)
+		body, err := people.getCursor(people.FirstURL)
 		if err != nil {
-			return err
+			result := &Result{}
+			json.Unmarshal(body, result)
+			return result, err
 		}
-		return nil
+		return nil, nil
 	}
-	return errors.New("first cursor not available")
+	return nil, errors.New("first cursor not available")
 }
 
 // Previous - Moves to the previous link from a link header for a large collection
-func (people *People) Previous() error {
+func (people *People) Previous() (*Result, error) {
 	if people.PreviousURL != "" {
-		err := people.getCursor(people.PreviousURL)
+		body, err := people.getCursor(people.PreviousURL)
 		if err != nil {
-			return err
+			result := &Result{}
+			json.Unmarshal(body, result)
+			return result, err
 		}
-		return nil
+		return nil, nil
 	}
-	return errors.New("previous cursor not available")
+	return nil, errors.New("previous cursor not available")
 }
 
 // getCursor - Gets the appropriate link associated to the link header
-func (people *People) getCursor(url string) error {
+func (people *People) getCursor(url string) ([]byte, error) {
 	body, links, err := get(url)
 	if err != nil {
-		return err
+		return body, err
 	}
 	if links != nil {
 		people.Links = *links
 	}
 	err = json.Unmarshal(body, people)
 	if err != nil {
-		return err
+		return body, err
 	}
-	return nil
+	return body, nil
 }
 
 // Get - GETs a person by ID
-func (person *Person) Get() error {
+func (person *Person) Get() (*Result, error) {
 	body, _, err := get(PeopleResource + "/" + person.ID)
 	if err != nil {
-		return err
+		result := &Result{}
+		json.Unmarshal(body, result)
+		return result, err
 	}
 	err = json.Unmarshal(body, person)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return nil, nil
 }
 
 // GetMe - GETs the current authenticated user
-func (person *Person) GetMe() error {
+func (person *Person) GetMe() (*Result, error) {
 	body, _, err := get(PeopleResource + "/me")
 	if err != nil {
-		return err
+		result := &Result{}
+		json.Unmarshal(body, result)
+		return result, err
 	}
 	err = json.Unmarshal(body, person)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return nil, nil
 }
 
 // buildQueryString - Builds the query string
