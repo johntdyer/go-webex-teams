@@ -54,7 +54,8 @@ func TestApplicationsSpec(t *testing.T) {
 			})
 			Convey("Delete application", func() {
 				application := &Application{ID: "1"}
-				err := application.Delete()
+				result, err := application.Delete()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 			})
 			Convey("Post application", func() {

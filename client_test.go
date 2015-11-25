@@ -14,6 +14,7 @@ import (
 var (
 	stubNow     = func() time.Time { return time.Unix(1445178376, 0) }
 	CreatedTime = time.Unix(1445178376, 0)
+	APIError    = `{"message":"Failed to get conversation.","errors":[{"description":"Failed to get conversation."}],"trackingId":"go-spark_6D15B3DA-BF4B-0601-C7DB-F9315AE0783E_76"}`
 )
 
 func TestClientSpec(t *testing.T) {
@@ -61,8 +62,18 @@ func TestClientSpec(t *testing.T) {
 		BaseURL = ts.URL
 		InitClient("1234")
 		Convey("DELETE", func() {
-			err := delete("/foo")
-			So(err, ShouldBeNil)
+			Convey("Happy case", func() {
+				result, err := delete("/foo")
+				So(result, ShouldBeNil)
+				So(err, ShouldBeNil)
+			})
+			Convey("Negative case", func() {
+				result, err := delete("/negative")
+				So(err.Error(), ShouldEqual, "400 Bad Request")
+				So(result.Errors[0].Description, ShouldEqual, "Failed to get conversation.")
+				So(result.Message, ShouldEqual, "Failed to get conversation.")
+				So(result.Trackingid, ShouldEqual, "go-spark_6D15B3DA-BF4B-0601-C7DB-F9315AE0783E_76")
+			})
 		})
 		Convey("GET", func() {
 			body, _, err := get("/foo")
@@ -109,6 +120,9 @@ func serveHTTP(t *testing.T) *httptest.Server {
 					w.Write([]byte("you PUT"))
 				}
 			})
+		case "/negative":
+			w.WriteHeader(400)
+			w.Write([]byte(APIError))
 		case ApplicationsResource:
 			switch req.Method {
 			case "GET":

@@ -101,7 +101,8 @@ func TestRoomsSpec(t *testing.T) {
 			})
 			Convey("Delete room", func() {
 				room := &Room{ID: "1"}
-				err := room.Delete()
+				result, err := room.Delete()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 			})
 			Convey("Post room", func() {

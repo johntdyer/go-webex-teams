@@ -118,7 +118,7 @@ func (subscription *Subscription) Get() error {
 }
 
 // Delete - DELETEs a subscription
-func (subscription *Subscription) Delete() error {
+func (subscription *Subscription) Delete() (*Result, error) {
 	return delete(SubscriptionsResource + "/" + subscription.ID)
 }
 

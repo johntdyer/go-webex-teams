@@ -59,7 +59,8 @@ func TestWebhooksSpec(t *testing.T) {
 			})
 			Convey("Delete webhook", func() {
 				webhook := &Webhook{ID: "1"}
-				err := webhook.Delete()
+				result, err := webhook.Delete()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 			})
 			Convey("Post webhook", func() {

@@ -116,7 +116,7 @@ func (webhook *Webhook) Get() error {
 }
 
 // Delete - DELETEs a room
-func (webhook *Webhook) Delete() error {
+func (webhook *Webhook) Delete() (*Result, error) {
 	return delete(WebhooksResource + "/" + webhook.ID)
 }
 

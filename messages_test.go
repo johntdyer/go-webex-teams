@@ -113,7 +113,8 @@ func TestMessagesSpec(t *testing.T) {
 			})
 			Convey("Delete message", func() {
 				message := &Message{ID: "1"}
-				err := message.Delete()
+				result, err := message.Delete()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 			})
 			Convey("Post message", func() {

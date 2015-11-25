@@ -121,7 +121,7 @@ func (app *Application) Get() error {
 }
 
 // Delete - DELETEs an application by ID
-func (app *Application) Delete() error {
+func (app *Application) Delete() (*Result, error) {
 	return delete(ApplicationsResource + "/" + app.ID)
 }
 

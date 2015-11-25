@@ -72,7 +72,8 @@ func TestSubscriptionsSpec(t *testing.T) {
 			})
 			Convey("Delete subscription", func() {
 				subscription := &Subscription{ID: "1"}
-				err := subscription.Delete()
+				result, err := subscription.Delete()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 			})
 		})

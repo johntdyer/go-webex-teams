@@ -100,7 +100,8 @@ func TestMembershipsSpec(t *testing.T) {
 			})
 			Convey("Delete membership", func() {
 				membership := &Membership{ID: "1"}
-				err := membership.Delete()
+				result, err := membership.Delete()
+				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 			})
 			Convey("Post membership", func() {

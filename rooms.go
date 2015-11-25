@@ -114,7 +114,7 @@ func (room *Room) Get() error {
 }
 
 // Delete - DELETEs a room
-func (room *Room) Delete() error {
+func (room *Room) Delete() (*Result, error) {
 	return delete(RoomsResource + "/" + room.ID)
 }
 

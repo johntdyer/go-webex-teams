@@ -121,7 +121,7 @@ func (msg *Message) Get() error {
 }
 
 // Delete - Deletes a message based on the ID provided
-func (msg *Message) Delete() error {
+func (msg *Message) Delete() (*Result, error) {
 	return delete(MessagesResource + "/" + msg.ID)
 }
 

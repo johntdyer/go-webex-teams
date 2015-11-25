@@ -64,9 +64,10 @@ func main() {
 
 	// Delete an application by ID
 	application := spark.Application{ID: "123"}
-	err := application.Delete()
+	result, err := application.Delete()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 
 	// Create an application
@@ -147,9 +148,10 @@ func main() {
 
 	// Delete an membership by ID
 	membership := spark.Membership{ID: "123"}
-	err := membership.Delete()
+	result, err := membership.Delete()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 
 	// Create a membership
@@ -224,9 +226,10 @@ func main() {
 
 	// Delete an message by ID
 	message := spark.Message{ID: "5678"}
-	err := message.Delete()
+	result, err := message.Delete()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 
 	// Create a message
@@ -337,9 +340,10 @@ func main() {
 
 	// Delete a room by ID
 	room := spark.Room{ID: "123"}
-	err := room.Delete()
+	result, err := room.Delete()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 
 	// Create a room
@@ -410,9 +414,10 @@ func main() {
 
 	// Delete a subscription by ID
 	subscription := spark.Subscription{ID: "123"}
-	err := room.Delete()
+	result, err := room.Delete()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 ```
 
@@ -460,9 +465,10 @@ func main() {
 
 	// Delete a webhook by ID
 	webhook := spark.Webhook{ID: "123"}
-	err := room.Delete()
+	result, err := room.Delete()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(result)
 	}
 
 	// Create a webhook

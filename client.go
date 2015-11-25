@@ -3,6 +3,7 @@ package spark
 import (
 	"bytes"
 	"crypto/rand"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -53,6 +54,15 @@ type Links struct {
 	PreviousURL string
 }
 
+// Result represents an error returned from the Spark API
+type Result struct {
+	Message string `json:"message"`
+	Errors  []struct {
+		Description string `json:"description"`
+	} `json:"errors"`
+	Trackingid string `json:"trackingId"`
+}
+
 // InitClient - Generates a new Spark client taking and setting the auth token
 func InitClient(token string) {
 	ActiveClient = &Client{
@@ -77,10 +87,15 @@ func incrementer() {
 }
 
 // delete - Calls an HTTP DELETE
-func delete(resource string) error {
+func delete(resource string) (*Result, error) {
 	req, _ := http.NewRequest("DELETE", BaseURL+resource, nil)
-	_, _, err := processRequest(req)
-	return err
+	body, _, err := processRequest(req)
+	if err != nil && body != nil {
+		result := &Result{}
+		json.Unmarshal(body, result)
+		return result, err
+	}
+	return nil, err
 }
 
 // get - Calls an HTTP GET
@@ -108,16 +123,13 @@ func processRequest(req *http.Request) ([]byte, *Links, error) {
 	}
 	setHeaders(req)
 	res, err := ActiveClient.HTTP.Do(req)
-	if err != nil {
-		return nil, nil, err
-	}
-	if res.StatusCode != 200 {
-		return nil, nil, errors.New(res.Status)
-	}
 	defer res.Body.Close()
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		return nil, nil, err
+		return body, nil, err
+	}
+	if res.StatusCode != 200 {
+		return body, nil, errors.New(res.Status)
 	}
 	linkHeader := res.Header.Get("Link")
 	if linkHeader != "" {

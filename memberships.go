@@ -122,7 +122,7 @@ func (membership *Membership) Get() error {
 }
 
 // Delete - DELETEs a membership
-func (membership *Membership) Delete() error {
+func (membership *Membership) Delete() (*Result, error) {
 	return delete(MembershipsResource + "/" + membership.ID)
 }
 
