@@ -18,7 +18,7 @@ func TestApplicationsSpec(t *testing.T) {
 	defer ts.Close()
 	previousURL := BaseURL
 	BaseURL = ts.URL
-	InitClient("123")
+	InitClient(&Authorization{AccessToken: "123"})
 	Convey("Given we want to interact with Spark applications", t, func() {
 		Convey("For an application", func() {
 			Convey("It should generate the proper JSON message", func() {

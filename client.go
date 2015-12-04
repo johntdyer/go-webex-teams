@@ -38,12 +38,16 @@ var (
 
 // Authorization represents the auth elements required for the API
 type Authorization struct {
-	AccessToken string
+	AccessToken  string
+	ClientID     string
+	ClientSecret string
+	AuthCode     string
+	RedirectURL  string
 }
 
 // Client represents a new Spark client
 type Client struct {
-	Token            string
+	Authorization    *Authorization
 	TrackingIDPrefix string
 	Sequence         int
 	Increment        chan int
@@ -69,9 +73,9 @@ type Result struct {
 }
 
 // InitClient - Generates a new Spark client taking and setting the auth token
-func InitClient(token string) {
+func InitClient(authorization *Authorization) {
 	ActiveClient = &Client{
-		Token:            token,
+		Authorization:    authorization,
 		HTTP:             &http.Client{},
 		TrackingIDPrefix: "go-spark_" + uuid(),
 		Sequence:         0,
@@ -123,7 +127,7 @@ func put(resource string, body []byte) ([]byte, *Links, error) {
 
 // processRequest - Processes an HTTP request
 func processRequest(req *http.Request) ([]byte, *Links, error) {
-	if ActiveClient.Token == "" {
+	if ActiveClient.Authorization.AccessToken == "" {
 		return nil, nil, ErrInactiveClient
 	}
 	setHeaders(req)
@@ -148,7 +152,7 @@ func processRequest(req *http.Request) ([]byte, *Links, error) {
 func setHeaders(req *http.Request) {
 	ActiveClient.Increment <- 1
 	<-ActiveClient.Finished
-	req.Header.Set("Authorization", "Bearer "+ActiveClient.Token)
+	req.Header.Set("Authorization", "Bearer "+ActiveClient.Authorization.AccessToken)
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("TrackingID", TrackingID())

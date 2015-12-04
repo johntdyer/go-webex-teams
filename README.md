@@ -28,7 +28,8 @@ import (
 )
 
 func main() {
-	spark.InitClient("<YOUR TOKEN>")
+	authorization := &Authorization{AccessToken: "123"}
+	spark.InitClient(authorization)
 ```
 
 ### Applications

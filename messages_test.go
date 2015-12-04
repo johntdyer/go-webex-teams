@@ -18,7 +18,7 @@ func TestMessagesSpec(t *testing.T) {
 	defer ts.Close()
 	previousURL := BaseURL
 	BaseURL = ts.URL
-	InitClient("123")
+	InitClient(&Authorization{AccessToken: "123"})
 	Convey("Given we want to interact with Spark memberships", t, func() {
 		Convey("For messages", func() {
 			Convey("Get messages", func() {

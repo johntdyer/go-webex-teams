@@ -17,7 +17,7 @@ func TestSubscriptionsSpec(t *testing.T) {
 	defer ts.Close()
 	previousURL := BaseURL
 	BaseURL = ts.URL
-	InitClient("123")
+	InitClient(&Authorization{AccessToken: "123"})
 	Convey("Given we want to interact with Spark subscriptions", t, func() {
 		Convey("Should construct proper query strings", func() {
 			Convey("Personid query", func() {

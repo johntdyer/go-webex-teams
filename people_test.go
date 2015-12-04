@@ -17,7 +17,7 @@ func TestPeopleSpec(t *testing.T) {
 	defer ts.Close()
 	previousURL := BaseURL
 	BaseURL = ts.URL
-	InitClient("123")
+	InitClient(&Authorization{AccessToken: "123"})
 	Convey("Given we want to interact with Spark people", t, func() {
 		Convey("For people", func() {
 			Convey("Should construct proper query strings", func() {

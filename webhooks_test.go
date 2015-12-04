@@ -18,7 +18,7 @@ func TestWebhooksSpec(t *testing.T) {
 	defer ts.Close()
 	previousURL := BaseURL
 	BaseURL = ts.URL
-	InitClient("123")
+	InitClient(&Authorization{AccessToken: "123"})
 	Convey("Given we want to interact with Spark webhooks", t, func() {
 		Convey("For a webhook", func() {
 			Convey("It should generate the proper JSON message", func() {

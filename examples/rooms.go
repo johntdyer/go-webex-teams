@@ -10,12 +10,12 @@ import (
 	"fmt"
 	"os"
 
-	"../."
+	"sqbu-github.cisco.com/jgoecke/go-spark"
 )
 
 func main() {
-	token := os.Getenv("SPARK_TOKEN")
-	spark.InitClient(token)
+	authorization := &Authorization{os.Getenv("SPARK_TOKEN")}
+	spark.InitClient(authorization)
 
 	// Rooms
 

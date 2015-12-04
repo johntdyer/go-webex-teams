@@ -42,16 +42,17 @@ func TestClientSpec(t *testing.T) {
 		So(RoomsResource, ShouldStartWith, "/")
 		So(SubscriptionsResource, ShouldStartWith, "/")
 	})
+
 	Convey("Should create an *http.Client", t, func() {
-		InitClient("1234")
-		So(ActiveClient.Token, ShouldEqual, "1234")
+		InitClient(&Authorization{AccessToken: "123"})
+		So(ActiveClient.Authorization.AccessToken, ShouldEqual, "123")
 		So(reflect.TypeOf(ActiveClient.HTTP).String(), ShouldEqual, "*http.Client")
 	})
 	Convey("Should set the HTTP headers properly", t, func() {
-		InitClient("1234")
+		InitClient(&Authorization{AccessToken: "123"})
 		req, _ := http.NewRequest("GET", "http://foo.com", nil)
 		setHeaders(req)
-		So(req.Header.Get("Authorization"), ShouldEqual, "Bearer 1234")
+		So(req.Header.Get("Authorization"), ShouldEqual, "Bearer 123")
 		So(req.Header.Get("Content-Type"), ShouldEqual, "application/json")
 		So(req.Header.Get("Accept"), ShouldEqual, "application/json")
 		So(req.Header.Get("TrackingID"), ShouldEqual, TrackingID())
@@ -61,7 +62,7 @@ func TestClientSpec(t *testing.T) {
 		defer ts.Close()
 		previousURL := BaseURL
 		BaseURL = ts.URL
-		InitClient("1234")
+		InitClient(&Authorization{AccessToken: "123"})
 		Convey("DELETE", func() {
 			Convey("Happy case", func() {
 				result, err := delete("/foo")
