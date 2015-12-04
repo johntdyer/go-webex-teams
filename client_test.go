@@ -52,6 +52,10 @@ func TestClientSpec(t *testing.T) {
 			So(ActiveClient.Authorization.RefreshToken, ShouldEqual, "MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDEyMzQ1Njc4OTEyMzQ1Njc4")
 			So(ActiveClient.Authorization.RefreshTokenExpiresIn, ShouldEqual, 86399)
 		})
+		Convey("Test refreshToken", func() {
+			_, _, err := get("/test_refreshToken")
+			So(err, ShouldBeNil)
+		})
 		BaseURL = previousURL
 	})
 	Convey("Sould parse a link header", t, func() {
@@ -167,6 +171,7 @@ func TestClientSpec(t *testing.T) {
 
 // serveHTTP serves up a test server emulating the Tropo Gateway
 func serveHTTP(t *testing.T) *httptest.Server {
+	refreshTokenCnt := 0
 	return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 		body, _ := ioutil.ReadAll(req.Body)
 		defer req.Body.Close()
@@ -175,6 +180,13 @@ func serveHTTP(t *testing.T) *httptest.Server {
 		case "/access_token":
 			w.WriteHeader(200)
 			w.Write([]byte(AccessTokenJSON))
+		case "/test_refreshToken":
+			if refreshTokenCnt == 0 {
+				w.WriteHeader(401)
+				refreshTokenCnt++
+			} else {
+				w.WriteHeader(200)
+			}
 		case "/foo":
 			Convey("Should receive the correct body from a POST/PUT request", t, func() {
 				switch req.Method {

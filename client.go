@@ -46,6 +46,7 @@ type Authorization struct {
 	ClientSecret          string `json:"client_secret,omitempty"`
 	Code                  string `json:"code,omitempty"`
 	RedirectURL           string `json:"redirect_url,omitempty"`
+	GrantType             string `json:"grant_type,omitempty"`
 }
 
 // Client represents a new Spark client
@@ -96,6 +97,7 @@ func InitClient(authorization *Authorization) error {
 	return getAccessToken(authorization)
 }
 
+// getAccessToken retrieves an AccessToken via credentials or a RefreshToken
 func getAccessToken(authorization *Authorization) error {
 	body, err := json.Marshal(authorization)
 	if err != nil {
@@ -156,6 +158,16 @@ func processRequest(req *http.Request) ([]byte, *Links, error) {
 	}
 	setHeaders(req)
 	res, err := ActiveClient.HTTP.Do(req)
+
+	// Check for an unauthorized and try again if we have a RefreshToken
+	if res.StatusCode == 401 {
+		authorization := ActiveClient.Authorization
+		if authorization.ClientID != "" && authorization.ClientSecret != "" && authorization.RefreshToken != "" {
+			authorization.GrantType = "refresh_token"
+			res, err = ActiveClient.HTTP.Do(req)
+		}
+	}
+
 	defer res.Body.Close()
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
