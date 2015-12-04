@@ -13,12 +13,47 @@ import (
 )
 
 var (
-	stubNow     = func() time.Time { return time.Unix(1445178376, 0) }
-	CreatedTime = time.Unix(1445178376, 0)
-	APIError    = `{"message":"Failed to get conversation.","errors":[{"description":"Failed to get conversation."}],"trackingId":"go-spark_6D15B3DA-BF4B-0601-C7DB-F9315AE0783E_76"}`
+	stubNow         = func() time.Time { return time.Unix(1445178376, 0) }
+	CreatedTime     = time.Unix(1445178376, 0)
+	APIError        = `{"message":"Failed to get conversation.","errors":[{"description":"Failed to get conversation."}],"trackingId":"go-spark_6D15B3DA-BF4B-0601-C7DB-F9315AE0783E_76"}`
+	AccessTokenJSON = `{"access_token":"ZDI3MGEyYzQtNmFlNS00NDNhLWFlNzAtZGVjNjE0MGU1OGZmZWNmZDEwN2ItYTU3","expires_in":5999,"refresh_token":"MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDEyMzQ1Njc4OTEyMzQ1Njc4","refresh_token_expires_in":86399}`
 )
 
 func TestClientSpec(t *testing.T) {
+	Convey("Test client instantion", t, func() {
+		ts := serveHTTP(t)
+		defer ts.Close()
+		previousURL := BaseURL
+		BaseURL = ts.URL
+		Convey("It should work with an AccessToken", func() {
+			err := InitClient(&Authorization{AccessToken: "123"})
+			So(err, ShouldBeNil)
+		})
+		Convey("It should not work with missing params", func() {
+			err := InitClient(&Authorization{})
+			So(err.Error(), ShouldEqual, "You must provide credentials")
+			err = InitClient(&Authorization{ClientID: "1234"})
+			So(err.Error(), ShouldEqual, "You must provide credentials")
+			err = InitClient(&Authorization{ClientSecret: "secret"})
+			So(err.Error(), ShouldEqual, "You must provide credentials")
+			err = InitClient(&Authorization{RedirectURL: "http://foobar.com"})
+			So(err.Error(), ShouldEqual, "You must provide credentials")
+		})
+		Convey("It should work with appropriate credentials", func() {
+			authorization := &Authorization{
+				ClientID:     "123",
+				ClientSecret: "secret",
+				RedirectURL:  "http://foobar.com",
+			}
+			err := InitClient(authorization)
+			So(err, ShouldBeNil)
+			So(ActiveClient.Authorization.AccessToken, ShouldEqual, "ZDI3MGEyYzQtNmFlNS00NDNhLWFlNzAtZGVjNjE0MGU1OGZmZWNmZDEwN2ItYTU3")
+			So(ActiveClient.Authorization.ExpiresIn, ShouldEqual, 5999)
+			So(ActiveClient.Authorization.RefreshToken, ShouldEqual, "MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDEyMzQ1Njc4OTEyMzQ1Njc4")
+			So(ActiveClient.Authorization.RefreshTokenExpiresIn, ShouldEqual, 86399)
+		})
+		BaseURL = previousURL
+	})
 	Convey("Sould parse a link header", t, func() {
 		Convey("Parse url", func() {
 			url := `<https://api.github.com/search/code?q=addClass+user_mozilla&page=34>`
@@ -137,6 +172,9 @@ func serveHTTP(t *testing.T) *httptest.Server {
 		defer req.Body.Close()
 		w.Header().Set("Content-Type", "application/json")
 		switch req.URL.String() {
+		case "/access_token":
+			w.WriteHeader(200)
+			w.Write([]byte(AccessTokenJSON))
 		case "/foo":
 			Convey("Should receive the correct body from a POST/PUT request", t, func() {
 				switch req.Method {

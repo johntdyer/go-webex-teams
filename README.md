@@ -28,7 +28,20 @@ import (
 )
 
 func main() {
+	/*
+	You may authorize with an AccessToken from the Developer Portal
+	as follows:
+
 	authorization := &Authorization{AccessToken: "123"}
+
+	or you may authorize as part of an Oauth flow as follows:
+	*/
+	authorization := &Authorization{
+		ClientID: "123",
+		ClientSecret: "secret",
+		Code: "567",
+		RedirectURL: "http://your-server.com/auth?code=567",
+	}
 	spark.InitClient(authorization)
 ```
 

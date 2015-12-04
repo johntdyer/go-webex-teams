@@ -38,11 +38,14 @@ var (
 
 // Authorization represents the auth elements required for the API
 type Authorization struct {
-	AccessToken  string
-	ClientID     string
-	ClientSecret string
-	AuthCode     string
-	RedirectURL  string
+	AccessToken           string `json:"access_token,omitempty"`
+	ExpiresIn             int    `json:"expires_in,omitempty"`
+	RefreshToken          string `json:"refresh_token,omitempty"`
+	RefreshTokenExpiresIn int    `json:"refresh_token_expires_in,omitempty"`
+	ClientID              string `json:"client_id,omitempty"`
+	ClientSecret          string `json:"client_secret,omitempty"`
+	Code                  string `json:"code,omitempty"`
+	RedirectURL           string `json:"redirect_url,omitempty"`
 }
 
 // Client represents a new Spark client
@@ -73,7 +76,7 @@ type Result struct {
 }
 
 // InitClient - Generates a new Spark client taking and setting the auth token
-func InitClient(authorization *Authorization) {
+func InitClient(authorization *Authorization) error {
 	ActiveClient = &Client{
 		Authorization:    authorization,
 		HTTP:             &http.Client{},
@@ -82,7 +85,28 @@ func InitClient(authorization *Authorization) {
 		Increment:        make(chan int),
 		Finished:         make(chan bool),
 	}
+	// Launch a Go routine that increments a counter for the TrackerID sequence number
 	go incrementer()
+	if authorization.AccessToken != "" {
+		return nil
+	}
+	if authorization.ClientID == "" || authorization.ClientSecret == "" || authorization.RedirectURL == "" {
+		return errors.New("You must provide credentials")
+	}
+	return getAccessToken(authorization)
+}
+
+func getAccessToken(authorization *Authorization) error {
+	body, err := json.Marshal(authorization)
+	if err != nil {
+		return err
+	}
+	body, _, err = post("/access_token", body)
+	if err != nil {
+		return err
+	}
+	err = json.Unmarshal(body, authorization)
+	return err
 }
 
 // Increment - Updates the sequence of the request to ensure a unique identifier
@@ -127,7 +151,7 @@ func put(resource string, body []byte) ([]byte, *Links, error) {
 
 // processRequest - Processes an HTTP request
 func processRequest(req *http.Request) ([]byte, *Links, error) {
-	if ActiveClient.Authorization.AccessToken == "" {
+	if ActiveClient.Authorization.AccessToken == "" && req.URL.Path != "/access_token" {
 		return nil, nil, ErrInactiveClient
 	}
 	setHeaders(req)
