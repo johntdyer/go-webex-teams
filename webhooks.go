@@ -12,7 +12,7 @@ type Webhook struct {
 	Resource  string     `json:"resource,omitempty"`
 	Event     string     `json:"event,omitempty"`
 	Filter    string     `json:"filter,omitempty"`
-	Targeturl string     `json:"targetUrl,omitempty"`
+	TargetURL string     `json:"targetUrl,omitempty"`
 	Name      string     `json:"name,omitempty"`
 	Created   *time.Time `json:"created,omitempty"`
 }

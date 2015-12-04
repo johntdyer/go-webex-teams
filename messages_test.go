@@ -22,13 +22,13 @@ func TestMessagesSpec(t *testing.T) {
 	Convey("Given we want to interact with Spark memberships", t, func() {
 		Convey("For messages", func() {
 			Convey("Get messages", func() {
-				messages := &Messages{Roomid: "1"}
+				messages := &Messages{RoomID: "1"}
 				result, err := messages.Get()
 				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
-				So(messages.Items[0].Personid, ShouldEqual, "789")
+				So(messages.Items[0].PersonID, ShouldEqual, "789")
 				So(messages.Items[0].PersonEmail, ShouldEqual, "john@doe.com")
-				So(messages.Items[0].Roomid, ShouldEqual, "456")
+				So(messages.Items[0].RoomID, ShouldEqual, "456")
 				So(messages.Items[0].Text, ShouldEqual, "foo")
 				So(messages.Items[0].Files[0], ShouldEqual, "image1.jpg")
 				So(messages.Items[0].Files[1], ShouldEqual, "image2.jpg")
@@ -37,9 +37,9 @@ func TestMessagesSpec(t *testing.T) {
 				messages := &Messages{}
 				err := json.Unmarshal([]byte(MessagesJSON)[:], &messages)
 				So(err, ShouldBeNil)
-				So(messages.Items[0].Personid, ShouldEqual, "789")
+				So(messages.Items[0].PersonID, ShouldEqual, "789")
 				So(messages.Items[0].PersonEmail, ShouldEqual, "john@doe.com")
-				So(messages.Items[0].Roomid, ShouldEqual, "456")
+				So(messages.Items[0].RoomID, ShouldEqual, "456")
 				So(messages.Items[0].Text, ShouldEqual, "foo")
 				So(messages.Items[0].Files[0], ShouldEqual, "image1.jpg")
 				So(messages.Items[0].Files[1], ShouldEqual, "image2.jpg")
@@ -87,9 +87,9 @@ func TestMessagesSpec(t *testing.T) {
 			Convey("It should generate the proper JSON message", func() {
 				message := &Message{
 					ID:          "123",
-					Personid:    "789",
+					PersonID:    "789",
 					PersonEmail: "john@doe.com",
-					Roomid:      "456",
+					RoomID:      "456",
 					Text:        "foo",
 					Files:       []string{"image1.jpg", "image2.jpg"},
 					Created:     &CreatedTime,
@@ -102,9 +102,9 @@ func TestMessagesSpec(t *testing.T) {
 				message := &Message{}
 				err := json.Unmarshal([]byte(MessageJSON)[:], message)
 				So(err, ShouldBeNil)
-				So(message.Personid, ShouldEqual, "789")
+				So(message.PersonID, ShouldEqual, "789")
 				So(message.PersonEmail, ShouldEqual, "john@doe.com")
-				So(message.Roomid, ShouldEqual, "456")
+				So(message.RoomID, ShouldEqual, "456")
 				So(message.Text, ShouldEqual, "foo")
 				So(message.Files[0], ShouldEqual, "image1.jpg")
 				So(message.Files[1], ShouldEqual, "image2.jpg")
@@ -114,9 +114,9 @@ func TestMessagesSpec(t *testing.T) {
 				result, err := message.Get()
 				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
-				So(message.Personid, ShouldEqual, "789")
+				So(message.PersonID, ShouldEqual, "789")
 				So(message.PersonEmail, ShouldEqual, "john@doe.com")
-				So(message.Roomid, ShouldEqual, "456")
+				So(message.RoomID, ShouldEqual, "456")
 				So(message.Text, ShouldEqual, "foo")
 				So(message.Files[0], ShouldEqual, "image1.jpg")
 				So(message.Files[1], ShouldEqual, "image2.jpg")
@@ -129,9 +129,9 @@ func TestMessagesSpec(t *testing.T) {
 			})
 			Convey("Post message", func() {
 				message := &Message{
-					Roomid:      "123",
+					RoomID:      "123",
 					Text:        "foobar",
-					Personid:    "789",
+					PersonID:    "789",
 					PersonEmail: "john@doe.com",
 					Files:       []string{"foo.txt", "bar.txt"},
 				}

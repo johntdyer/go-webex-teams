@@ -22,12 +22,12 @@ func TestMembershipsSpec(t *testing.T) {
 	Convey("Given we want to interact with Spark memberships", t, func() {
 		Convey("Should construct proper query strings", func() {
 			Convey("Personid query", func() {
-				memberships := &Memberships{Personid: "123"}
+				memberships := &Memberships{PersonID: "123"}
 				query := memberships.buildQueryString()
 				So(query, ShouldEqual, "?personId=123")
 			})
 			Convey("Roomid query", func() {
-				memberships := &Memberships{Roomid: "123"}
+				memberships := &Memberships{RoomID: "123"}
 				query := memberships.buildQueryString()
 				So(query, ShouldEqual, "?roomId=123")
 			})
@@ -38,15 +38,15 @@ func TestMembershipsSpec(t *testing.T) {
 			})
 			Convey("Personid & Roomid query", func() {
 				memberships := &Memberships{
-					Personid: "123",
-					Roomid:   "456",
+					PersonID: "123",
+					RoomID:   "456",
 				}
 				query := memberships.buildQueryString()
 				So(query, ShouldEqual, "?roomId=456&personId=123")
 			})
 			Convey("Personid & PersonEmail query", func() {
 				memberships := &Memberships{
-					Personid:    "123",
+					PersonID:    "123",
 					PersonEmail: "456",
 				}
 				query := memberships.buildQueryString()
@@ -54,9 +54,9 @@ func TestMembershipsSpec(t *testing.T) {
 			})
 			Convey("Personid & PersonEmail & Roomid query", func() {
 				memberships := &Memberships{
-					Personid:    "123",
+					PersonID:    "123",
 					PersonEmail: "456",
-					Roomid:      "789",
+					RoomID:      "789",
 				}
 				query := memberships.buildQueryString()
 				So(query, ShouldEqual, "?roomId=789&personId=123&personEmail=456")
@@ -66,8 +66,8 @@ func TestMembershipsSpec(t *testing.T) {
 			Convey("It should generate the proper JSON message", func() {
 				membership := &Membership{
 					ID:          "000",
-					Roomid:      "123",
-					Personid:    "456",
+					RoomID:      "123",
+					PersonID:    "456",
 					Ismoderator: true,
 					Ismonitor:   true,
 					Islocked:    true,
@@ -83,8 +83,8 @@ func TestMembershipsSpec(t *testing.T) {
 				err := json.Unmarshal([]byte(MembershipJSON)[:], membership)
 				So(err, ShouldBeNil)
 				So(membership.ID, ShouldEqual, "000")
-				So(membership.Roomid, ShouldEqual, "123")
-				So(membership.Personid, ShouldEqual, "456")
+				So(membership.RoomID, ShouldEqual, "123")
+				So(membership.PersonID, ShouldEqual, "456")
 				So(membership.Ismoderator, ShouldBeTrue)
 				So(membership.Islocked, ShouldBeTrue)
 				So(membership.PersonEmail, ShouldEqual, "jane@doe.com")
@@ -95,8 +95,8 @@ func TestMembershipsSpec(t *testing.T) {
 				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 				So(membership.ID, ShouldEqual, "000")
-				So(membership.Roomid, ShouldEqual, "123")
-				So(membership.Personid, ShouldEqual, "456")
+				So(membership.RoomID, ShouldEqual, "123")
+				So(membership.PersonID, ShouldEqual, "456")
 				So(membership.Ismoderator, ShouldEqual, true)
 			})
 			Convey("Delete membership", func() {
@@ -107,8 +107,8 @@ func TestMembershipsSpec(t *testing.T) {
 			})
 			Convey("Post membership", func() {
 				membership := &Membership{
-					Roomid:      "123",
-					Personid:    "456",
+					RoomID:      "123",
+					PersonID:    "456",
 					PersonEmail: "john@doe.com",
 					Ismoderator: true,
 				}
@@ -119,8 +119,8 @@ func TestMembershipsSpec(t *testing.T) {
 			Convey("Put membership", func() {
 				membership := &Membership{
 					ID:          "1",
-					Roomid:      "123",
-					Personid:    "456",
+					RoomID:      "123",
+					PersonID:    "456",
 					PersonEmail: "john@doe.com",
 					Ismoderator: true,
 				}
@@ -135,20 +135,20 @@ func TestMembershipsSpec(t *testing.T) {
 				err := json.Unmarshal([]byte(MembershipsJSON)[:], &memberships)
 				So(err, ShouldBeNil)
 				So(memberships.Items[0].ID, ShouldEqual, "000")
-				So(memberships.Items[0].Roomid, ShouldEqual, "123")
-				So(memberships.Items[0].Personid, ShouldEqual, "456")
+				So(memberships.Items[0].RoomID, ShouldEqual, "123")
+				So(memberships.Items[0].PersonID, ShouldEqual, "456")
 				So(memberships.Items[0].Ismoderator, ShouldEqual, true)
 				So(memberships.Items[0].Ismonitor, ShouldEqual, true)
 				So(memberships.Items[0].Islocked, ShouldEqual, true)
 			})
 			Convey("Get memberships", func() {
-				memberships := &Memberships{Roomid: "123"}
+				memberships := &Memberships{RoomID: "123"}
 				result, err := memberships.Get()
 				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 				So(memberships.Items[0].ID, ShouldEqual, "000")
-				So(memberships.Items[0].Roomid, ShouldEqual, "123")
-				So(memberships.Items[0].Personid, ShouldEqual, "456")
+				So(memberships.Items[0].RoomID, ShouldEqual, "123")
+				So(memberships.Items[0].PersonID, ShouldEqual, "456")
 				So(memberships.Items[0].Ismoderator, ShouldEqual, true)
 				So(memberships.Items[0].Ismonitor, ShouldEqual, true)
 				So(memberships.Items[0].Islocked, ShouldEqual, true)

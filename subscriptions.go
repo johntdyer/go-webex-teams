@@ -10,8 +10,8 @@ import (
 // Subscription represents a relationship between a person and an application.
 type Subscription struct {
 	ID              string     `json:"id,omitempty"`
-	Personid        string     `json:"personId,omitempty"`
-	Applicationid   string     `json:"applicationId,omitempty"`
+	PersonID        string     `json:"personId,omitempty"`
+	ApplicationID   string     `json:"applicationId,omitempty"`
 	Applicationname string     `json:"applicationName,omitempty"`
 	Created         *time.Time `json:"created,omitempty"`
 }
@@ -21,7 +21,7 @@ type Subscriptions struct {
 	Items []struct {
 		Subscription
 	} `json:"items"`
-	Personid string
+	PersonID string
 	Type     string
 	Links
 }
@@ -137,8 +137,8 @@ func (subscription *Subscription) Delete() (*Result, error) {
 // buildQueryString - Builds the query string
 func (subscriptions *Subscriptions) buildQueryString() string {
 	query := ""
-	if subscriptions.Personid != "" {
-		query = "?personId=" + subscriptions.Personid
+	if subscriptions.PersonID != "" {
+		query = "?personId=" + subscriptions.PersonID
 		if subscriptions.Type != "" {
 			query += "&type=" + url.QueryEscape(subscriptions.Type)
 		}

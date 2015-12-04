@@ -36,6 +36,11 @@ var (
 	ErrInactiveClient = errors.New("You must call InitalizeClient() before using this operation")
 )
 
+// Authorization represents the auth elements required for the API
+type Authorization struct {
+	AccessToken string
+}
+
 // Client represents a new Spark client
 type Client struct {
 	Token            string

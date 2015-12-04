@@ -9,9 +9,9 @@ import (
 // Message represents how people communicate in rooms. Individual messages are timestamped and represented in the Spark app followed by a line break.
 type Message struct {
 	ID          string     `json:"id,omitempty"`
-	Personid    string     `json:"personId,omitempty"`
+	PersonID    string     `json:"personId,omitempty"`
 	PersonEmail string     `json:"personEmail,omitempty"`
-	Roomid      string     `json:"roomId,omitempty"`
+	RoomID      string     `json:"roomId,omitempty"`
 	Text        string     `json:"text,omitempty"`
 	Files       []string   `json:"files,omitempty"`
 	Created     *time.Time `json:"created,omitempty"`
@@ -23,13 +23,13 @@ type Messages struct {
 		Message
 	} `json:"items"`
 	// Used as a URL query paramter
-	Roomid string
+	RoomID string
 	Links
 }
 
 // Get - GETs all messages based on the provided Roomid
 func (msgs *Messages) Get() (*Result, error) {
-	body, links, err := get(MessagesResource + "?roomId=" + msgs.Roomid)
+	body, links, err := get(MessagesResource + "?roomId=" + msgs.RoomID)
 	if err != nil {
 		result := &Result{}
 		json.Unmarshal(body, result)

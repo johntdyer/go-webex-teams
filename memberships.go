@@ -9,8 +9,8 @@ import (
 // Membership represent a relationship between a person and a room.
 type Membership struct {
 	ID          string     `json:"id,omitempty"`
-	Roomid      string     `json:"roomId,omitempty"`
-	Personid    string     `json:"personId,omitempty"`
+	RoomID      string     `json:"roomId,omitempty"`
+	PersonID    string     `json:"personId,omitempty"`
 	Ismoderator bool       `json:"isModerator,omitempty"`
 	Ismonitor   bool       `json:"isMonitor,omitempty"`
 	Islocked    bool       `json:"isLocked,omitempty"`
@@ -23,8 +23,8 @@ type Memberships struct {
 	Items []struct {
 		Membership
 	} `json:"items"`
-	Roomid      string
-	Personid    string
+	RoomID      string
+	PersonID    string
 	PersonEmail string
 	Links
 }
@@ -179,17 +179,17 @@ func (membership *Membership) Put() (*Result, error) {
 // buildQueryString - Builds the query string
 func (memberships *Memberships) buildQueryString() string {
 	query := ""
-	if memberships.Roomid != "" {
-		query = "?roomId=" + memberships.Roomid
-		if memberships.Personid != "" {
-			query += "&personId=" + memberships.Personid
+	if memberships.RoomID != "" {
+		query = "?roomId=" + memberships.RoomID
+		if memberships.PersonID != "" {
+			query += "&personId=" + memberships.PersonID
 		}
 		if memberships.PersonEmail != "" {
 			query += "&personEmail=" + memberships.PersonEmail
 		}
 	} else {
-		if memberships.Personid != "" {
-			query = "?personId=" + memberships.Personid
+		if memberships.PersonID != "" {
+			query = "?personId=" + memberships.PersonID
 			if memberships.PersonEmail != "" {
 				query += "&personEmail=" + memberships.PersonEmail
 			}

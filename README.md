@@ -94,7 +94,7 @@ func main() {
 		Logo:          "logo.jpg",
 		Keywords:      []string{"foo", "bar"},
 		Contactemails: []string{"bob@foo.com", "alice@bar.org"},
-		Redirecturls:  []string{"http://myapp.com/verify", "http://myapp.fr/verify"},
+		RedirectURLs:  []string{"http://myapp.com/verify", "http://myapp.fr/verify"},
 		Scopes:        []string{"foo", "bar"},
 	}
 	result, err := application.Post()
@@ -112,7 +112,7 @@ func main() {
 		Logo:          "logo.jpg",
 		Keywords:      []string{"foo", "bar"},
 		Contactemails: []string{"bob@foo.com", "alice@bar.org"},
-		Redirecturls:  []string{"http://myapp.com/verify", "http://myapp.fr/verify"},
+		RedirectURLs:  []string{"http://myapp.com/verify", "http://myapp.fr/verify"},
 		Scopes:        []string{"foo", "bar"},
 	}
 	result, err := application.Put()
@@ -181,8 +181,8 @@ func main() {
 
 	// Create a membership
 	membership := &Membership{
-		Roomid:      "123",
-		Personid:    "456",
+		RoomID:      "123",
+		PersonID:    "456",
 		PersonEmail: "john@doe.com",
 		Ismoderator: true,
 	}
@@ -196,8 +196,8 @@ func main() {
 	// Update a membership
 	membership := &Membership{
 		ID: 		 "1",
-		Roomid:      "123",
-		Personid:    "456",
+		RoomID:      "123",
+		PersonID:    "456",
 		PersonEmail: "john@doe.com",
 		Ismoderator: true,
 	}
@@ -214,7 +214,7 @@ func main() {
 	// Messages
 	
 	// Get all messages for a room
-	messages := spark.Messages{Roomid: "1234"}
+	messages := spark.Messages{RoomID: "1234"}
 	result, err := messages.Get()
 	if err != nil {
 		fmt.Println(err)
@@ -267,7 +267,7 @@ func main() {
 
 	// Create a message
 	message := &Message{
-		Roomid:	"4567",
+		RoomID:	"4567",
 		Text:	"This is my awesome message!",
 		Files: 	[]string{"http://foo.com/image1.jpg", "http://foo.comimage2.jpg"},
 	}
@@ -342,7 +342,7 @@ func main() {
 	// Rooms
 	
 	// Get all rooms
-	rooms := spark.Rooms{Personid: "abc123"}
+	rooms := spark.Rooms{PersonID: "abc123"}
 	result, err := rooms.Get()
 	if err != nil {
 		fmt.Println(err)
@@ -424,7 +424,7 @@ func main() {
 	// Subscriptions (not implemented in Spark API yet)
 	
 	// Get all subscriptions
-	subscriptions := spark.Subscriptions{Personid: "abc123"}
+	subscriptions := spark.Subscriptions{PersonID: "abc123"}
 	result, err := subscriptions.Get()
 	if err != nil {
 		fmt.Println(err)

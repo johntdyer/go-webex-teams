@@ -27,7 +27,7 @@ func TestWebhooksSpec(t *testing.T) {
 					Resource:  "messages",
 					Event:     "created",
 					Filter:    "roomId=456",
-					Targeturl: "https://example.com/mywebhook",
+					TargetURL: "https://example.com/mywebhook",
 					Name:      "My Awesome Webhook",
 					Created:   &CreatedTime,
 				}
@@ -43,7 +43,7 @@ func TestWebhooksSpec(t *testing.T) {
 				So(webhook.Resource, ShouldEqual, "messages")
 				So(webhook.Event, ShouldEqual, "created")
 				So(webhook.Filter, ShouldEqual, "roomId=456")
-				So(webhook.Targeturl, ShouldEqual, "https://example.com/mywebhook")
+				So(webhook.TargetURL, ShouldEqual, "https://example.com/mywebhook")
 				So(webhook.Name, ShouldEqual, "My Awesome Webhook")
 			})
 			Convey("Get webhook", func() {
@@ -55,7 +55,7 @@ func TestWebhooksSpec(t *testing.T) {
 				So(webhook.Resource, ShouldEqual, "messages")
 				So(webhook.Event, ShouldEqual, "created")
 				So(webhook.Filter, ShouldEqual, "roomId=456")
-				So(webhook.Targeturl, ShouldEqual, "https://example.com/mywebhook")
+				So(webhook.TargetURL, ShouldEqual, "https://example.com/mywebhook")
 				So(webhook.Name, ShouldEqual, "My Awesome Webhook")
 			})
 			Convey("Delete webhook", func() {
@@ -69,7 +69,7 @@ func TestWebhooksSpec(t *testing.T) {
 					Resource:  "messages",
 					Event:     "created",
 					Filter:    "room=123",
-					Targeturl: "http://foo.com/bar",
+					TargetURL: "http://foo.com/bar",
 					Name:      "My Awesome webhook",
 				}
 				result, err := webhook.Post()
@@ -82,7 +82,7 @@ func TestWebhooksSpec(t *testing.T) {
 					Resource:  "messages",
 					Event:     "created",
 					Filter:    "room=123",
-					Targeturl: "http://foo.com/bar",
+					TargetURL: "http://foo.com/bar",
 					Name:      "My Awesome webhook",
 				}
 				result, err := webhook.Put()
@@ -100,7 +100,7 @@ func TestWebhooksSpec(t *testing.T) {
 				So(webhooks.Items[0].Resource, ShouldEqual, "messages")
 				So(webhooks.Items[0].Event, ShouldEqual, "created")
 				So(webhooks.Items[0].Filter, ShouldEqual, "roomId=456")
-				So(webhooks.Items[0].Targeturl, ShouldEqual, "https://example.com/mywebhook")
+				So(webhooks.Items[0].TargetURL, ShouldEqual, "https://example.com/mywebhook")
 				So(webhooks.Items[0].Name, ShouldEqual, "My Awesome Webhook")
 			})
 			Convey("It should raise an error when no link cursor", func() {

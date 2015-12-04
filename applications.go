@@ -14,7 +14,7 @@ type Application struct {
 	Logo              string     `json:"logo,omitempty"`
 	Keywords          []string   `json:"keywords,omitempty"`
 	Contactemails     []string   `json:"contactEmails,omitempty"`
-	Redirecturls      []string   `json:"redirectUrls,omitempty"`
+	RedirectURLs      []string   `json:"redirectUrls,omitempty"`
 	Scopes            []string   `json:"scopes,omitempty"`
 	SubscriptionCount int        `json:"subscriptionCount,omitempty"`
 	ClientID          string     `json:"clientId,omitempty"`

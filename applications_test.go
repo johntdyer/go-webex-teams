@@ -28,7 +28,7 @@ func TestApplicationsSpec(t *testing.T) {
 					Description:       "bar",
 					Logo:              "image.jpg",
 					Keywords:          []string{"foo", "bar"},
-					Redirecturls:      []string{"http://1.com", "http://2.com"},
+					RedirectURLs:      []string{"http://1.com", "http://2.com"},
 					Contactemails:     []string{"john@doe.com", "jane@doe.com"},
 					Scopes:            []string{"scope1", "scope2"},
 					SubscriptionCount: 1000,
@@ -66,7 +66,7 @@ func TestApplicationsSpec(t *testing.T) {
 					Logo:          "logo.jpg",
 					Keywords:      []string{"foo", "bar"},
 					Contactemails: []string{"bob@foo.com", "alice@bar.org"},
-					Redirecturls:  []string{"http://myapp.com/verify", "http://myapp.fr/verify"},
+					RedirectURLs:  []string{"http://myapp.com/verify", "http://myapp.fr/verify"},
 					Scopes:        []string{"foo", "bar"},
 				}
 				result, err := application.Post()
@@ -81,7 +81,7 @@ func TestApplicationsSpec(t *testing.T) {
 					Logo:          "logo.jpg",
 					Keywords:      []string{"foo", "bar"},
 					Contactemails: []string{"bob@foo.com", "alice@bar.org"},
-					Redirecturls:  []string{"http://myapp.com/verify", "http://myapp.fr/verify"},
+					RedirectURLs:  []string{"http://myapp.com/verify", "http://myapp.fr/verify"},
 					Scopes:        []string{"foo", "bar"},
 				}
 				result, err := application.Put()
@@ -153,8 +153,8 @@ func validateApplication(t *testing.T, application *Application) {
 	So(application.Logo, ShouldEqual, "image.jpg")
 	So(application.Keywords[0], ShouldEqual, "foo")
 	So(application.Keywords[1], ShouldEqual, "bar")
-	So(application.Redirecturls[0], ShouldEqual, "http://1.com")
-	So(application.Redirecturls[1], ShouldEqual, "http://2.com")
+	So(application.RedirectURLs[0], ShouldEqual, "http://1.com")
+	So(application.RedirectURLs[1], ShouldEqual, "http://2.com")
 	So(application.Contactemails[0], ShouldEqual, "john@doe.com")
 	So(application.Contactemails[1], ShouldEqual, "jane@doe.com")
 	So(application.Scopes[0], ShouldEqual, "scope1")
@@ -171,8 +171,8 @@ func validateApplications(t *testing.T, applications *Applications) {
 	So(applications.Items[0].Logo, ShouldEqual, "image.jpg")
 	So(applications.Items[0].Keywords[0], ShouldEqual, "foo")
 	So(applications.Items[0].Keywords[1], ShouldEqual, "bar")
-	So(applications.Items[0].Redirecturls[0], ShouldEqual, "http://1.com")
-	So(applications.Items[0].Redirecturls[1], ShouldEqual, "http://2.com")
+	So(applications.Items[0].RedirectURLs[0], ShouldEqual, "http://1.com")
+	So(applications.Items[0].RedirectURLs[1], ShouldEqual, "http://2.com")
 	So(applications.Items[0].Contactemails[0], ShouldEqual, "john@doe.com")
 	So(applications.Items[0].Contactemails[1], ShouldEqual, "jane@doe.com")
 	So(applications.Items[0].Scopes[0], ShouldEqual, "scope1")

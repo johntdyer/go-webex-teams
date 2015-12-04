@@ -21,7 +21,7 @@ func TestSubscriptionsSpec(t *testing.T) {
 	Convey("Given we want to interact with Spark subscriptions", t, func() {
 		Convey("Should construct proper query strings", func() {
 			Convey("Personid query", func() {
-				subscriptions := &Subscriptions{Personid: "123"}
+				subscriptions := &Subscriptions{PersonID: "123"}
 				query := subscriptions.buildQueryString()
 				So(query, ShouldEqual, "?personId=123")
 			})
@@ -32,7 +32,7 @@ func TestSubscriptionsSpec(t *testing.T) {
 			})
 			Convey("Personid & Type query", func() {
 				subscriptions := &Subscriptions{
-					Personid: "123",
+					PersonID: "123",
 					Type:     "string",
 				}
 				query := subscriptions.buildQueryString()
@@ -43,8 +43,8 @@ func TestSubscriptionsSpec(t *testing.T) {
 			Convey("It should generate the proper JSON message", func() {
 				subscription := &Subscription{
 					ID:              "000",
-					Personid:        "123",
-					Applicationid:   "456",
+					PersonID:        "123",
+					ApplicationID:   "456",
 					Applicationname: "foo",
 					Created:         &CreatedTime,
 				}
@@ -57,8 +57,8 @@ func TestSubscriptionsSpec(t *testing.T) {
 				err := json.Unmarshal([]byte(SubscriptionJSON)[:], subscription)
 				So(err, ShouldBeNil)
 				So(subscription.ID, ShouldEqual, "000")
-				So(subscription.Personid, ShouldEqual, "123")
-				So(subscription.Applicationid, ShouldEqual, "456")
+				So(subscription.PersonID, ShouldEqual, "123")
+				So(subscription.ApplicationID, ShouldEqual, "456")
 				So(subscription.Applicationname, ShouldEqual, "foo")
 			})
 			Convey("Get subscription", func() {
@@ -67,8 +67,8 @@ func TestSubscriptionsSpec(t *testing.T) {
 				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 				So(subscription.ID, ShouldEqual, "000")
-				So(subscription.Personid, ShouldEqual, "123")
-				So(subscription.Applicationid, ShouldEqual, "456")
+				So(subscription.PersonID, ShouldEqual, "123")
+				So(subscription.ApplicationID, ShouldEqual, "456")
 				So(subscription.Applicationname, ShouldEqual, "foo")
 			})
 			Convey("Delete subscription", func() {
@@ -84,18 +84,18 @@ func TestSubscriptionsSpec(t *testing.T) {
 				err := json.Unmarshal([]byte(SubscriptionsJSON)[:], &subscriptions)
 				So(err, ShouldBeNil)
 				So(subscriptions.Items[0].ID, ShouldEqual, "000")
-				So(subscriptions.Items[0].Personid, ShouldEqual, "123")
-				So(subscriptions.Items[0].Applicationid, ShouldEqual, "456")
+				So(subscriptions.Items[0].PersonID, ShouldEqual, "123")
+				So(subscriptions.Items[0].ApplicationID, ShouldEqual, "456")
 				So(subscriptions.Items[0].Applicationname, ShouldEqual, "foo")
 			})
 			Convey("Get subscriptions", func() {
-				subscriptions := &Subscriptions{Personid: "123"}
+				subscriptions := &Subscriptions{PersonID: "123"}
 				result, err := subscriptions.Get()
 				So(result, ShouldBeNil)
 				So(err, ShouldBeNil)
 				So(subscriptions.Items[0].ID, ShouldEqual, "000")
-				So(subscriptions.Items[0].Personid, ShouldEqual, "123")
-				So(subscriptions.Items[0].Applicationid, ShouldEqual, "456")
+				So(subscriptions.Items[0].PersonID, ShouldEqual, "123")
+				So(subscriptions.Items[0].ApplicationID, ShouldEqual, "456")
 				So(subscriptions.Items[0].Applicationname, ShouldEqual, "foo")
 			})
 			Convey("It should raise an error when no link cursor", func() {
