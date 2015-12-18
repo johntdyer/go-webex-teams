@@ -8,9 +8,9 @@ import (
 )
 
 var (
-	WebhookJSON          = `{"id":"123","resource":"messages","event":"created","filter":"roomId=456","targetUrl":"https://example.com/mywebhook","name":"My Awesome Webhook","created":"2015-10-18T07:26:16-07:00"}`
+	WebhookJSON          = `{"id":"123","resource":"messages","event":"created","filter":"roomId=456","targetUrl":"https://example.com/mywebhook","name":"My Awesome Webhook","created":"2015-10-18T07:26:16Z"}`
 	WebhooksJSON         = `{"items":[` + WebhookJSON + `]}`
-	WebhooksResponseJSON = `{"id":"123","resource":"messages","event":"created","filter":"roomId=456","targetUrl":"https://example.com/mywebhook","name":"My Awesome Webhook","created":"2015-10-18T14:26:16+00:00"}`
+	WebhooksResponseJSON = `{"id":"123","resource":"messages","event":"created","filter":"roomId=456","targetUrl":"https://example.com/mywebhook","name":"My Awesome Webhook","created":"2015-10-18T07:26:16Z"}`
 )
 
 func TestWebhooksSpec(t *testing.T) {

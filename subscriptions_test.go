@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	SubscriptionJSON  = `{"id":"000","personId":"123","applicationId":"456","applicationName":"foo","created":"2015-10-18T07:26:16-07:00"}`
+	SubscriptionJSON  = `{"id":"000","personId":"123","applicationId":"456","applicationName":"foo","created":"2015-10-18T07:26:16Z"}`
 	SubscriptionsJSON = `{"items":[` + SubscriptionJSON + `]}`
 )
 

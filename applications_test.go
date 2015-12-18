@@ -8,9 +8,9 @@ import (
 )
 
 var (
-	ApplicationJSON         = `{"id":"123","name":"foo","description":"bar","logo":"image.jpg","keywords":["foo","bar"],"contactEmails":["john@doe.com","jane@doe.com"],"redirectUrls":["http://1.com","http://2.com"],"scopes":["scope1","scope2"],"subscriptionCount":1000,"clientId":"123","clientSecret":"456","created":"2015-10-18T07:26:16-07:00"}`
+	ApplicationJSON         = `{"id":"123","name":"foo","description":"bar","logo":"image.jpg","keywords":["foo","bar"],"contactEmails":["john@doe.com","jane@doe.com"],"redirectUrls":["http://1.com","http://2.com"],"scopes":["scope1","scope2"],"subscriptionCount":1000,"clientId":"123","clientSecret":"456","created":"2015-10-18T07:26:16Z"}`
 	ApplicationsJSON        = `{"items":[` + ApplicationJSON + `]}`
-	ApplicationResponseJSON = `{"id":"123","name":"Out of Office Assistant","description":"Does awesome things","logo":"logo.jpg","keywords":["foo","bar"],"contactEmails":["bob@foo.com","alice@bar.org"],"redirectUrls":["http://myapp.com/verify","http://myapp.fr/verify"],"scopes":["foo","bar"],"subscriptionCount":1000,"clientId":"456","clientSecret":"secret","created":"2015-10-18T07:26:16-07:00"}`
+	ApplicationResponseJSON = `{"id":"123","name":"Out of Office Assistant","description":"Does awesome things","logo":"logo.jpg","keywords":["foo","bar"],"contactEmails":["bob@foo.com","alice@bar.org"],"redirectUrls":["http://myapp.com/verify","http://myapp.fr/verify"],"scopes":["foo","bar"],"subscriptionCount":1000,"clientId":"456","clientSecret":"secret","created":"2015-10-18T07:26:16Z"}`
 )
 
 func TestApplicationsSpec(t *testing.T) {

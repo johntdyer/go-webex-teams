@@ -8,9 +8,9 @@ import (
 )
 
 var (
-	MembershipJSON         = `{"id":"000","roomId":"123","personId":"456","isModerator":true,"isMonitor":true,"isLocked":true,"personEmail":"jane@doe.com","created":"2015-10-18T07:26:16-07:00"}`
+	MembershipJSON         = `{"id":"000","roomId":"123","personId":"456","isModerator":true,"isMonitor":true,"isLocked":true,"personEmail":"jane@doe.com","created":"2015-10-18T07:26:16Z"}`
 	MembershipsJSON        = `{"items":[` + MembershipJSON + `]}`
-	MembershipResponseJSON = `{"id":"1","roomId":"123","personId":"456","personEmail":"john@doe.com","isModerator":true,"isMonitor":true,"created":"2015-10-18T07:26:16-07:00"}`
+	MembershipResponseJSON = `{"id":"1","roomId":"123","personId":"456","personEmail":"john@doe.com","isModerator":true,"isMonitor":true,"created":"2015-10-18T07:26:16Z"}`
 )
 
 func TestMembershipsSpec(t *testing.T) {

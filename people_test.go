@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	PersonJSON = `{"id":"OTZhYmMy","emails":["johnny.chang@foomail.com"],"displayName":"John Andersen","avatar":"TODO","created":"2015-10-18T07:26:16-07:00"}`
+	PersonJSON = `{"id":"OTZhYmMy","emails":["johnny.chang@foomail.com"],"displayName":"John Andersen","avatar":"TODO","created":"2015-10-18T07:26:16Z"}`
 	PeopleJSON = `{"items":[` + PersonJSON + `]}`
 )
 

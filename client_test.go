@@ -13,8 +13,8 @@ import (
 )
 
 var (
-	stubNow         = func() time.Time { return time.Unix(1445178376, 0) }
-	CreatedTime     = time.Unix(1445178376, 0)
+	stubNow         = func() time.Time { return time.Unix(1445153176, 0).UTC() }
+	CreatedTime     = time.Unix(1445153176, 0).UTC()
 	APIError        = `{"message":"Failed to get conversation.","errors":[{"description":"Failed to get conversation."}],"trackingId":"go-spark_6D15B3DA-BF4B-0601-C7DB-F9315AE0783E_76"}`
 	AccessTokenJSON = `{"access_token":"ZDI3MGEyYzQtNmFlNS00NDNhLWFlNzAtZGVjNjE0MGU1OGZmZWNmZDEwN2ItYTU3","expires_in":5999,"refresh_token":"MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDEyMzQ1Njc4OTEyMzQ1Njc4","refresh_token_expires_in":86399}`
 )

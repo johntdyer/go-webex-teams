@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	RoomJSON         = `{"id":"123","title":"foo","sipAddress":"foo@bar.com","members":["foo","bar"],"created":"2015-10-18T07:26:16-07:00"}`
+	RoomJSON         = `{"id":"123","title":"foo","sipAddress":"foo@bar.com","members":["foo","bar"],"created":"2015-10-18T07:26:16Z"}`
 	RoomsJSON        = `{"items":[` + RoomJSON + `]}`
 	RoomResponseJSON = `{"title":"Project Unicorn - Sprint 0","members":["john@example.com","123"]}`
 )

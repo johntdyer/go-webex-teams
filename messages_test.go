@@ -8,9 +8,9 @@ import (
 )
 
 var (
-	MessageJSON         = `{"id":"123","personId":"789","personEmail":"john@doe.com","roomId":"456","text":"foo","files":["image1.jpg","image2.jpg"],"created":"2015-10-18T07:26:16-07:00"}`
+	MessageJSON         = `{"id":"123","personId":"789","personEmail":"john@doe.com","roomId":"456","text":"foo","files":["image1.jpg","image2.jpg"],"created":"2015-10-18T07:26:16Z"}`
 	MessagesJSON        = `{"items":[` + MessageJSON + `]}`
-	MessageResponseJSON = `{"id":"123","personId":"456","personEmail":"matt@example.com","roomId":"789","text":"PROJECT UPDATE - A new project project plan has been published on Box","files":["http://www.example.com/images/media.png"],"created":"2015-10-18T14:26:16+00:00"}`
+	MessageResponseJSON = `{"id":"123","personId":"456","personEmail":"matt@example.com","roomId":"789","text":"PROJECT UPDATE - A new project project plan has been published on Box","files":["http://www.example.com/images/media.png"],"created":"2015-10-18T14:26:16Z"}`
 )
 
 func TestMessagesSpec(t *testing.T) {
