@@ -14,12 +14,12 @@ import (
 )
 
 func main() {
-	authorization := &Authorization{os.Getenv("SPARK_TOKEN")}
+	authorization := &spark.Authorization{AccessToken: os.Getenv("SPARK_TOKEN")}
 	spark.InitClient(authorization)
 
 	// Get all applications
 	applications := spark.Applications{}
-	err := applications.Get()
+	_, err := applications.Get()
 	fmt.Println(spark.TrackingID())
 	if err != nil {
 		fmt.Println(err)

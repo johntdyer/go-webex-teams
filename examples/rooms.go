@@ -14,7 +14,7 @@ import (
 )
 
 func main() {
-	authorization := &Authorization{os.Getenv("SPARK_TOKEN")}
+	authorization := &spark.Authorization{AccessToken: os.Getenv("SPARK_TOKEN")}
 	spark.InitClient(authorization)
 
 	// Rooms
@@ -43,7 +43,7 @@ func main() {
 
 	// // Create a room
 	newRoom := &spark.Room{Title: "IFTTT Notifications Room"}
-	err := newRoom.Post()
+	_, err := newRoom.Post()
 	if err != nil {
 		fmt.Println(err)
 	} else {

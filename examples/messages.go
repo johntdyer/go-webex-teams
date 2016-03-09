@@ -15,7 +15,7 @@ import (
 )
 
 func main() {
-	authorization := &Authorization{os.Getenv("SPARK_TOKEN")}
+	authorization := &spark.Authorization{AccessToken: os.Getenv("SPARK_TOKEN")}
 	spark.InitClient(authorization)
 
 	// Get all rooms
@@ -27,8 +27,8 @@ func main() {
 	}
 
 	// Get all messages from a room
-	messages := spark.Messages{Roomid: rooms.Items[1].ID}
-	err = messages.Get()
+	messages := spark.Messages{RoomID: rooms.Items[1].ID}
+	_, err = messages.Get()
 	fmt.Println(spark.TrackingID())
 	fmt.Println("Displaying messages for room -> " + rooms.Items[1].Title)
 	if err != nil {
@@ -40,7 +40,7 @@ func main() {
 		}
 		// Display an individual message
 		message := spark.Message{ID: messages.Items[0].ID}
-		err = message.Get()
+		_, err = message.Get()
 		fmt.Println(spark.TrackingID())
 		if err != nil {
 			fmt.Println(err)
@@ -52,11 +52,11 @@ func main() {
 
 	// Create a message in the test room of SPARK_TEST_ROOM
 	message := spark.Message{
-		Roomid: os.Getenv("SPARK_TEST_ROOM"),
+		RoomID: os.Getenv("SPARK_TEST_ROOM"),
 		Text:   "Hello for go-spark!",
 		Files:  []string{"http://49.media.tumblr.com/0cb3d95bf6263c0e27e2b141d0bd9409/tumblr_nnjbwx8fNo1rf78nfo1_500.gif"},
 	}
-	err = message.Post()
+	_, err = message.Post()
 	fmt.Println(spark.TrackingID())
 	if err != nil {
 		fmt.Println(err)

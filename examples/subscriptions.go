@@ -15,12 +15,12 @@ import (
 )
 
 func main() {
-	authorization := &Authorization{os.Getenv("SPARK_TOKEN")}
+	authorization := &spark.Authorization{AccessToken: os.Getenv("SPARK_TOKEN")}
 	spark.InitClient(authorization)
 
 	// Get all rooms
-	subscriptions := spark.Subscriptions{Personid: "456"}
-	err := subscriptions.Get()
+	subscriptions := spark.Subscriptions{PersonID: "456"}
+	_, err := subscriptions.Get()
 	fmt.Println(spark.TrackingID())
 	if err != nil {
 		fmt.Println(err)

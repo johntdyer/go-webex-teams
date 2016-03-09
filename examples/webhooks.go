@@ -15,12 +15,12 @@ import (
 )
 
 func main() {
-	authorization := &Authorization{os.Getenv("SPARK_TOKEN")}
+	authorization := &spark.Authorization{AccessToken: os.Getenv("SPARK_TOKEN")}
 	spark.InitClient(authorization)
 
 	// Get all rooms
 	webhooks := spark.Webhooks{}
-	err := webhooks.Get()
+	_, err := webhooks.Get()
 	fmt.Println(spark.TrackingID())
 	if err != nil {
 		fmt.Println(err)
@@ -43,10 +43,10 @@ func main() {
 		Resource:  "messages",
 		Event:     "created",
 		Filter:    "roomId=Y2lzY29zcGFyazovL3VzL1JPT00vYmJjZWIxYWQtNDNmMS0zYjU4LTkxNDctZjE0YmIwYzRkMTU0",
-		Targeturl: "https://example.com/hook",
+		TargetURL: "https://example.com/hook",
 		Name:      "Awesomesauce",
 	}
-	err = webhook.Post()
+	_, err = webhook.Post()
 	fmt.Println(spark.TrackingID())
 	if err != nil {
 		fmt.Println(err)

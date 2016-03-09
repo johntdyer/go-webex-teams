@@ -14,14 +14,14 @@ import (
 )
 
 func main() {
-	authorization := &Authorization{os.Getenv("SPARK_TOKEN")}
+	authorization := &spark.Authorization{AccessToken: os.Getenv("SPARK_TOKEN")}
 	spark.InitClient(authorization)
 
 	// People
 
 	// Get people
 	people := spark.People{Email: "jgoecke@cisco.com"}
-	err := people.Get()
+	_, err := people.Get()
 	fmt.Println(spark.TrackingID())
 	if err != nil {
 		fmt.Println(err)
@@ -33,7 +33,7 @@ func main() {
 
 	// Get a person
 	person := spark.Person{ID: people.Items[0].ID}
-	err = person.Get()
+	_, err = person.Get()
 	fmt.Println(spark.TrackingID())
 	if err != nil {
 		fmt.Println(err)
@@ -43,7 +43,7 @@ func main() {
 
 	// Get the authenticated user
 	person = spark.Person{}
-	err = person.GetMe()
+	_, err = person.GetMe()
 	fmt.Println(spark.TrackingID())
 	if err != nil {
 		fmt.Println(err)
