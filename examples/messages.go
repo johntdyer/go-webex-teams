@@ -20,7 +20,7 @@ func main() {
 
 	// Get all rooms
 	rooms := spark.Rooms{}
-	err := rooms.Get()
+	_, err := rooms.Get()
 	fmt.Println(spark.TrackingID())
 	if err != nil {
 		fmt.Println(err)
