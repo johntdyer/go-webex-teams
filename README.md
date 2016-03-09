@@ -140,7 +140,7 @@ func main() {
 ### Memberships
 ```go
 	// Memberships
-	
+
 	// Get all memberships
 	memberships := spark.Memberships{PersonEmail: "john@doe.com"}
 	result, err := memberships.Get()
@@ -226,7 +226,7 @@ func main() {
 ### Messages
 ```go
 	// Messages
-	
+
 	// Get all messages for a room
 	messages := spark.Messages{RoomID: "1234"}
 	result, err := messages.Get()
@@ -296,7 +296,7 @@ func main() {
 ### People
 ```go
 	// People
-	
+
 	// Get people
 	people := spark.People{PersonEmail: "john@doe.com"}
 	result, err := people.Get()
@@ -354,9 +354,9 @@ func main() {
 ### Rooms
 ```go
 	// Rooms
-	
+
 	// Get all rooms
-	rooms := spark.Rooms{PersonID: "abc123"}
+	rooms := spark.Rooms{}
 	result, err := rooms.Get()
 	if err != nil {
 		fmt.Println(err)
@@ -436,7 +436,7 @@ func main() {
 ### Subscriptions
 ```go
 	// Subscriptions (not implemented in Spark API yet)
-	
+
 	// Get all subscriptions
 	subscriptions := spark.Subscriptions{PersonID: "abc123"}
 	result, err := subscriptions.Get()
@@ -493,7 +493,7 @@ func main() {
 ### Webhooks
 ```go
 	// Webhooks
-	
+
 	// Get all webhooks
 	webhooks := spark.Webhooks{}
 	result, err := webhooks.Get()
