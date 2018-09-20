@@ -1,4 +1,4 @@
-package spark
+package webexTeams
 
 import (
 	"encoding/json"
@@ -19,7 +19,7 @@ func TestRoomsSpec(t *testing.T) {
 	previousURL := BaseURL
 	BaseURL = ts.URL
 	InitClient(&Authorization{AccessToken: "123"})
-	Convey("Given we want to interact with Spark rooms", t, func() {
+	Convey("Given we want to interact with Teams rooms", t, func() {
 		Convey("For rooms", func() {
 			Convey("Get rooms", func() {
 				rooms := &Rooms{}

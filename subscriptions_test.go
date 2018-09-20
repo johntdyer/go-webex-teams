@@ -1,4 +1,4 @@
-package spark
+package webexTeams
 
 import (
 	"encoding/json"
@@ -18,7 +18,7 @@ func TestSubscriptionsSpec(t *testing.T) {
 	previousURL := BaseURL
 	BaseURL = ts.URL
 	InitClient(&Authorization{AccessToken: "123"})
-	Convey("Given we want to interact with Spark subscriptions", t, func() {
+	Convey("Given we want to interact with Teams subscriptions", t, func() {
 		Convey("Should construct proper query strings", func() {
 			Convey("Personid query", func() {
 				subscriptions := &Subscriptions{PersonID: "123"}

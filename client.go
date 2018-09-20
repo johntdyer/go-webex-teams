@@ -1,4 +1,4 @@
-package spark
+package webexTeams
 
 import (
 	"bytes"
@@ -14,8 +14,8 @@ import (
 )
 
 var (
-	// BaseURL              = "https://api.ciscospark.com/v1"
-	BaseURL = "https://api.ciscospark.com/hydra/api/v1"
+	BaseURL              = "https://api.webex.com/v1"
+	// BaseURL = "https://api.webex.com/hydra/api/v1"
 	// ApplicationsResource is the resource for managing applications
 	ApplicationsResource = "/applications"
 	// MembershipsResource is the resource for managing memberships
@@ -30,7 +30,7 @@ var (
 	SubscriptionsResource = "/subscriptions"
 	// WebhooksResource is the resource for managing webhooks
 	WebhooksResource = "/webhooks"
-	// ActiveClient represents the client used to connect to the Spark API
+	// ActiveClient represents the client used to connect to the Teams API
 	ActiveClient = &Client{}
 	// ErrInactiveClient raises if you have not done an InitClient()
 	ErrInactiveClient = errors.New("You must call InitalizeClient() before using this operation")
@@ -49,7 +49,7 @@ type Authorization struct {
 	GrantType             string `json:"grant_type,omitempty"`
 }
 
-// Client represents a new Spark client
+// Client represents a new Teams client
 type Client struct {
 	Authorization    *Authorization
 	TrackingIDPrefix string
@@ -67,7 +67,7 @@ type Links struct {
 	PreviousURL string
 }
 
-// Result represents an error returned from the Spark API
+// Result represents an error returned from the Teams API
 type Result struct {
 	Message string `json:"message"`
 	Errors  []struct {
@@ -76,12 +76,12 @@ type Result struct {
 	Trackingid string `json:"trackingId"`
 }
 
-// InitClient - Generates a new Spark client taking and setting the auth token
+// InitClient - Generates a new Teams client taking and setting the auth token
 func InitClient(authorization *Authorization) error {
 	ActiveClient = &Client{
 		Authorization:    authorization,
 		HTTP:             &http.Client{},
-		TrackingIDPrefix: "go-spark_" + uuid(),
+		TrackingIDPrefix: "go-webex-teams_" + uuid(),
 		Sequence:         0,
 		Increment:        make(chan int),
 		Finished:         make(chan bool),
@@ -224,7 +224,7 @@ func parseURL(url string) string {
 
 // TrackingID returns the current value used to set the
 // unique TrackingID HTTP header with each request to the
-// Spark API
+// Teams API
 func TrackingID() string {
 	return ActiveClient.TrackingIDPrefix + "_" + strconv.Itoa(ActiveClient.Sequence)
 }

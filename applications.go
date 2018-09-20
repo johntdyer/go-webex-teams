@@ -1,4 +1,4 @@
-package spark
+package webexTeams
 
 import (
 	"encoding/json"
@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-// Application represents how a developer requests access to perform Spark operations on behalf of a user
+// Application represents how a developer requests access to perform Teams operations on behalf of a user
 type Application struct {
 	ID                string     `json:"id,omitempty"`
 	Name              string     `json:"name,omitempty"`

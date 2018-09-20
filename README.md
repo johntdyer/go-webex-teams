@@ -1,21 +1,12 @@
-# go-spark
+# go-webex-teams
 
-A [Go](https://golang.org/) library for the [Spark REST APIs](https://developer.ciscospark.com).
+A [Go](https://golang.org/) library for the [WebEx Teams REST APIs](https://developer.webex.com).
 
 ## Installation
 
-`go get sqbu-github.cisco.com/jgoecke/go-spark`
+`go get github.com/johntdyer/go-webex-teams`
 
-If this fails, you may also do:
 
-```
-cd $GOPATH/src
-mkdir sqbu-github.cisco.com
-cd sqbu-github.cisco.com
-mkdir jgoecke
-cd jgoecke
-git clone https://sqbu-github.cisco.com/jgoecke/go-spark.git
-```
 
 ## Usage
 
@@ -24,7 +15,7 @@ package main
 
 import (
   "fmt"
-  "sqbu-github.cisco.com/jgoecke/go-spark"
+  "github.com/johntdyer/go-webex-teams"
 )
 
 func main() {
@@ -42,15 +33,15 @@ func main() {
 		Code: "567",
 		RedirectURL: "http://your-server.com/auth?code=567",
 	}
-	spark.InitClient(authorization)
+	teams.InitClient(authorization)
 ```
 
 ### Applications
 ```go
-	// Applications (not implemented in Spark API yet)
+	// Applications (not implemented in Teams API yet)
 
 	// Get all applications
-	applications := spark.Applications{}
+	applications := teams.Applications{}
 	result, err := applications.Get()
 	if err != nil {
 		fmt.Println(err)
@@ -85,7 +76,7 @@ func main() {
 	fmt.Println(applications)
 
 	// Get an application by ID
-	application := spark.Application{ID: "123"}
+	application := teams.Application{ID: "123"}
 	result, err := application.Get()
 	if err != nil {
 		fmt.Println(err)
@@ -94,7 +85,7 @@ func main() {
 	fmt.Println(application)
 
 	// Delete an application by ID
-	application := spark.Application{ID: "123"}
+	application := teams.Application{ID: "123"}
 	result, err := application.Delete()
 	if err != nil {
 		fmt.Println(err)
@@ -142,7 +133,7 @@ func main() {
 	// Memberships
 
 	// Get all memberships
-	memberships := spark.Memberships{PersonEmail: "john@doe.com"}
+	memberships := teams.Memberships{PersonEmail: "john@doe.com"}
 	result, err := memberships.Get()
 	if err != nil {
 		fmt.Println(err)
@@ -177,7 +168,7 @@ func main() {
 	fmt.Println(memberships)
 
 	// Get an membership by ID
-	membership := spark.Membership{ID: "123"}
+	membership := teams.Membership{ID: "123"}
 	result, err := membership.Get()
 	if err != nil {
 		fmt.Println(err)
@@ -186,7 +177,7 @@ func main() {
 	fmt.Println(membership)
 
 	// Delete an membership by ID
-	membership := spark.Membership{ID: "123"}
+	membership := teams.Membership{ID: "123"}
 	result, err := membership.Delete()
 	if err != nil {
 		fmt.Println(err)
@@ -228,7 +219,7 @@ func main() {
 	// Messages
 
 	// Get all messages for a room
-	messages := spark.Messages{RoomID: "1234"}
+	messages := teams.Messages{RoomID: "1234"}
 	result, err := messages.Get()
 	if err != nil {
 		fmt.Println(err)
@@ -263,7 +254,7 @@ func main() {
 	fmt.Println(messages)
 
 	// Get an message by ID
-	message := spark.Message{ID: "5678"}
+	message := teams.Message{ID: "5678"}
 	result, err := message.Get()
 	if err != nil {
 		fmt.Println(err)
@@ -272,7 +263,7 @@ func main() {
 	fmt.Println(message)
 
 	// Delete an message by ID
-	message := spark.Message{ID: "5678"}
+	message := teams.Message{ID: "5678"}
 	result, err := message.Delete()
 	if err != nil {
 		fmt.Println(err)
@@ -298,7 +289,7 @@ func main() {
 	// People
 
 	// Get people
-	people := spark.People{PersonEmail: "john@doe.com"}
+	people := teams.People{PersonEmail: "john@doe.com"}
 	result, err := people.Get()
 	if err != nil {
 		fmt.Println(err)
@@ -333,7 +324,7 @@ func main() {
 	fmt.Println(people)
 
 	// Get a person by ID
-	person := spark.Person{ID: "123"}
+	person := teams.Person{ID: "123"}
 	result, err := person.Get()
 	if err != nil {
 		fmt.Println(err)
@@ -342,7 +333,7 @@ func main() {
 	fmt.Println(person
 
 	// Get the current authenticated user
-	person := spark.Person{}
+	person := teams.Person{}
 	result, err := person.GetMe()
 	if err != nil {
 		fmt.Println(err)
@@ -356,7 +347,7 @@ func main() {
 	// Rooms
 
 	// Get all rooms
-	rooms := spark.Rooms{}
+	rooms := teams.Rooms{}
 	result, err := rooms.Get()
 	if err != nil {
 		fmt.Println(err)
@@ -391,7 +382,7 @@ func main() {
 	fmt.Println(rooms)
 
 	// Get a room by ID
-	room := spark.Room{ID: "123"}
+	room := teams.Room{ID: "123"}
 	result, err := room.Get()
 	if err != nil {
 		fmt.Println(err)
@@ -400,7 +391,7 @@ func main() {
 	fmt.Println(room)
 
 	// Delete a room by ID
-	room := spark.Room{ID: "123"}
+	room := teams.Room{ID: "123"}
 	result, err := room.Delete()
 	if err != nil {
 		fmt.Println(err)
@@ -435,10 +426,10 @@ func main() {
 
 ### Subscriptions
 ```go
-	// Subscriptions (not implemented in Spark API yet)
+	// Subscriptions (not implemented in Teams API yet)
 
 	// Get all subscriptions
-	subscriptions := spark.Subscriptions{PersonID: "abc123"}
+	subscriptions := teams.Subscriptions{PersonID: "abc123"}
 	result, err := subscriptions.Get()
 	if err != nil {
 		fmt.Println(err)
@@ -473,7 +464,7 @@ func main() {
 	fmt.Println(subscriptions)
 
 	// Get a subscription by ID
-	subscription := spark.Subscription{ID: "123"}
+	subscription := teams.Subscription{ID: "123"}
 	result, err := subscription.Get()
 	if err != nil {
 		fmt.Println(err)
@@ -482,7 +473,7 @@ func main() {
 	fmt.Println(subscription)
 
 	// Delete a subscription by ID
-	subscription := spark.Subscription{ID: "123"}
+	subscription := teams.Subscription{ID: "123"}
 	result, err := room.Delete()
 	if err != nil {
 		fmt.Println(err)
@@ -495,7 +486,7 @@ func main() {
 	// Webhooks
 
 	// Get all webhooks
-	webhooks := spark.Webhooks{}
+	webhooks := teams.Webhooks{}
 	result, err := webhooks.Get()
 	if err != nil {
 		fmt.Println(err)
@@ -530,7 +521,7 @@ func main() {
 	fmt.Println(webhooks)
 
 	// Get a webhook by ID
-	webhook := spark.Webhook{ID: "123"}
+	webhook := teams.Webhook{ID: "123"}
 	result, err := webhook.Get()
 	if err != nil {
 		fmt.Println(err)
@@ -539,7 +530,7 @@ func main() {
 	fmt.Println(webhook)
 
 	// Delete a webhook by ID
-	webhook := spark.Webhook{ID: "123"}
+	webhook := teams.Webhook{ID: "123"}
 	result, err := room.Delete()
 	if err != nil {
 		fmt.Println(err)
@@ -565,5 +556,5 @@ func main() {
 
 ## Notes
 
-* To use the examples in the /examples folder, you must set an environment variable SPARK_TOKEN. You may obtain a token by logging in @ [http://developer.ciscospark.com](http://developer.ciscospark.com).
-* This library also implements the TrackingID header used to trace requests in the Spark platform. If troubleshooting and working with our support, output the current values, seen in the example above, and send along with your support request.
+* To use the examples in the /examples folder, you must set an environment variable WEBEX_TEAMS_TOKEN. You may obtain a token by logging in @ [http://developer.webex.com](http://developer.webex.com).
+* This library also implements the TrackingID header used to trace requests in the Teams platform. If troubleshooting and working with our support, output the current values, seen in the example above, and send along with your support request.

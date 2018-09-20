@@ -1,8 +1,8 @@
 /*
 You must have these environment variables set to use this example:
 
-SPARK_TOKEN must be a valid developer token
-SPARK_TEST_ROOM is the Room ID of the room you want to POST test messages into
+WEBEX_TEAMS_TOKEN must be a valid developer token
+WEBEX_TEAMS_TEST_ROOM is the Room ID of the room you want to POST test messages into
 */
 
 package main
@@ -11,17 +11,17 @@ import (
 	"fmt"
 	"os"
 
-	"sqbu-github.cisco.com/jgoecke/go-spark"
+	"github.com/johntdyer/go-webex-teams"
 )
 
 func main() {
-	authorization := &spark.Authorization{AccessToken: os.Getenv("SPARK_TOKEN")}
-	spark.InitClient(authorization)
+	authorization := &teams.Authorization{AccessToken: os.Getenv("WEBEX_TEAMS_TOKEN")}
+	teams.InitClient(authorization)
 
 	// Get all rooms
-	webhooks := spark.Webhooks{}
+	webhooks := teams.Webhooks{}
 	_, err := webhooks.Get()
-	fmt.Println(spark.TrackingID())
+	fmt.Println(teams.TrackingID())
 	if err != nil {
 		fmt.Println(err)
 	} else {
@@ -39,7 +39,7 @@ func main() {
 	//            "name" : "My Awesome Webhook"
 	//          }
 
-	webhook := spark.Webhook{
+	webhook := teams.Webhook{
 		Resource:  "messages",
 		Event:     "created",
 		Filter:    "roomId=Y2lzY29zcGFyazovL3VzL1JPT00vYmJjZWIxYWQtNDNmMS0zYjU4LTkxNDctZjE0YmIwYzRkMTU0",
@@ -47,7 +47,7 @@ func main() {
 		Name:      "Awesomesauce",
 	}
 	_, err = webhook.Post()
-	fmt.Println(spark.TrackingID())
+	fmt.Println(teams.TrackingID())
 	if err != nil {
 		fmt.Println(err)
 	} else {

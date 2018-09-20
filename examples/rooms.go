@@ -1,7 +1,7 @@
 /*
 You must have these environment variables set to use this example:
 
-SPARK_TOKEN must be a valid developer token
+WEBEX_TEAMS_TOKEN must be a valid developer token
 */
 
 package main
@@ -10,17 +10,17 @@ import (
 	"fmt"
 	"os"
 
-	"sqbu-github.cisco.com/jgoecke/go-spark"
+	"github.com/johntdyer/go-webex-teams"
 )
 
 func main() {
-	authorization := &spark.Authorization{AccessToken: os.Getenv("SPARK_TOKEN")}
-	spark.InitClient(authorization)
+	authorization := &teams.Authorization{AccessToken: os.Getenv("WEBEX_TEAMS_TOKEN")}
+	teams.InitClient(authorization)
 
 	// Rooms
 
 	// // Get all rooms
-	// rooms := spark.Rooms{}
+	// rooms := teams.Rooms{}
 	// err := rooms.Get()
 	// if err != nil {
 	// 	fmt.Println(err)
@@ -28,7 +28,7 @@ func main() {
 	// 	for _, room := range rooms.Items {
 	// 		fmt.Println(room)
 	// 	}
-	// 	fmt.Println(spark.TrackingID())
+	// 	fmt.Println(teams.TrackingID())
 	// }
 
 	// // Get a room by ID
@@ -38,17 +38,17 @@ func main() {
 	// 	fmt.Println(err)
 	// } else {
 	// 	fmt.Println(room)
-	// 	fmt.Println(spark.TrackingID())
+	// 	fmt.Println(teams.TrackingID())
 	// }
 
 	// // Create a room
-	newRoom := &spark.Room{Title: "IFTTT Notifications Room"}
+	newRoom := &teams.Room{Title: "IFTTT Notifications Room"}
 	_, err := newRoom.Post()
 	if err != nil {
 		fmt.Println(err)
 	} else {
 		fmt.Println(newRoom)
-		fmt.Println(spark.TrackingID())
+		fmt.Println(teams.TrackingID())
 	}
 
 	// time.Sleep(3 * time.Second)
@@ -59,7 +59,7 @@ func main() {
 	// 	fmt.Println(err)
 	// } else {
 	// 	fmt.Println(newRoom)
-	// 	fmt.Println(spark.TrackingID())
+	// 	fmt.Println(teams.TrackingID())
 	// }
 
 	// time.Sleep(3 * time.Second)
@@ -69,6 +69,6 @@ func main() {
 	// 	fmt.Println(err)
 	// } else {
 	// 	fmt.Println("Room " + newRoom.Title + " deleted!")
-	// 	fmt.Println(spark.TrackingID())
+	// 	fmt.Println(teams.TrackingID())
 	// }
 }

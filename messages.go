@@ -1,12 +1,14 @@
-package spark
+package webexTeams
 
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"time"
+
 )
 
-// Message represents how people communicate in rooms. Individual messages are timestamped and represented in the Spark app followed by a line break.
+// Message represents how people communicate in rooms. Individual messages are timestamped and represented in the Teams app followed by a line break.
 type Message struct {
 	ID          string     `json:"id,omitempty"`
 	PersonID    string     `json:"personId,omitempty"`
@@ -139,6 +141,7 @@ func (msg *Message) Delete() (*Result, error) {
 
 // Post - Creates (POSTs) a new message
 func (msg *Message) Post() (*Result, error) {
+	fmt.Println("ERRRRR")
 	body, err := json.Marshal(msg)
 	if err != nil {
 		return nil, err

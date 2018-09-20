@@ -1,7 +1,7 @@
 /*
 You must have these environment variables set to use this example:
 
-SPARK_TOKEN must be a valid developer token
+WEBEX_TEAMS_TOKEN must be a valid developer token
 */
 
 package main
@@ -10,17 +10,18 @@ import (
 	"fmt"
 	"os"
 
-	"sqbu-github.cisco.com/jgoecke/go-spark"
+	"github.com/johntdyer/go-webex-teams"
+
 )
 
 func main() {
-	authorization := &spark.Authorization{AccessToken: os.Getenv("SPARK_TOKEN")}
-	spark.InitClient(authorization)
+	authorization := &teams.Authorization{AccessToken: os.Getenv("WEBEX_TEAMS_TOKEN")}
+	teams.InitClient(authorization)
 
 	// Get all applications
-	applications := spark.Applications{}
+	applications := teams.Applications{}
 	_, err := applications.Get()
-	fmt.Println(spark.TrackingID())
+	fmt.Println(teams.TrackingID())
 	if err != nil {
 		fmt.Println(err)
 	} else {

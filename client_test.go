@@ -1,4 +1,4 @@
-package spark
+package webexTeams
 
 import (
 	"encoding/json"
@@ -15,7 +15,7 @@ import (
 var (
 	stubNow         = func() time.Time { return time.Unix(1445153176, 0).UTC() }
 	CreatedTime     = time.Unix(1445153176, 0).UTC()
-	APIError        = `{"message":"Failed to get conversation.","errors":[{"description":"Failed to get conversation."}],"trackingId":"go-spark_6D15B3DA-BF4B-0601-C7DB-F9315AE0783E_76"}`
+	APIError        = `{"message":"Failed to get conversation.","errors":[{"description":"Failed to get conversation."}],"trackingId":"go-webex-teams_6D15B3DA-BF4B-0601-C7DB-F9315AE0783E_76"}`
 	AccessTokenJSON = `{"access_token":"ZDI3MGEyYzQtNmFlNS00NDNhLWFlNzAtZGVjNjE0MGU1OGZmZWNmZDEwN2ItYTU3","expires_in":5999,"refresh_token":"MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDEyMzQ1Njc4OTEyMzQ1Njc4","refresh_token_expires_in":86399}`
 )
 
@@ -64,12 +64,12 @@ func TestClientSpec(t *testing.T) {
 			So(parseURL(url), ShouldEqual, "https://api.github.com/search/code?q=addClass+user_mozilla&page=34")
 		})
 		Convey("Parse header itself", func() {
-			link := `<https://api.ciscospark.com/v1/applications/first>; rel="first", <https://api.ciscospark.com/v1/applications/prev>; rel="prev", <https://api.ciscospark.com/v1/applications/next>; rel="next", <https://api.ciscospark.com/v1/applications/last>; rel="last"`
+			link := `<https://api.webex.com/v1/applications/first>; rel="first", <https://api.webex.com/v1/applications/prev>; rel="prev", <https://api.webex.com/v1/applications/next>; rel="next", <https://api.webex.com/v1/applications/last>; rel="last"`
 			links := parseLink(link)
-			So(links.NextURL, ShouldEqual, "https://api.ciscospark.com/v1/applications/next")
-			So(links.LastURL, ShouldEqual, "https://api.ciscospark.com/v1/applications/last")
-			So(links.FirstURL, ShouldEqual, "https://api.ciscospark.com/v1/applications/first")
-			So(links.PreviousURL, ShouldEqual, "https://api.ciscospark.com/v1/applications/prev")
+			So(links.NextURL, ShouldEqual, "https://api.webex.com/v1/applications/next")
+			So(links.LastURL, ShouldEqual, "https://api.webex.com/v1/applications/last")
+			So(links.FirstURL, ShouldEqual, "https://api.webex.com/v1/applications/first")
+			So(links.PreviousURL, ShouldEqual, "https://api.webex.com/v1/applications/prev")
 		})
 	})
 	Convey("Constants should be set", t, func() {
@@ -113,7 +113,7 @@ func TestClientSpec(t *testing.T) {
 				So(err.Error(), ShouldEqual, "400 Bad Request")
 				So(result.Errors[0].Description, ShouldEqual, "Failed to get conversation.")
 				So(result.Message, ShouldEqual, "Failed to get conversation.")
-				So(result.Trackingid, ShouldEqual, "go-spark_6D15B3DA-BF4B-0601-C7DB-F9315AE0783E_76")
+				So(result.Trackingid, ShouldEqual, "go-webex-teams_6D15B3DA-BF4B-0601-C7DB-F9315AE0783E_76")
 			})
 		})
 		Convey("GET", func() {
@@ -129,7 +129,7 @@ func TestClientSpec(t *testing.T) {
 				So(err.Error(), ShouldEqual, "400 Bad Request")
 				So(result.Errors[0].Description, ShouldEqual, "Failed to get conversation.")
 				So(result.Message, ShouldEqual, "Failed to get conversation.")
-				So(result.Trackingid, ShouldEqual, "go-spark_6D15B3DA-BF4B-0601-C7DB-F9315AE0783E_76")
+				So(result.Trackingid, ShouldEqual, "go-webex-teams_6D15B3DA-BF4B-0601-C7DB-F9315AE0783E_76")
 			})
 		})
 		message := "foo-bar"
@@ -146,7 +146,7 @@ func TestClientSpec(t *testing.T) {
 				So(err.Error(), ShouldEqual, "400 Bad Request")
 				So(result.Errors[0].Description, ShouldEqual, "Failed to get conversation.")
 				So(result.Message, ShouldEqual, "Failed to get conversation.")
-				So(result.Trackingid, ShouldEqual, "go-spark_6D15B3DA-BF4B-0601-C7DB-F9315AE0783E_76")
+				So(result.Trackingid, ShouldEqual, "go-webex-teams_6D15B3DA-BF4B-0601-C7DB-F9315AE0783E_76")
 			})
 		})
 		Convey("PUT", func() {
@@ -162,7 +162,7 @@ func TestClientSpec(t *testing.T) {
 				So(err.Error(), ShouldEqual, "400 Bad Request")
 				So(result.Errors[0].Description, ShouldEqual, "Failed to get conversation.")
 				So(result.Message, ShouldEqual, "Failed to get conversation.")
-				So(result.Trackingid, ShouldEqual, "go-spark_6D15B3DA-BF4B-0601-C7DB-F9315AE0783E_76")
+				So(result.Trackingid, ShouldEqual, "go-webex-teams_6D15B3DA-BF4B-0601-C7DB-F9315AE0783E_76")
 			})
 		})
 		BaseURL = previousURL
