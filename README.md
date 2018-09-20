@@ -558,3 +558,7 @@ func main() {
 
 * To use the examples in the /examples folder, you must set an environment variable WEBEX_TEAMS_TOKEN. You may obtain a token by logging in @ [http://developer.webex.com](http://developer.webex.com).
 * This library also implements the TrackingID header used to trace requests in the Teams platform. If troubleshooting and working with our support, output the current values, seen in the example above, and send along with your support request.
+
+## Credits
+
+Originaly created by [Jason Goecke](https://github.com/jsgoecke).
